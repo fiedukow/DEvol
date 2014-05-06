@@ -1,5 +1,4 @@
 library(mvtnorm)
-#library(lattice)
 library(distr)
 library(cec2005benchmark)
 
@@ -116,7 +115,8 @@ draw_population = function(pop, range, qual) {
 
 de = function(dims, range, pop_size, diff_factor,
               init_type, select_type, crossover_type,
-              cr, qual, best_possiblle, generations, near_enough) {
+              cr, qual, best_possiblle, generations, near_enough,
+              diff_size) {
   pop = initialize(pop_size, dims, range, init_type)
   result = list()
   result$values = c()
@@ -143,64 +143,94 @@ de = function(dims, range, pop_size, diff_factor,
                                                     best)
     }))  
     pop = pop_next
-  }
-  result$pop = pop
+  }  
   result$generation = length(result$values)
+  result$generation_max = generations
   result$best_element = real_select(pop, qual, "best")
   result$best_qual = qual(result$best_element)
   result$time_taken = as.numeric(Sys.time())-as.numeric(begin)
+  result$select_type = select_type
+  result$crossover_type = crossover_type
+  result$init_type = init_type
+  result$diff_size = diff_size
+  result$cr = cr
+  result$diff_factor = diff_factor
+  result$best_possible = best_possiblle
+  result$qual = qual
+  result$pop = pop
+  result$near_enough = near_enough
+  result$range = range
   return(result)
 }
 
-visalize = function(de_result) {
-  plot(de_result$values, type="l")
-  print(de_result$best_qual)
-  print(paste("Time taken: ", de_result$time_taken))
-  #if (dims == 2) draw_population(pop, range, qual)
-  print("Best object:")
-  print(as.vector(de_result$best_element))
-  print(paste("Best result: ", de_result$best_qual))
-  print(paste("Generations: ", de_result$generation))
+save_results = function(de_result, experiment_name, quality_function_description) {
+  dir.create("./results", showWarnings = FALSE)
+  png(filename = paste("./results/", experiment_name, ".png", sep=""),
+      width = 600, height = 600, units = "px", pointsize = 12,
+      bg = "white")
+  plot(de_result$values, type="l",
+       main=paste("DE", de_result$select_type, de_result$diff_size, de_result$crossover_type, sep="/"),
+       xlab="generation",
+       ylab="best quality function value",
+       col="blue",
+       lwd=3)
+  dev.off()  
+  fileConn<-file(paste("./results/", experiment_name, ".txt", sep=""))
+  writeLines(paste(
+    paste("Experiment: ", experiment_name, "; ",
+          paste("DE", de_result$select_type, de_result$diff_size, de_result$crossover_type, sep="/"),
+          sep=""),
+    "-----------------------------------------",
+    paste("_", as.character.Date(Sys.time()), "_", sep = ""),
+    paste("Time taken: __",de_result$time_taken, "__", sep = ""),
+    paste(""),
+    paste(" * Dimensions = ", length(de_result$pop[1,]), sep=""),    
+    paste(" * Range = [", de_result$range[1], ", ", de_result$range[2], "]", sep=""),
+    paste(" * Cr = ", de_result$cr, sep = ""),
+    paste(" * μ = ", length(de_result$pop), sep = ""),
+    paste(" * F = ", de_result$diff_factor, sep = ""),
+    paste(" * generations = ", de_result$generation, sep = ""),    
+    paste(" * generationsMax = ", de_result$generation_max, sep = ""),
+    paste(" * Init Method = ", de_result$init_type, sep = ""),
+    paste(" * Best Found Value = ", de_result$best_qual, sep = ""),
+    paste(" * Perfect Known Value = ", de_result$best_possible, sep = ""),
+    paste(" * Good Enough Range = ", de_result$near_enough, sep = ""),
+    paste(" * Quality Function: ", quality_function_description, sep=""),
+    paste(""),
+    paste("![](./", experiment_name, ".png)", sep=""),
+    paste(""),
+    paste("---------------------------------------"),
+    paste(""),
+    paste(" * [Raw Form Raport](./", experiment_name, ".txt)", sep=""),
+    paste(" * [Best Object](./", experiment_name, "_best.txt)", sep=""),
+    paste(" * [Final Population](./", experiment_name, "_pop.txt)", sep=""),
+    paste(" * [best(generation)](./", experiment_name, "_values.txt)", sep=""),
+  sep="\n"), fileConn)
+  close(fileConn)
+  
+  write(de_result$best_element, file=paste("./results/", experiment_name, "_best.txt", sep=""))
+  write(de_result$pop, file=paste("./results/", experiment_name, "_pop.txt", sep=""))
+  write(de_result$values, file=paste("./results/", experiment_name, "_values.txt", sep=""))
+  system(paste("./gen_html_report.sh ", experiment_name, sep=""))
+  #if (dims == 2) draw_population(pop, range, qual)  
 }
 
-ex = list()
-ex[[1]] = de(dims = 50,
-             range = c(-5,5),
-             pop_size = 100,
-             diff_factor = 1.0,
-             init_type = "unif",
-             select_type = "best",
-             crossover_type = "exp",
-             cr = 0.75,
-             qual = function(p) { cec2005benchmark(10, p) },
-             best_possiblle = -330,
-             generations = 100,
-             near_enough = 0.001)
-ex[[2]] = de(dims = 50,
-             range = c(-5,5),
-             pop_size = 1000,
-             diff_factor = 1.0,
-             init_type = "unif",
-             select_type = "best",
-             crossover_type = "exp",
-             cr = 0.75,
-             qual = function(p) { cec2005benchmark(10, p) },
-             best_possiblle = -330,
-             generations = 100,
-             near_enough = 0.001)
-ex[[3]] = de(dims = 50,
-             range = c(-5,5),
-             pop_size = 100,
-             diff_factor = 1.0,
-             init_type = "unif",
-             select_type = "best",
-             crossover_type = "exp",
-             cr = 0.75,
-             qual = function(p) { cec2005benchmark(10, p) },
-             best_possiblle = -330,
-             generations = 1000,
-             near_enough = 0.001)
-
-visalize(ex[[1]])
-visalize(ex[[2]])
-visalize(ex[[3]])
+runExperiment = function(experiment_name, dims, range, pop_size, diff_factor,
+                         init_type, select_type, crossover_type,
+                         cr, qual, qual_description, best_possiblle,
+                         generations, near_enough, diff_size) {
+  result = de(dims,
+              range,
+              pop_size,
+              diff_factor,
+              init_type,
+              select_type,
+              crossover_type,
+              cr,
+              qual,
+              best_possiblle,
+              generations,
+              near_enough,
+              diff_size)
+  save_results(result, experiment_name, qual_description)  
+}

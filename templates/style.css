@@ -1,0 +1,15 @@
+body {
+  font-family: Verdana, Arial, sans-serif;
+  font-size: 14px;
+}
+
+h2 {
+  font-size: 18px;
+}
+
+img {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  border: 1px solid black;
+}
