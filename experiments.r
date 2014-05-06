@@ -1,6 +1,6 @@
 source("multidim.r")
 
-setwd("~/repo/mgr")
+setwd("~/repo/DEvol")
 runExperiment(experiment_name = "TEST",
               dims = 50,
               range = c(-5,5),
