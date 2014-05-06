@@ -1,10 +1,10 @@
 source("multidim.r")
 
 setwd("~/repo/DEvol")
-runExperiment(experiment_name = "TEST",
+runExperiment(experiment_name = "TEST2",
               dims = 50,
               range = c(-5,5),
-              pop_size = 10,
+              pop_size = 100,
               diff_factor = 1.0,
               init_type = "unif",
               select_type = "best",

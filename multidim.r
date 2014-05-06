@@ -5,6 +5,9 @@ library(cec2005benchmark)
 # MINIMIZE OR MAXIMIZE
 best = min
 which.best = which.min
+rexpdist_r = NULL
+rexpdist_cr = -1
+rexpdist_dims = -1
 
 # Distribution for exponential selection - just to make it faster
 expdist = function(dims, cr) {
@@ -14,7 +17,12 @@ expdist = function(dims, cr) {
 }
 
 rexpdist = function(dims, cr) {
-  r(expdist(dims, cr))(1)
+  if (cr != rexpdist_cr || dims != rexpdist_dims) {
+    rexpdist_r <<- r(expdist(dims, cr))
+    rexpdist_cr <<- cr
+    rexpdist_dims <<- dims
+  }
+  rexpdist_r(1)
 }
 
 my_quality = function(x, y) {
