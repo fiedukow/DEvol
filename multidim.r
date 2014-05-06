@@ -60,7 +60,15 @@ differentiator = function(element, pair, factor = 1.0) {
 }
 
 crossover_bin = function(x, y, dims, cr) {
-  ## TODO
+  # TODO: Loop avoidance?
+  z = c()
+  for(i in 1:dims) {
+    if (runif(1, 0, 1) < cr)
+      z[i] = x[i]
+    else
+      z[i] = y[i]
+  }
+  return(z)
 }
 
 crossover_exp = function(x, y, dims, cr) {
