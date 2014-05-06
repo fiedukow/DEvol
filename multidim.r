@@ -203,7 +203,7 @@ save_results = function(de_result, experiment_name, quality_function_description
     paste(" * Dimensions = ", length(de_result$pop[1,]), sep=""),    
     paste(" * Range = [", de_result$range[1], ", ", de_result$range[2], "]", sep=""),
     paste(" * Cr = ", de_result$cr, sep = ""),
-    paste(" * μ = ", length(de_result$pop), sep = ""),
+    paste(" * μ = ", nrow(de_result$pop), sep = ""),
     paste(" * F = ", de_result$diff_factor, sep = ""),
     paste(" * generations = ", de_result$generation, sep = ""),    
     paste(" * generationsMax = ", de_result$generation_max, sep = ""),
