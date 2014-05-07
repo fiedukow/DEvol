@@ -5,6 +5,9 @@ library(cec2005benchmark)
 # MINIMIZE OR MAXIMIZE
 best = min
 which.best = which.min
+
+# Cache of distribution randomizer function
+# ~40% DE/X/X/EXP optimalization
 rexpdist_r = NULL
 rexpdist_cr = -1
 rexpdist_dims = -1
@@ -25,23 +28,6 @@ rexpdist = function(dims, cr) {
   rexpdist_r(1)
 }
 
-my_quality = function(x, y) {
-  m1 = c(2.5, 2.5)
-  m2 = c(2.5, 2.5)
-  m3 = c(4.0, 3.0)
-  
-  cv1 = matrix(c(1.00, 0.25,
-                 0.25, 1.50), nrow=2)
-  cv2 = diag(2)*1.1
-  cv3 = matrix(c(2.0, 0.0,
-                 0.0, 1.0), nrow =2)
-  
-  matrix(dmvnorm(expand.grid(x,y), m1, solve(cv1)) -
-           dmvnorm(expand.grid(x,y), m2, solve(cv2)) +
-           dmvnorm(expand.grid(x,y), m3, solve(cv3)) * 0.1,
-         nrow = length(x))
-}
-
 initialize_unif = function(n, dims, range) {
   matrix(replicate(n, runif(dims, range[1], range[2])), ncol=dims)
 }
@@ -57,6 +43,10 @@ real_select = function(p, quality_function, method = "rand") {
          best = matrix(p[which.best(quality_function(p)), ], ncol=ncol(p)))
 }
 
+# Optimalization of selection - best is passed as argument
+# it allows not to search for it every time
+# TODO: Probably moving best_element to external variable will be better
+#       as it will keep hacks consistent and interfaces as clear as possible.
 select = function(p, quality_function, method = "rand", best_element = NA) {
   switch(method,
          rand = real_select(p, quality_function, method),
@@ -68,7 +58,7 @@ differentiator = function(element, pair, factor = 1.0) {
 }
 
 crossover_bin = function(x, y, dims, cr) {
-  # TODO: Loop avoidance?
+  # TODO: Is loop avoidance possible (and faster) here?
   z = c()
   for(i in 1:dims) {
     if (runif(1, 0, 1) < cr)
@@ -97,6 +87,8 @@ better = function(x, y, qual) {
   real_select(p, qual, "best")
 }
 
+# TODO: fitting into range should have more option then just
+#       truncating the element into range.
 range_fit = function(X, range) {
   sapply(X, function(xi) { min(max(xi, range[1]), range[2]) } )  
 }
@@ -120,7 +112,12 @@ each_x = function(xi,
   better(xi, z, qual)
 }
 
+# This is only valid for two demensions
 draw_population = function(pop, range, qual) {
+  if (length(pop[1,]) != 2) {
+    warning("Draw population is undefined for object dimensions size other then 2")
+    return(NA)
+  }
   x = seq(from = range[1], to = range[2], by = 0.01)
   y = seq(from = range[1], to = range[2], by = 0.01)
   contour(x, y, matrix(qual(as.matrix(expand.grid(x,y))),
@@ -140,7 +137,7 @@ de = function(dims, range, pop_size, diff_factor,
   begin = Sys.time()
   for(i in 1:generations) {    
     best = real_select(pop, qual, "best") # it will be passed for some of selection methods for optymalization 
-                                          # it gives about 40% when using X/best/X
+                                          # it gives about 40% when using DE/best/X/X
     if (abs(qual(best) - best_possiblle) < near_enough) {
       print(paste("Found good enough in ", i, " generation."))
       break;
@@ -228,7 +225,6 @@ save_results = function(de_result, experiment_name, quality_function_description
   write(de_result$pop, file=paste("./results/", experiment_name, "_pop.txt", sep=""))
   write(de_result$values, file=paste("./results/", experiment_name, "_values.txt", sep=""))
   system(paste("./gen_html_report.sh ", experiment_name, sep=""))
-  #if (dims == 2) draw_population(pop, range, qual)  
 }
 
 runExperiment = function(experiment_name, dims, range, pop_size, diff_factor,
