@@ -1,6 +1,7 @@
 library(mvtnorm)
 library(distr)
 library(cec2005benchmark)
+library(cec2013)
 
 # MINIMIZE OR MAXIMIZE
 best = min
@@ -58,22 +59,18 @@ differentiator = function(element, pair, factor = 1.0) {
 }
 
 crossover_bin = function(x, y, dims, cr) {
-  # TODO: Is loop avoidance possible (and faster) here?
-  z = c()
-  for(i in 1:dims) {
-    if (runif(1, 0, 1) < cr)
-      z[i] = x[i]
-    else
-      z[i] = y[i]
-  }
-  return(z)
+  mod = (runif(dims) < cr)
+  mod*x + (1-mod)*y
 }
 
 crossover_exp = function(x, y, dims, cr) {
-  pos = rexpdist(dims, cr)
-  z = c(x[0:pos], y[(pos+1):max(dims,pos+1)])
+  #pos = rexpdist(dims, cr)
+  #z = c(x[0:pos], y[(pos+1):max(dims,pos+1)])
   # NA are added if dims = pos
-  na.omit(z)
+  #na.omit(z)
+  mod = (runif(dims) < cr)
+  mod = cummax(mod)
+  mod*x + (1-mod)*y
 }
 
 crossover = function(x, y, dims=2, cr=0.5, method="bin") {
