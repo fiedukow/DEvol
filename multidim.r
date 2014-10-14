@@ -33,25 +33,16 @@ initialize_unif = function(n, dims, range) {
   matrix(replicate(n, runif(dims, range[1], range[2])), ncol=dims)
 }
 
-initialize = function(n = 1, dims = 1, range, method = "unif") {
-  switch(method,
-         unif = initialize_unif(n, dims, range))
+select_best_real = function(p, quality_function, best_element = NA) {
+  matrix(p[which.best(quality_function(p)), ], ncol=ncol(p))
 }
 
-real_select = function(p, quality_function, method = "rand") {
-  switch(method,
-         rand = matrix(p[sample(nrow(p), 1), ], ncol=ncol(p)),
-         best = matrix(p[which.best(quality_function(p)), ], ncol=ncol(p)))
+select_best = function(p, quality_function, best_element) {
+  best_element
 }
 
-# Optimalization of selection - best is passed as argument
-# it allows not to search for it every time
-# TODO: Probably moving best_element to external variable will be better
-#       as it will keep hacks consistent and interfaces as clear as possible.
-select = function(p, quality_function, method = "rand", best_element = NA) {
-  switch(method,
-         rand = real_select(p, quality_function, method),
-         best = best_element)
+select_rand = function(p, quality_function, rand_element = NA) {
+  matrix(p[sample(nrow(p), 1), ], ncol=ncol(p))
 }
 
 differentiator = function(element, pair, factor = 1.0) {
@@ -73,15 +64,9 @@ crossover_exp = function(x, y, dims, cr) {
   mod*x + (1-mod)*y
 }
 
-crossover = function(x, y, dims=2, cr=0.5, method="bin") {
-  switch(method,
-         bin = crossover_bin(x, y, dims, cr),
-         exp = crossover_exp(x, y, dims, cr))
-}
-
 better = function(x, y, qual) {
   p = matrix(c(x,y), ncol=length(x), byrow=TRUE)  
-  real_select(p, qual, "best")
+  select_best_real(p, qual)
 }
 
 # TODO: fitting into range should have more option then just
@@ -94,17 +79,17 @@ each_x = function(xi,
                   pop,
                   dims,
                   diff_factor,
-                  init_type,
-                  select_type,
-                  crossover_type,
+                  init,
+                  select,
+                  crossover,
                   cr,
                   qual,
                   range,
                   best) { #This is passed as optimalization only 
-  x = select(pop, qual, select_type, best)
+  x = select(pop, qual, best)
   pair = pop[sample(nrow(pop), 2), ]
   y = differentiator(x, pair, diff_factor)
-  z = crossover(xi, y, dims, cr, crossover_type)
+  z = crossover(xi, y, dims, cr)
   z = range_fit(z, range)
   better(xi, z, qual)
 }
@@ -120,20 +105,20 @@ draw_population = function(pop, range, qual) {
   contour(x, y, matrix(qual(as.matrix(expand.grid(x,y))),
                        nrow=length(x)))
   points(pop, col="blue")
-  points(real_select(pop, qual, "best"), col="red", lw=2)
+  points(select_best_real(pop, qual), col="red", lw=2)
 }
 
 de = function(dims, range, pop_size, diff_factor,
-              init_type, select_type, crossover_type,
+              init, select, crossover,
               cr, qual, best_possiblle, generations, near_enough,
               diff_size) {
-  pop = initialize(pop_size, dims, range, init_type)
+  pop = init(pop_size, dims, range)
   result = list()
   result$values = c()
   
   begin = Sys.time()
   for(i in 1:generations) {    
-    best = real_select(pop, qual, "best") # it will be passed for some of selection methods for optymalization 
+    best = select_best_real(pop, qual) # it will be passed for some of selection methods for optymalization 
                                           # it gives about 40% when using DE/best/X/X
     if (abs(qual(best) - best_possiblle) < near_enough) {
       print(paste("Found good enough in ", i, " generation."))
@@ -144,9 +129,9 @@ de = function(dims, range, pop_size, diff_factor,
                                                     pop,
                                                     dims,
                                                     diff_factor,
-                                                    init_type,
-                                                    select_type,
-                                                    crossover_type,
+                                                    init,
+                                                    select,
+                                                    crossover,
                                                     cr,
                                                     qual,
                                                     range,
@@ -156,26 +141,18 @@ de = function(dims, range, pop_size, diff_factor,
   }  
   result$generation = length(result$values)
   result$generation_max = generations
-  result$best_element = real_select(pop, qual, "best")
+  result$best_element = select_best_real(pop, qual)
   result$best_qual = qual(result$best_element)
   result$time_taken = as.numeric(Sys.time())-as.numeric(begin)
-  result$select_type = select_type
-  result$crossover_type = crossover_type
-  result$init_type = init_type
-  result$diff_size = diff_size
-  result$cr = cr
-  result$diff_factor = diff_factor
-  result$best_possible = best_possiblle
-  result$qual = qual
+  #result$qual = qual
   result$pop = pop
-  result$near_enough = near_enough
-  result$range = range
+
   return(result)
 }
 
-save_results = function(de_result, experiment_name, quality_function_description) {
+save_results = function(de_result) {
   dir.create("./results", showWarnings = FALSE)
-  png(filename = paste("./results/", experiment_name, ".png", sep=""),
+  png(filename = paste("./results/", de_result$experiment_name, ".png", sep=""),
       width = 600, height = 600, units = "px", pointsize = 12,
       bg = "white")
   plot(de_result$values, type="l",
@@ -185,9 +162,9 @@ save_results = function(de_result, experiment_name, quality_function_description
        col="blue",
        lwd=3)
   dev.off()  
-  fileConn<-file(paste("./results/", experiment_name, ".txt", sep=""))
+  fileConn<-file(paste("./results/", de_result$experiment_name, ".txt", sep=""))
   writeLines(paste(
-    paste("Experiment: ", experiment_name, "; ",
+    paste("Experiment: ", de_result$experiment_name, "; ",
           paste("DE", de_result$select_type, de_result$diff_size, de_result$crossover_type, sep="/"),
           sep=""),
     "-----------------------------------------",
@@ -205,41 +182,57 @@ save_results = function(de_result, experiment_name, quality_function_description
     paste(" * Best Found Value = ", de_result$best_qual, sep = ""),
     paste(" * Perfect Known Value = ", de_result$best_possible, sep = ""),
     paste(" * Good Enough Range = ", de_result$near_enough, sep = ""),
-    paste(" * Quality Function: ", quality_function_description, sep=""),
+    paste(" * Quality Function: ", de_result$qual_description, sep=""),
     paste(""),
-    paste("![](./", experiment_name, ".png)", sep=""),
+    paste("![](./", de_result$experiment_name, ".png)", sep=""),
     paste(""),
     paste("---------------------------------------"),
     paste(""),
-    paste(" * [Raw Form Raport](./", experiment_name, ".txt)", sep=""),
-    paste(" * [Best Object](./", experiment_name, "_best.txt)", sep=""),
-    paste(" * [Final Population](./", experiment_name, "_pop.txt)", sep=""),
-    paste(" * [best(generation)](./", experiment_name, "_values.txt)", sep=""),
+    paste(" * [Raw Form Raport](./", de_result$experiment_name, ".txt)", sep=""),
+    paste(" * [Best Object](./", de_result$experiment_name, "_best.txt)", sep=""),
+    paste(" * [Final Population](./", de_result$experiment_name, "_pop.txt)", sep=""),
+    paste(" * [best(generation)](./", de_result$experiment_name, "_values.txt)", sep=""),
   sep="\n"), fileConn)
   close(fileConn)
   
-  write(de_result$best_element, file=paste("./results/", experiment_name, "_best.txt", sep=""))
-  write(de_result$pop, file=paste("./results/", experiment_name, "_pop.txt", sep=""))
-  write(de_result$values, file=paste("./results/", experiment_name, "_values.txt", sep=""))
-  system(paste("./gen_html_report.sh ", experiment_name, sep=""))
+  write(de_result$best_element, file=paste("./results/", de_result$experiment_name, "_best.txt", sep=""))
+  write(de_result$pop, file=paste("./results/", de_result$experiment_name, "_pop.txt", sep=""))
+  write(de_result$values, file=paste("./results/", de_result$experiment_name, "_values.txt", sep=""))
+  system(paste("./gen_html_report.sh ", de_result$experiment_name, sep=""))
 }
 
 runExperiment = function(experiment_name, dims, range, pop_size, diff_factor,
-                         init_type, select_type, crossover_type,
-                         cr, qual, qual_description, best_possiblle,
+                         init, select, crossover,
+                         cr, qual, best_possiblle,
                          generations, near_enough, diff_size) {
   result = de(dims,
               range,
               pop_size,
               diff_factor,
-              init_type,
-              select_type,
-              crossover_type,
+              init[[1]],
+              select[[1]],
+              crossover[[1]],
               cr,
-              qual,
+              qual[[1]],
               best_possiblle,
               generations,
               near_enough,
               diff_size)
-  save_results(result, experiment_name, qual_description)  
+
+  # appending params to result to generate report from that
+  result$select_type = select[[2]]
+  result$crossover_type = crossover[[2]]
+  result$init_type = init[[2]]
+  result$diff_size = diff_size
+  result$cr = cr
+  result$diff_factor = diff_factor
+  result$best_possible = best_possiblle
+  result$qual_description = qual[[2]]
+  result$near_enough = near_enough
+  result$range = range
+  result$experiment_name = experiment_name
+
+  save_results(result)
+
+  return(result)
 }
