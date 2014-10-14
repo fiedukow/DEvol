@@ -1,0 +1,5 @@
+.RData
+.Rhistory
+results/*.txt
+results/*.png
+results/*.html
