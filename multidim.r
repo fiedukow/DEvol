@@ -7,8 +7,8 @@ initialize_unif = function(n, dims, range) {
   matrix(replicate(n, runif(dims, range[1], range[2])), ncol=dims)
 }
 
-select_best_real = function(p, quality_function, best_element = NA) {
-  matrix(p[which.best(quality_function(p)), ], ncol=ncol(p))
+select_best_real = function(p, best_element = NA) {
+  matrix(p[[1]][which.best(p[[2]]), ], ncol=ncol(p[[1]]))
 }
 
 select_best = function(p, quality_function, best_element) {
@@ -48,6 +48,7 @@ range_fit = function(p, range) {
 
 # This is only valid for two demensions
 draw_population = function(pop, range, qual) {
+  # FIXME: This will not work after "Improving select_best_real to acctually use already calculated qual values."
   if (length(pop[1,]) != 2) {
     warning("Draw population is undefined for object dimensions size other then 2")
     return(NA)
@@ -57,7 +58,7 @@ draw_population = function(pop, range, qual) {
   contour(x, y, matrix(qual(as.matrix(expand.grid(x,y))),
                        nrow=length(x)))
   points(pop, col="blue")
-  points(select_best_real(pop, qual), col="red", lw=2)
+  points(select_best_real(pop), col="red", lw=2)
 }
 
 de = function(dims, range, pop_size, diff_factor,
@@ -74,8 +75,8 @@ de = function(dims, range, pop_size, diff_factor,
 
   begin = Sys.time()
   for(i in 1:generations) {
-    best = select_best_real(pop[[1]], qual) # it will be passed for some of selection methods for optimalization
-                                       # it gives about 40% when using DE/best/X/X
+    best = select_best_real(pop) # it will be passed for some of selection methods for optimalization
+                                 # it gives about 40% when using DE/best/X/X
     if (abs(qual(best) - best_possiblle) < near_enough) {
       print(paste("Found good enough in ", i, " generation."))
       break;
@@ -92,7 +93,7 @@ de = function(dims, range, pop_size, diff_factor,
   }
   result$generation = length(result$values)
   result$generation_max = generations
-  result$best_element = select_best_real(pop[[1]], qual)
+  result$best_element = select_best_real(pop)
   result$best_qual = qual(result$best_element)
   result$time_taken = as.numeric(Sys.time())-as.numeric(begin)
   #result$qual = qual
