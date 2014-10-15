@@ -7,28 +7,6 @@ library(cec2013)
 best = min
 which.best = which.min
 
-# Cache of distribution randomizer function
-# ~40% DE/X/X/EXP optimalization
-rexpdist_r = NULL
-rexpdist_cr = -1
-rexpdist_dims = -1
-
-# Distribution for exponential selection - just to make it faster
-expdist = function(dims, cr) {
-  p = cr^(0:(dims-1)) * (1-cr)
-  p[dims+1] = 1 - sum(p)
-  DiscreteDistribution(0:dims, p)
-}
-
-rexpdist = function(dims, cr) {
-  if (cr != rexpdist_cr || dims != rexpdist_dims) {
-    rexpdist_r <<- r(expdist(dims, cr))
-    rexpdist_cr <<- cr
-    rexpdist_dims <<- dims
-  }
-  rexpdist_r(1)
-}
-
 initialize_unif = function(n, dims, range) {
   matrix(replicate(n, runif(dims, range[1], range[2])), ncol=dims)
 }
@@ -55,10 +33,6 @@ crossover_bin = function(x, y, dims, cr) {
 }
 
 crossover_exp = function(x, y, dims, cr) {
-  #pos = rexpdist(dims, cr)
-  #z = c(x[0:pos], y[(pos+1):max(dims,pos+1)])
-  # NA are added if dims = pos
-  #na.omit(z)
   mod = (runif(dims) < cr)
   mod = cummax(mod)
   mod*x + (1-mod)*y
