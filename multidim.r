@@ -1,8 +1,3 @@
-library(mvtnorm)
-library(distr)
-library(cec2005benchmark)
-library(cec2013)
-
 # MINIMIZE OR MAXIMIZE
 best = min
 which.best = which.min

@@ -1,3 +1,7 @@
+source("multidim.r")
+library(cec2005benchmark)
+library(cec2013)
+
 C_EXP  = c(crossover_exp,   "exp",  "Standard exponential crossover function." )
 C_BIN  = c(crossover_bin,   "bin",  "Standard binary crossover function."      )
 I_UNIF = c(initialize_unif, "unif", "Standard uniform initialization function.")
