@@ -6,6 +6,7 @@ library(cec2013)
 # MINIMIZE OR MAXIMIZE
 best = min
 which.best = which.min
+better = `<`
 
 initialize_unif = function(n, dims, range) {
   matrix(replicate(n, runif(dims, range[1], range[2])), ncol=dims)
@@ -16,56 +17,38 @@ select_best_real = function(p, quality_function, best_element = NA) {
 }
 
 select_best = function(p, quality_function, best_element) {
-  best_element
+  matrix(best_element, ncol=ncol(p), nrow=nrow(p), byrow=TRUE)
 }
 
 select_rand = function(p, quality_function, rand_element = NA) {
-  matrix(p[sample(nrow(p), 1), ], ncol=ncol(p))
+  matrix(p[sample(nrow(p), nrow(p), TRUE), ], ncol=ncol(p), byrow=TRUE)
 }
 
-differentiator = function(element, pair, factor = 1.0) {
+differentiator = function(elements, pairs, factor = 1.0) {
   element + factor*(pair[1,] - pair[2,])
 }
 
-crossover_bin = function(x, y, dims, cr) {
-  mod = (runif(dims) < cr)
+diff_vector = function(pop) {
+  N = nrow(pop)
+  x1 = sample(pop, N, TRUE)
+  x2 = sample(pop, N, TRUE)
+  x1 - x2
+}
+
+crossover_bin = function(x, y, cr) {
+  mod = t(replicate(nrow(x), (runif(ncol(x)) < cr)))
   mod*x + (1-mod)*y
 }
 
-crossover_exp = function(x, y, dims, cr) {
-  mod = (runif(dims) < cr)
-  mod = cummax(mod)
+crossover_exp = function(x, y, cr) {
+  mod = t(replicate(nrow(x), cummin(runif(ncol(x)) > cr)))
   mod*x + (1-mod)*y
-}
-
-better = function(x, y, qual) {
-  p = matrix(c(x,y), ncol=length(x), byrow=TRUE)  
-  select_best_real(p, qual)
 }
 
 # TODO: fitting into range should have more option then just
 #       truncating the element into range.
-range_fit = function(X, range) {
-  sapply(X, function(xi) { min(max(xi, range[1]), range[2]) } )  
-}
-
-each_x = function(xi,
-                  pop,
-                  dims,
-                  diff_factor,
-                  init,
-                  select,
-                  crossover,
-                  cr,
-                  qual,
-                  range,
-                  best) { #This is passed as optimalization only 
-  x = select(pop, qual, best)
-  pair = pop[sample(nrow(pop), 2), ]
-  y = differentiator(x, pair, diff_factor)
-  z = crossover(xi, y, dims, cr)
-  z = range_fit(z, range)
-  better(xi, z, qual)
+range_fit = function(p, range) {
+  pmin(pmax(p, range[1]), range[2])
 }
 
 # This is only valid for two demensions
@@ -86,36 +69,35 @@ de = function(dims, range, pop_size, diff_factor,
               init, select, crossover,
               cr, qual, best_possiblle, generations, near_enough,
               diff_size) {
-  pop = init(pop_size, dims, range)
+  pop = list()
+  pop_next = list()
+  pop[[1]] = init(pop_size, dims, range)
+  pop[[2]] = qual(pop[[1]])
+
   result = list()
   result$values = c()
-  
+
   begin = Sys.time()
-  for(i in 1:generations) {    
-    best = select_best_real(pop, qual) # it will be passed for some of selection methods for optymalization 
-                                          # it gives about 40% when using DE/best/X/X
+  for(i in 1:generations) {
+    best = select_best_real(pop[[1]], qual) # it will be passed for some of selection methods for optimalization
+                                       # it gives about 40% when using DE/best/X/X
     if (abs(qual(best) - best_possiblle) < near_enough) {
       print(paste("Found good enough in ", i, " generation."))
       break;
     }
     result$values[i] = qual(best)
-    pop_next = t(apply(pop, 1, function(x) { each_x(x,
-                                                    pop,
-                                                    dims,
-                                                    diff_factor,
-                                                    init,
-                                                    select,
-                                                    crossover,
-                                                    cr,
-                                                    qual,
-                                                    range,
-                                                    best)
-    }))  
-    pop = pop_next
-  }  
+    pop_next[[1]] = select(pop[[1]], qual, best) + diff_factor*diff_vector(pop[[1]])
+    pop_next[[1]] = range_fit(crossover(pop[[1]], pop_next[[1]], cr), range)
+    pop_next[[2]] = qual(pop_next[[1]])
+
+    # TODO better turnament then simple selecting better.
+    mod = better(pop[[2]], pop_next[[2]])
+    pop[[1]] = pop[[1]]*mod + pop_next[[1]]*(1-mod)
+    pop[[2]] = pop[[2]]*mod + pop_next[[2]]*(1-mod)
+  }
   result$generation = length(result$values)
   result$generation_max = generations
-  result$best_element = select_best_real(pop, qual)
+  result$best_element = select_best_real(pop[[1]], qual)
   result$best_qual = qual(result$best_element)
   result$time_taken = as.numeric(Sys.time())-as.numeric(begin)
   #result$qual = qual
@@ -135,7 +117,7 @@ save_results = function(de_result) {
        ylab="best quality function value",
        col="blue",
        lwd=3)
-  dev.off()  
+  dev.off()
   fileConn<-file(paste("./results/", de_result$experiment_name, ".txt", sep=""))
   writeLines(paste(
     paste("Experiment: ", de_result$experiment_name, "; ",
@@ -145,12 +127,12 @@ save_results = function(de_result) {
     paste("_", as.character.Date(Sys.time()), "_", sep = ""),
     paste("Time taken: __",de_result$time_taken, "__", sep = ""),
     paste(""),
-    paste(" * Dimensions = ", length(de_result$pop[1,]), sep=""),    
+    paste(" * Dimensions = ", length(de_result$pop[[1]][1,]), sep=""),
     paste(" * Range = [", de_result$range[1], ", ", de_result$range[2], "]", sep=""),
     paste(" * Cr = ", de_result$cr, sep = ""),
-    paste(" * μ = ", nrow(de_result$pop), sep = ""),
+    paste(" * μ = ", nrow(de_result$pop[[1]]), sep = ""),
     paste(" * F = ", de_result$diff_factor, sep = ""),
-    paste(" * generations = ", de_result$generation, sep = ""),    
+    paste(" * generations = ", de_result$generation, sep = ""),
     paste(" * generationsMax = ", de_result$generation_max, sep = ""),
     paste(" * Init Method = ", de_result$init_type, sep = ""),
     paste(" * Best Found Value = ", de_result$best_qual, sep = ""),
@@ -168,9 +150,10 @@ save_results = function(de_result) {
     paste(" * [best(generation)](./", de_result$experiment_name, "_values.txt)", sep=""),
   sep="\n"), fileConn)
   close(fileConn)
-  
+
   write(de_result$best_element, file=paste("./results/", de_result$experiment_name, "_best.txt", sep=""))
-  write(de_result$pop, file=paste("./results/", de_result$experiment_name, "_pop.txt", sep=""))
+  write(de_result$pop[[1]], file=paste("./results/", de_result$experiment_name, "_pop.txt", sep="")) # TODO
+                                                                                        # Maybe dump results as well?
   write(de_result$values, file=paste("./results/", de_result$experiment_name, "_values.txt", sep=""))
   system(paste("./gen_html_report.sh ", de_result$experiment_name, sep=""))
 }
