@@ -1,19 +1,16 @@
 source("multidim.r")
 source("named_functions.r")
 
-
-setwd("/home//fiedukow/repo/DEvol/")
-runExperiment(experiment_name = "testrun",
-                               dims = 5,
-                               range = c(-5,5),
-                               pop_size = 100,
-                               diff_factor = 1.0,
-                               init = I_UNIF,
-                               select = S_BEST,
-                               crossover = C_EXP,
-                               cr = 0.75,
-                               qual = CEC_2013_10,
-                               best_possiblle = -330,
-                               generations = 100,
-                               near_enough = 0.001,
-                               diff_size = 1)
+#setwd(PutYourDEvolPathHere)
+#runExperiment(experiment_name = "NAME",
+#              dims = DIMENSIONS,
+#              range = c(BEGIN_RANGE,END_RANGE),
+#              pop_size = POPULATION_SIZE,
+#              diff_factor = F_FACTOR,
+#              init = c(INIT_FUNCTION, "NAME", "DESCRIPTION"),
+#              select = c(SELECT_FUNCTION, "NAME", "DESCRIPTION"),,
+#              crossover = c(CROSSOVER_FUNCTION, "NAME", "DESCRIPTION"),,
+#              cr = CROSSOVER_RATIO,
+#              qual = c(QUALITY_FUNCTION, "NAME", "DESCRIPTION"),,
+#              generations = MAX_GENERATIONS,
+#              diff_size = DIFFERING_PAIRS_NUMBER)
