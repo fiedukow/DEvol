@@ -7,26 +7,18 @@ initialize_unif = function(n, dims, range) {
   matrix(replicate(n, runif(dims, range[1], range[2])), ncol=dims)
 }
 
-select_best_real = function(p, best_element = NA) {
-  matrix(p[[1]][which.best(p[[2]]), ], ncol=ncol(p[[1]]))
+select_best = function(p) {
+  matrix(p[[1]][which.best(p[[2]]), ], nrow(p[[1]]), ncol(p[[1]]), TRUE)
 }
 
-select_best = function(p, quality_function, best_element) {
-  matrix(best_element, ncol=ncol(p), nrow=nrow(p), byrow=TRUE)
-}
-
-select_rand = function(p, quality_function, rand_element = NA) {
-  matrix(p[sample(nrow(p), nrow(p), TRUE), ], ncol=ncol(p), byrow=TRUE)
-}
-
-differentiator = function(elements, pairs, factor = 1.0) {
-  element + factor*(pair[1,] - pair[2,])
+select_rand = function(p) {
+  N = nrow(p[[1]])
+  p[[1]][sample(N, N, TRUE), ]
 }
 
 diff_vector = function(pop) {
-  N = nrow(pop)
-  x1 = sample(pop, N, TRUE)
-  x2 = sample(pop, N, TRUE)
+  x1 = select_rand(list(pop))
+  x2 = select_rand(list(pop))
   x1 - x2
 }
 
@@ -58,7 +50,7 @@ draw_population = function(pop, range, qual) {
   contour(x, y, matrix(qual(as.matrix(expand.grid(x,y))),
                        nrow=length(x)))
   points(pop, col="blue")
-  points(select_best_real(pop), col="red", lw=2)
+  points(select_best(pop), col="red", lw=2)
 }
 
 de = function(dims, range, pop_size, diff_factor, init, select, crossover,
@@ -73,15 +65,14 @@ de = function(dims, range, pop_size, diff_factor, init, select, crossover,
 
   begin = Sys.time()
   for(i in 1:generations) {
-    best = select_best_real(pop) # it will be passed for some of selection methods for optimalization
-                                 # it gives about 40% when using DE/best/X/X
+    best_value = qual(pop[[1]][which.best(pop[[2]]), ])
+    result$values[i] = best_value
     if (!is.na(best_possible) && !is.na(near_enough) &&
-        abs(qual(best) - best_possible) < near_enough) {
+        abs(qual(best_value) - best_possible) < near_enough) {
       print(paste("Found good enough in ", i, " generation."))
       break;
     }
-    result$values[i] = qual(best)
-    pop_next[[1]] = select(pop[[1]], qual, best) + diff_factor*diff_vector(pop[[1]])
+    pop_next[[1]] = select(pop) + diff_factor*diff_vector(pop[[1]])
     pop_next[[1]] = range_fit(crossover(pop[[1]], pop_next[[1]], cr), range)
     pop_next[[2]] = qual(pop_next[[1]])
 
@@ -92,7 +83,7 @@ de = function(dims, range, pop_size, diff_factor, init, select, crossover,
   }
   result$generation = length(result$values)
   result$generation_max = generations
-  result$best_element = select_best_real(pop)
+  result$best_element = pop[[1]][which.best(pop[[2]]), ]
   result$best_qual = qual(result$best_element)
   result$time_taken = as.numeric(Sys.time())-as.numeric(begin)
   #result$qual = qual
