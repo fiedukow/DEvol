@@ -61,10 +61,8 @@ draw_population = function(pop, range, qual) {
   points(select_best_real(pop), col="red", lw=2)
 }
 
-de = function(dims, range, pop_size, diff_factor,
-              init, select, crossover,
-              cr, qual, best_possiblle, generations, near_enough,
-              diff_size) {
+de = function(dims, range, pop_size, diff_factor, init, select, crossover,
+              cr, qual, generations, diff_size, best_possible = NA, near_enough = NA) {
   pop = list()
   pop_next = list()
   pop[[1]] = init(pop_size, dims, range)
@@ -77,7 +75,8 @@ de = function(dims, range, pop_size, diff_factor,
   for(i in 1:generations) {
     best = select_best_real(pop) # it will be passed for some of selection methods for optimalization
                                  # it gives about 40% when using DE/best/X/X
-    if (abs(qual(best) - best_possiblle) < near_enough) {
+    if (!is.na(best_possible) && !is.na(near_enough) &&
+        abs(qual(best) - best_possible) < near_enough) {
       print(paste("Found good enough in ", i, " generation."))
       break;
     }
@@ -154,10 +153,8 @@ save_results = function(de_result) {
   system(paste("./gen_html_report.sh ", de_result$experiment_name, sep=""))
 }
 
-runExperiment = function(experiment_name, dims, range, pop_size, diff_factor,
-                         init, select, crossover,
-                         cr, qual, best_possiblle,
-                         generations, near_enough, diff_size) {
+runExperiment = function(experiment_name, dims, range, pop_size, diff_factor, init, select, crossover,
+                         cr, qual, generations, diff_size, best_possible = NA, near_enough = NA) {
   result = de(dims,
               range,
               pop_size,
@@ -167,10 +164,10 @@ runExperiment = function(experiment_name, dims, range, pop_size, diff_factor,
               crossover[[1]],
               cr,
               qual[[1]],
-              best_possiblle,
               generations,
-              near_enough,
-              diff_size)
+              diff_size,
+              best_possible,
+              near_enough)
 
   # appending params to result to generate report from that
   result$select_type = select[[2]]
@@ -179,7 +176,7 @@ runExperiment = function(experiment_name, dims, range, pop_size, diff_factor,
   result$diff_size = diff_size
   result$cr = cr
   result$diff_factor = diff_factor
-  result$best_possible = best_possiblle
+  result$best_possible = best_possible
   result$qual_description = qual[[2]]
   result$near_enough = near_enough
   result$range = range
