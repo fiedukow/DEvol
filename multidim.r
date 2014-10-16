@@ -4,7 +4,7 @@ which.best = which.min
 better = `<`
 
 initialize_unif = function(n, dims, range) {
-  matrix(replicate(n, runif(dims, range[1], range[2])), ncol=dims)
+  matrix(replicate(n, runif(dims, range[1], range[2])), ncol=dims, byrow = TRUE)
 }
 
 select_best = function(p) {
@@ -34,8 +34,18 @@ crossover_exp = function(x, y, cr) {
 
 # TODO: fitting into range should have more option then just
 #       truncating the element into range.
-range_fit = function(p, range) {
+range_fit_truncate = function(p, range) {
   pmin(pmax(p, range[1]), range[2])
+}
+
+range_fit_mirror = function(p, range) {
+  #range_l = range[2] - range[1]
+  mod_min = p > range[1]
+  mirrored_min = range[1] + (range[1] - p)
+  p = mod_min*p + (1 - mod_min)*mirrored_min
+  mod_max = p < range[2]
+  mirrored_max = range[2] - (p - range[2])
+  p = mod_max*p + (1 - mod_max)*mirrored_max
 }
 
 # This is only valid for two demensions
@@ -54,7 +64,7 @@ draw_population = function(pop, range, qual) {
 }
 
 de = function(dims, range, pop_size, diff_factor, init, select, crossover,
-              cr, qual, generations, diff_size, best_possible = NA, near_enough = NA) {
+              cr, qual, generations, diff_size, rage_fit = range_fit_mirror, best_possible = NA, near_enough = NA) {
   pop = list()
   pop_next = list()
   pop[[1]] = init(pop_size, dims, range)
