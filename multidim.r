@@ -64,7 +64,7 @@ draw_population = function(pop, range, qual) {
 }
 
 de = function(dims, range, pop_size, diff_factor, init, select, crossover,
-              cr, qual, generations, diff_size, rage_fit = range_fit_mirror, best_possible = NA, near_enough = NA) {
+              cr, qual, generations, diff_size, range_fit = range_fit_mirror, best_possible = NA, near_enough = NA) {
   pop = list()
   pop_next = list()
   pop[[1]] = init(pop_size, dims, range)
@@ -98,6 +98,8 @@ de = function(dims, range, pop_size, diff_factor, init, select, crossover,
   result$time_taken = as.numeric(Sys.time())-as.numeric(begin)
   #result$qual = qual
   result$pop = pop
+  result$middle = colMeans(pop[[1]])
+  result$middle_qual = qual(result$middle)
 
   return(result)
 }
@@ -148,8 +150,9 @@ save_results = function(de_result) {
   close(fileConn)
 
   write(de_result$best_element, file=paste("./results/", de_result$experiment_name, "_best.txt", sep=""))
-  write(de_result$pop[[1]], file=paste("./results/", de_result$experiment_name, "_pop.txt", sep="")) # TODO
-                                                                                        # Maybe dump results as well?
+  write.table(de_result$pop[[1]], file=paste("./results/", de_result$experiment_name, "_pop.txt", sep=""),
+              col.names=F, row.names=F)
+  # Maybe dump quality function values as well?
   write(de_result$values, file=paste("./results/", de_result$experiment_name, "_values.txt", sep=""))
   system(paste("./gen_html_report.sh ", de_result$experiment_name, sep=""))
 }
@@ -167,6 +170,7 @@ runExperiment = function(experiment_name, dims, range, pop_size, diff_factor, in
               qual[[1]],
               generations,
               diff_size,
+              range_fit_mirror,
               best_possible,
               near_enough)
 
