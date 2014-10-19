@@ -7,18 +7,17 @@ initialize_unif = function(n, dims, range) {
   matrix(replicate(n, runif(dims, range[1], range[2])), ncol=dims, byrow = TRUE)
 }
 
-select_best = function(p) {
-  matrix(p[[1]][which.best(p[[2]]), ], nrow(p[[1]]), ncol(p[[1]]), TRUE)
+select_best = function(p, N) {
+  matrix(p[[1]][which.best(p[[2]]), ], N, ncol(p[[1]]), TRUE)
 }
 
-select_rand = function(p) {
-  N = nrow(p[[1]])
+select_rand = function(p, N) {
   p[[1]][sample(N, N, TRUE), ]
 }
 
-diff_vector = function(pop) {
-  x1 = select_rand(list(pop))
-  x2 = select_rand(list(pop))
+diff_vector = function(pop, N) {
+  x1 = select_rand(list(pop), N)
+  x2 = select_rand(list(pop), N)
   x1 - x2
 }
 
@@ -72,11 +71,18 @@ draw_population = function(pop, range, qual) {
 }
 
 de = function(dims, range, pop_size, diff_factor, init, select, crossover,
-              cr, qual, generations, diff_size, range_fit = range_fit_mirror, best_possible = NA, near_enough = NA) {
+              cr, qual, generations, diff_size, range_fit = range_fit_mirror,
+              N_history = pop_size, best_possible = NA, near_enough = NA) {
+  if (N_history < pop_size)
+    warning("History must be at least 1 population long")
+  if (N_history %% pop_size != 0)
+    warning("For now de() is well defined only for N_history being multiple of pop_size")
+
   pop = list()
   pop_next = list()
   pop[[1]] = init(pop_size, dims, range)
   pop[[2]] = qual(pop[[1]])
+  pop_prev = pop;
 
   result = list()
   result$values = c()
@@ -90,14 +96,24 @@ de = function(dims, range, pop_size, diff_factor, init, select, crossover,
       print(paste("Found good enough in ", i, " generation."))
       break;
     }
-    pop_next[[1]] = select(pop) + diff_factor*diff_vector(pop[[1]])
-    pop_next[[1]] = range_fit(crossover(pop[[1]], pop_next[[1]], cr), range)
+    pop_next[[1]] = select(pop_prev, pop_size) + diff_factor*diff_vector(pop[[1]], pop_size)
+    pop_next[[1]] = range_fit(crossover(pop_prev[[1]], pop_next[[1]], cr), range)
     pop_next[[2]] = qual(pop_next[[1]])
 
     # TODO better turnament then simple selecting better.
-    mod = better(pop[[2]], pop_next[[2]])
-    pop[[1]] = pop[[1]]*mod + pop_next[[1]]*(1-mod)
-    pop[[2]] = pop[[2]]*mod + pop_next[[2]]*(1-mod)
+    mod = better(pop_prev[[2]], pop_next[[2]])
+    pop_next[[1]] = pop_prev[[1]]*mod + pop_next[[1]]*(1-mod)
+    pop_next[[2]] = pop_prev[[2]]*mod + pop_next[[2]]*(1-mod)
+
+    pop[[1]] = rbind(pop[[1]], pop_next[[1]])
+    pop[[2]] = c(pop[[2]], pop_next[[2]])
+
+    # Shift History window
+    N = nrow(pop[[1]])
+    pop[[1]] = pop[[1]][max(1, N - N_history + 1):N, ]
+    pop[[2]] = pop[[2]][max(1, N - N_history + 1):N]
+
+    pop_prev = pop_next
   }
   result$generation = length(result$values)
   result$generation_max = generations
@@ -166,7 +182,8 @@ save_results = function(de_result) {
 }
 
 runExperiment = function(experiment_name, dims, range, pop_size, diff_factor, init, select, crossover,
-                         cr, qual, generations, diff_size, best_possible = NA, near_enough = NA) {
+                         cr, qual, generations, diff_size, N_history = pop_size,
+                         best_possible = NA, near_enough = NA) {
   result = de(dims,
               range,
               pop_size,
@@ -179,8 +196,9 @@ runExperiment = function(experiment_name, dims, range, pop_size, diff_factor, in
               generations,
               diff_size,
               range_fit_mirror,
+              N_history,
               best_possible,
-              near_enough)
+              near_enough);
 
   # appending params to result to generate report from that
   result$select_type = select[[2]]
