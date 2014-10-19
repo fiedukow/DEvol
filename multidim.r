@@ -80,9 +80,12 @@ de = function(dims, range, pop_size, diff_factor, init, select, crossover,
 
   pop = list()
   pop_next = list()
+  H_norm = list()
   pop[[1]] = init(pop_size, dims, range)
   pop[[2]] = qual(pop[[1]])
   pop_prev = pop;
+  H_norm[[1]] = pop[[1]] - matrix(colMeans(pop[[1]]), nrow=pop_size, ncol=dims, byrow=TRUE)
+  H_norm[[2]] = pop[[2]]
 
   result = list()
   result$values = c()
@@ -96,7 +99,7 @@ de = function(dims, range, pop_size, diff_factor, init, select, crossover,
       print(paste("Found good enough in ", i, " generation."))
       break;
     }
-    pop_next[[1]] = select(pop_prev, pop_size) + diff_factor*diff_vector(pop[[1]], pop_size)
+    pop_next[[1]] = select(pop_prev, pop_size) + diff_factor*diff_vector(H_norm[[1]], pop_size)
     pop_next[[1]] = range_fit(crossover(pop_prev[[1]], pop_next[[1]], cr), range)
     pop_next[[2]] = qual(pop_next[[1]])
 
@@ -107,11 +110,16 @@ de = function(dims, range, pop_size, diff_factor, init, select, crossover,
 
     pop[[1]] = rbind(pop[[1]], pop_next[[1]])
     pop[[2]] = c(pop[[2]], pop_next[[2]])
+    H_norm[[1]] = rbind(H_norm[[1]],
+                        pop_next[[1]] - matrix(colMeans(pop_next[[1]]), nrow=pop_size, ncol=dims, byrow=TRUE))
+    H_norm[[2]] = pop_next[[2]]
 
     # Shift History window
     N = nrow(pop[[1]])
     pop[[1]] = pop[[1]][max(1, N - N_history + 1):N, ]
     pop[[2]] = pop[[2]][max(1, N - N_history + 1):N]
+    H_norm[[1]] = H_norm[[1]][max(1, N - N_history + 1):N, ]
+    H_norm[[2]] = H_norm[[2]][max(1, N - N_history + 1):N]
 
     pop_prev = pop_next
   }
