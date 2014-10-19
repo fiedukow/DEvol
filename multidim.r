@@ -32,19 +32,27 @@ crossover_exp = function(x, y, cr) {
   mod*x + (1-mod)*y
 }
 
-# TODO: fitting into range should have more option then just
-#       truncating the element into range.
 range_fit_truncate = function(p, range) {
   pmin(pmax(p, range[1]), range[2])
 }
 
 range_fit_mirror = function(p, range) {
-  #range_l = range[2] - range[1]
+  range_l = range[2] - range[1]
   mod_min = p > range[1]
-  mirrored_min = range[1] + (range[1] - p)
+  mirrored_min = range[1] + ((range[1] - p)%%range_l)
   p = mod_min*p + (1 - mod_min)*mirrored_min
   mod_max = p < range[2]
-  mirrored_max = range[2] - (p - range[2])
+  mirrored_max = range[2] - ((p - range[2])%%range_l)
+  p = mod_max*p + (1 - mod_max)*mirrored_max
+}
+
+range_fit_roll = function(p, range) {
+  range_l = range[2] - range[1]
+  mod_min = p > range[1]
+  rolled_min = range[2] - ((range[1] - p)%%range_l)
+  p = mod_min*p + (1 - mod_min)*mirrored_min
+  mod_max = p < range[2]
+  rolled_max = range[1] + ((p - range[2])%%range_l)
   p = mod_max*p + (1 - mod_max)*mirrored_max
 }
 
