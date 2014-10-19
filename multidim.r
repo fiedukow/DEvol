@@ -78,22 +78,26 @@ de = function(dims, range, pop_size, diff_factor, init, select, crossover,
   if (N_history %% pop_size != 0)
     warning("For now de() is well defined only for N_history being multiple of pop_size")
 
-  pop = list()
   pop_next = list()
+  H = list()
   H_norm = list()
-  pop[[1]] = init(pop_size, dims, range)
-  pop[[2]] = qual(pop[[1]])
-  pop_prev = pop;
-  H_norm[[1]] = pop[[1]] - matrix(colMeans(pop[[1]]), nrow=pop_size, ncol=dims, byrow=TRUE)
-  H_norm[[2]] = pop[[2]]
+  H[[1]] = init(pop_size, dims, range)
+  H[[2]] = qual(H[[1]])
+  H_norm[[1]] = H[[1]] - matrix(colMeans(H[[1]]), nrow=pop_size, ncol=dims, byrow=TRUE)
+  H_norm[[2]] = H[[2]]
+
+  pop_prev = H;
 
   result = list()
   result$values = c()
+  result$mid_values = c()
 
   begin = Sys.time()
   for(i in 1:generations) {
-    best_value = qual(pop[[1]][which.best(pop[[2]]), ])
+    best_value = qual(H[[1]][which.best(H[[2]]), ])
     result$values[i] = best_value
+    result$mid_values[i] = qual(colMeans(pop_prev[[1]]))
+
     if (!is.na(best_possible) && !is.na(near_enough) &&
         abs(qual(best_value) - best_possible) < near_enough) {
       print(paste("Found good enough in ", i, " generation."))
@@ -108,16 +112,16 @@ de = function(dims, range, pop_size, diff_factor, init, select, crossover,
     pop_next[[1]] = pop_prev[[1]]*mod + pop_next[[1]]*(1-mod)
     pop_next[[2]] = pop_prev[[2]]*mod + pop_next[[2]]*(1-mod)
 
-    pop[[1]] = rbind(pop[[1]], pop_next[[1]])
-    pop[[2]] = c(pop[[2]], pop_next[[2]])
+    H[[1]] = rbind(H[[1]], pop_next[[1]])
+    H[[2]] = c(H[[2]], pop_next[[2]])
     H_norm[[1]] = rbind(H_norm[[1]],
                         pop_next[[1]] - matrix(colMeans(pop_next[[1]]), nrow=pop_size, ncol=dims, byrow=TRUE))
     H_norm[[2]] = pop_next[[2]]
 
     # Shift History window
-    N = nrow(pop[[1]])
-    pop[[1]] = pop[[1]][max(1, N - N_history + 1):N, ]
-    pop[[2]] = pop[[2]][max(1, N - N_history + 1):N]
+    N = nrow(H[[1]])
+    H[[1]] = H[[1]][max(1, N - N_history + 1):N, ]
+    H[[2]] = H[[2]][max(1, N - N_history + 1):N]
     H_norm[[1]] = H_norm[[1]][max(1, N - N_history + 1):N, ]
     H_norm[[2]] = H_norm[[2]][max(1, N - N_history + 1):N]
 
@@ -125,12 +129,13 @@ de = function(dims, range, pop_size, diff_factor, init, select, crossover,
   }
   result$generation = length(result$values)
   result$generation_max = generations
-  result$best_element = pop[[1]][which.best(pop[[2]]), ]
+  result$best_element = H[[1]][which.best(H[[2]]), ]
   result$best_qual = qual(result$best_element)
   result$time_taken = as.numeric(Sys.time())-as.numeric(begin)
   #result$qual = qual
-  result$pop = pop
-  result$middle = colMeans(pop[[1]])
+  result$H = H
+  result$last_pop = pop_prev
+  result$middle = colMeans(H[[1]])
   result$middle_qual = qual(result$middle)
 
   return(result)
@@ -146,7 +151,10 @@ save_results = function(de_result) {
        xlab="generation",
        ylab="best quality function value",
        col="blue",
-       lwd=3)
+       ylim = c(min(c(de_result$values, de_result$mid_values)),
+                max(c(de_result$values, de_result$mid_values))),
+       lwd=4)
+  lines(de_result$mid_values, col="red", lwd=2)
   dev.off()
   fileConn<-file(paste("./results/", de_result$experiment_name, ".txt", sep=""))
   writeLines(paste(
@@ -157,10 +165,11 @@ save_results = function(de_result) {
     paste("_", as.character.Date(Sys.time()), "_", sep = ""),
     paste("Time taken: __",de_result$time_taken, "__", sep = ""),
     paste(""),
-    paste(" * Dimensions = ", length(de_result$pop[[1]][1,]), sep=""),
+    paste(" * Dimensions = ", length(de_result$H[[1]][1,]), sep=""),
     paste(" * Range = [", de_result$range[1], ", ", de_result$range[2], "]", sep=""),
     paste(" * Cr = ", de_result$cr, sep = ""),
-    paste(" * μ = ", nrow(de_result$pop[[1]]), sep = ""),
+    paste(" * μ = ", nrow(de_result$last_pop[[1]]), sep = ""),
+    paste(" * μ_h = ", nrow(de_result$H[[1]]), sep = ""),
     paste(" * F = ", de_result$diff_factor, sep = ""),
     paste(" * generations = ", de_result$generation, sep = ""),
     paste(" * generationsMax = ", de_result$generation_max, sep = ""),
@@ -182,7 +191,7 @@ save_results = function(de_result) {
   close(fileConn)
 
   write(de_result$best_element, file=paste("./results/", de_result$experiment_name, "_best.txt", sep=""))
-  write.table(de_result$pop[[1]], file=paste("./results/", de_result$experiment_name, "_pop.txt", sep=""),
+  write.table(de_result$last_pop[[1]], file=paste("./results/", de_result$experiment_name, "_pop.txt", sep=""),
               col.names=F, row.names=F)
   # Maybe dump quality function values as well?
   write(de_result$values, file=paste("./results/", de_result$experiment_name, "_values.txt", sep=""))
