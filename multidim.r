@@ -49,10 +49,10 @@ range_fit_roll = function(p, range) {
   range_l = range[2] - range[1]
   mod_min = p > range[1]
   rolled_min = range[2] - ((range[1] - p)%%range_l)
-  p = mod_min*p + (1 - mod_min)*mirrored_min
+  p = mod_min*p + (1 - mod_min)*rolled_min
   mod_max = p < range[2]
   rolled_max = range[1] + ((p - range[2])%%range_l)
-  p = mod_max*p + (1 - mod_max)*mirrored_max
+  p = mod_max*p + (1 - mod_max)*rolled_max
 }
 
 # This is only valid for two demensions
@@ -186,6 +186,7 @@ save_results = function(de_result) {
     paste(" * Initialization: ", de_result$init[[2]], " - ", de_result$init[[3]]),
     paste(" * Selection: ", de_result$select[[2]], " - ", de_result$select[[3]]),
     paste(" * Crossover: ", de_result$crossover[[2]], " - ", de_result$crossover[[3]]),
+    paste(" * Fitting into range: ", de_result$range_fit[[2]], " - ", de_result$range_fit[[3]]),
     paste(""),
     paste("---------------------------------------"),
     paste(""),
@@ -227,7 +228,7 @@ save_results = function(de_result) {
 }
 
 runExperiment = function(experiment_name, dims, range, pop_size, diff_factor, init, select, crossover,
-                         cr, qual, generations, diff_size, N_history = pop_size,
+                         cr, qual, generations, diff_size, range_fit, N_history = pop_size,
                          best_possible = NA, near_enough = NA) {
   result = de(dims,
               range,
@@ -240,7 +241,7 @@ runExperiment = function(experiment_name, dims, range, pop_size, diff_factor, in
               qual[[1]],
               generations,
               diff_size,
-              range_fit_mirror,
+              range_fit[[1]],
               N_history,
               best_possible,
               near_enough);
@@ -257,6 +258,7 @@ runExperiment = function(experiment_name, dims, range, pop_size, diff_factor, in
   result$near_enough = near_enough
   result$range = range
   result$experiment_name = experiment_name
+  result$range_fit = range_fit
 
   save_results(result)
 
