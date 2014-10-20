@@ -144,10 +144,11 @@ de = function(dims, range, pop_size, diff_factor, init, select, crossover,
 save_results = function(de_result) {
   dir.create("./results", showWarnings = FALSE)
   png(filename = paste("./results/", de_result$experiment_name, ".png", sep=""),
-      width = 600, height = 600, units = "px", pointsize = 12,
+      width = 800, height = 600, units = "px", pointsize = 12,
       bg = "white")
+  par(cex=1.2)
   plot(de_result$values, type="l",
-       main=paste("DE", de_result$select_type, de_result$diff_size, de_result$crossover_type, sep="/"),
+       main=paste("DE", de_result$select[[2]], de_result$diff_size, de_result$crossover[[2]], sep="/"),
        xlab="generation",
        ylab="best quality function value",
        col="blue",
@@ -155,15 +156,40 @@ save_results = function(de_result) {
                 max(c(de_result$values, de_result$mid_values))),
        lwd=4)
   lines(de_result$mid_values, col="red", lwd=2)
+  par(par(xpd=TRUE))
+  legend("top", c("best element in generation", "middle element of generation"),
+         lty=c(1,1),
+         lwd=c(4,2),
+         col=c("blue","red"),
+         bty="n")
   dev.off()
   fileConn<-file(paste("./results/", de_result$experiment_name, ".txt", sep=""))
   writeLines(paste(
     paste("Experiment: ", de_result$experiment_name, "; ",
-          paste("DE", de_result$select_type, de_result$diff_size, de_result$crossover_type, sep="/"),
+          paste("DE", de_result$select[[2]], de_result$diff_size, de_result$crossover[[2]], sep="/"),
           sep=""),
     "-----------------------------------------",
-    paste("_", as.character.Date(Sys.time()), "_", sep = ""),
-    paste("Time taken: __",de_result$time_taken, "__", sep = ""),
+    paste("Finished on: __", as.character.Date(Sys.time()), "__", sep = ""),
+    paste(""),
+    paste("Time taken: __",de_result$time_taken, "__ seconds", sep = ""),
+    paste(""),
+    paste("---------------------------------------"),
+    paste(""),
+    paste("__Quality function:__"),
+    paste(""),
+    paste(" * ", de_result$qual[[2]], " - ", de_result$qual[[3]]),
+    paste(""),
+    paste("---------------------------------------"),
+    paste(""),
+    paste("__Operators used:__"),
+    paste(""),
+    paste(" * Initialization: ", de_result$init[[2]], " - ", de_result$init[[3]]),
+    paste(" * Selection: ", de_result$select[[2]], " - ", de_result$select[[3]]),
+    paste(" * Crossover: ", de_result$crossover[[2]], " - ", de_result$crossover[[3]]),
+    paste(""),
+    paste("---------------------------------------"),
+    paste(""),
+    paste("__Parameters:__"),
     paste(""),
     paste(" * Dimensions = ", length(de_result$H[[1]][1,]), sep=""),
     paste(" * Range = [", de_result$range[1], ", ", de_result$range[2], "]", sep=""),
@@ -173,20 +199,21 @@ save_results = function(de_result) {
     paste(" * F = ", de_result$diff_factor, sep = ""),
     paste(" * generations = ", de_result$generation, sep = ""),
     paste(" * generationsMax = ", de_result$generation_max, sep = ""),
-    paste(" * Init Method = ", de_result$init_type, sep = ""),
     paste(" * Best Found Value = ", de_result$best_qual, sep = ""),
     paste(" * Perfect Known Value = ", de_result$best_possible, sep = ""),
     paste(" * Good Enough Range = ", de_result$near_enough, sep = ""),
-    paste(" * Quality Function: ", de_result$qual_description, sep=""),
     paste(""),
     paste("![](./", de_result$experiment_name, ".png)", sep=""),
     paste(""),
     paste("---------------------------------------"),
     paste(""),
+    paste("__Additional data:__"),
+    paste(""),
     paste(" * [Raw Form Raport](./", de_result$experiment_name, ".txt)", sep=""),
     paste(" * [Best Object](./", de_result$experiment_name, "_best.txt)", sep=""),
     paste(" * [Final Population](./", de_result$experiment_name, "_pop.txt)", sep=""),
     paste(" * [best(generation)](./", de_result$experiment_name, "_values.txt)", sep=""),
+    paste(" * [middle(generation)](./", de_result$experiment_name, "_middle.txt)", sep=""),
   sep="\n"), fileConn)
   close(fileConn)
 
@@ -195,6 +222,7 @@ save_results = function(de_result) {
               col.names=F, row.names=F)
   # Maybe dump quality function values as well?
   write(de_result$values, file=paste("./results/", de_result$experiment_name, "_values.txt", sep=""))
+  write(de_result$values, file=paste("./results/", de_result$experiment_name, "_middle.txt", sep=""))
   system(paste("./gen_html_report.sh ", de_result$experiment_name, sep=""))
 }
 
@@ -218,14 +246,14 @@ runExperiment = function(experiment_name, dims, range, pop_size, diff_factor, in
               near_enough);
 
   # appending params to result to generate report from that
-  result$select_type = select[[2]]
-  result$crossover_type = crossover[[2]]
-  result$init_type = init[[2]]
+  result$select = select
+  result$crossover = crossover
+  result$init = init
   result$diff_size = diff_size
   result$cr = cr
   result$diff_factor = diff_factor
   result$best_possible = best_possible
-  result$qual_description = qual[[2]]
+  result$qual = qual
   result$near_enough = near_enough
   result$range = range
   result$experiment_name = experiment_name
