@@ -132,7 +132,6 @@ de = function(dims, range, pop_size, diff_factor, init, select, crossover,
   result$best_element = H[[1]][which.best(H[[2]]), ]
   result$best_qual = qual(result$best_element)
   result$time_taken = as.numeric(Sys.time())-as.numeric(begin)
-  #result$qual = qual
   result$H = H
   result$last_pop = pop_prev
   result$middle = colMeans(H[[1]])
@@ -215,6 +214,7 @@ save_results = function(de_result) {
     paste(" * [Final Population](./", de_result$experiment_name, "_pop.txt)", sep=""),
     paste(" * [best(generation)](./", de_result$experiment_name, "_values.txt)", sep=""),
     paste(" * [middle(generation)](./", de_result$experiment_name, "_middle.txt)", sep=""),
+    paste(" * [Raw result dump](./", de_result$experiment_name, "_dump.r)", sep=""),
   sep="\n"), fileConn)
   close(fileConn)
 
@@ -225,6 +225,7 @@ save_results = function(de_result) {
   write(de_result$values, file=paste("./results/", de_result$experiment_name, "_values.txt", sep=""))
   write(de_result$values, file=paste("./results/", de_result$experiment_name, "_middle.txt", sep=""))
   system(paste("./gen_html_report.sh ", de_result$experiment_name, sep=""))
+  dump("de_result", file=paste("./results/", de_result$experiment_name, "_dump.r", sep=""))
 }
 
 runExperiment = function(experiment_name, dims, range, pop_size, diff_factor, init, select, crossover,
