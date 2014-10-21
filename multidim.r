@@ -12,7 +12,7 @@ select_best = function(p, N) {
 }
 
 select_rand = function(p, N) {
-  p[[1]][sample(N, N, TRUE), ]
+  p[[1]][sample(nrow(p[[1]]), N, TRUE), ]
 }
 
 diff_vector = function(pop, N) {
@@ -74,9 +74,9 @@ de = function(dims, range, pop_size, diff_factor, init, select, crossover,
               cr, qual, generations, diff_size, range_fit = range_fit_mirror,
               N_history = pop_size, best_possible = NA, near_enough = NA) {
   if (N_history < pop_size)
-    warning("History must be at least 1 population long")
+    stop("History must be at least 1 population long")
   if (N_history %% pop_size != 0)
-    warning("For now de() is well defined only for N_history being multiple of pop_size")
+    stop("For now de() is well defined only for N_history being multiple of pop_size")
 
   pop_next = list()
   H = list()
