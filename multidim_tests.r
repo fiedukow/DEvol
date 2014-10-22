@@ -29,7 +29,16 @@ test.select_rand = function() {
 }
 
 test.initialize_unif = function() {
-  # FIXME IMPLEMENT THIS
+  pop = initialize_unif(10, 2, c(-1,1))
+  checkEquals(dim(pop), c(10,2))
+  checkEquals(sum((pop < -1) + (pop > 1)), 0)
+
+  pop = initialize_unif(1, 1, c(0,0))
+  checkEquals(dim(matrix(pop)), c(1,1))
+  checkEquals(sum(pop),0)
+
+  pop = initialize_unif(10,20, c(0,0))
+  checkEquals(sum(pop),0)
 }
 
 test.diff_vector = function() {
