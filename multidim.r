@@ -78,15 +78,15 @@ de = function(dims, range, pop_size, diff_factor, init, select, crossover,
   if (N_history %% pop_size != 0)
     stop("For now de() is well defined only for N_history being multiple of pop_size")
 
+  pop_prev = list()
   pop_next = list()
-  H = list()
   H_norm = list()
-  H[[1]] = init(pop_size, dims, range)
-  H[[2]] = qual(H[[1]])
-  H_norm[[1]] = H[[1]] - matrix(colMeans(H[[1]]), nrow=pop_size, ncol=dims, byrow=TRUE)
-  H_norm[[2]] = H[[2]]
+  pop_prev[[1]] = init(pop_size, dims, range)
+  pop_prev[[2]] = qual(pop_prev[[1]])
+  H_norm[[1]] = pop_prev[[1]] - matrix(colMeans(pop_prev[[1]]), nrow=pop_size, ncol=dims, byrow=TRUE)
+  H_norm[[2]] = pop_prev[[2]]
 
-  pop_prev = H;
+
 
   result = list()
   result$values = c()
@@ -94,7 +94,7 @@ de = function(dims, range, pop_size, diff_factor, init, select, crossover,
 
   begin = Sys.time()
   for(i in 1:generations) {
-    best_value = qual(H[[1]][which.best(H[[2]]), ])
+    best_value = qual(pop_prev[[1]][which.best(pop_prev[[2]]), ])
     result$values[i] = best_value
     result$mid_values[i] = qual(colMeans(pop_prev[[1]]))
 
@@ -114,16 +114,12 @@ de = function(dims, range, pop_size, diff_factor, init, select, crossover,
     pop_next_fit = pop_prev[[1]]*mod + pop_next_fit*(1-mod)
     pop_next[[2]] = pop_prev[[2]]*mod + pop_next[[2]]*(1-mod)
 
-    H[[1]] = rbind(H[[1]], pop_next_fit)
-    H[[2]] = c(H[[2]], pop_next[[2]])
     H_norm[[1]] = rbind(H_norm[[1]],
                         pop_next[[1]] - matrix(colMeans(pop_next[[1]]), nrow=pop_size, ncol=dims, byrow=TRUE))
     H_norm[[2]] = pop_next[[2]]
 
     # Shift History window
-    N = nrow(H[[1]])
-    H[[1]] = H[[1]][max(1, N - N_history + 1):N, ]
-    H[[2]] = H[[2]][max(1, N - N_history + 1):N]
+    N = nrow(H_norm[[1]])
     H_norm[[1]] = H_norm[[1]][max(1, N - N_history + 1):N, ]
     H_norm[[2]] = H_norm[[2]][max(1, N - N_history + 1):N]
 
@@ -132,12 +128,12 @@ de = function(dims, range, pop_size, diff_factor, init, select, crossover,
   }
   result$generation = length(result$values)
   result$generation_max = generations
-  result$best_element = H[[1]][which.best(H[[2]]), ]
+  result$best_element = pop_prev[[1]][which.best(pop_prev[[2]]), ]
   result$best_qual = qual(result$best_element)
   result$time_taken = as.numeric(Sys.time())-as.numeric(begin)
-  result$H = H
+  result$H_norm = H_norm
   result$last_pop = pop_prev
-  result$middle = colMeans(H[[1]])
+  result$middle = colMeans(pop_prev[[1]])
   result$middle_qual = qual(result$middle)
 
   return(result)
