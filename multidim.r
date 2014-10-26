@@ -104,15 +104,17 @@ de = function(dims, range, pop_size, diff_factor, init, select, crossover,
       break;
     }
     pop_next[[1]] = select(pop_prev, pop_size) + diff_factor*diff_vector(H_norm[[1]], pop_size)
-    pop_next[[1]] = range_fit(crossover(pop_prev[[1]], pop_next[[1]], cr), range)
-    pop_next[[2]] = qual(pop_next[[1]])
+    pop_next[[1]] = crossover(pop_prev[[1]], pop_next[[1]], cr)
+    pop_next_fit = range_fit(pop_next[[1]], range)
+    pop_next[[2]] = qual(pop_next_fit)
 
     # TODO better turnament then simple selecting better.
     mod = better(pop_prev[[2]], pop_next[[2]])
     pop_next[[1]] = pop_prev[[1]]*mod + pop_next[[1]]*(1-mod)
+    pop_next_fit = pop_prev[[1]]*mod + pop_next_fit*(1-mod)
     pop_next[[2]] = pop_prev[[2]]*mod + pop_next[[2]]*(1-mod)
 
-    H[[1]] = rbind(H[[1]], pop_next[[1]])
+    H[[1]] = rbind(H[[1]], pop_next_fit)
     H[[2]] = c(H[[2]], pop_next[[2]])
     H_norm[[1]] = rbind(H_norm[[1]],
                         pop_next[[1]] - matrix(colMeans(pop_next[[1]]), nrow=pop_size, ncol=dims, byrow=TRUE))
@@ -125,6 +127,7 @@ de = function(dims, range, pop_size, diff_factor, init, select, crossover,
     H_norm[[1]] = H_norm[[1]][max(1, N - N_history + 1):N, ]
     H_norm[[2]] = H_norm[[2]][max(1, N - N_history + 1):N]
 
+    pop_next[[1]] = pop_next_fit
     pop_prev = pop_next
   }
   result$generation = length(result$values)
