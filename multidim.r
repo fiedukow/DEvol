@@ -78,7 +78,7 @@ draw_population = function(pop, range, qual) {
 
 de = function(dims, range, pop_size, diff_factor, init, select, crossover,
               cr, qual, generations, diff_size, range_fit = range_fit_mirror,
-              N_history = pop_size, best_possible = NA, near_enough = NA) {
+              N_history = pop_size, noise_sd = 1, best_possible = NA, near_enough = NA) {
   if (N_history < pop_size)
     stop("History must be at least 1 population long")
   if (N_history %% pop_size != 0)
@@ -91,8 +91,7 @@ de = function(dims, range, pop_size, diff_factor, init, select, crossover,
   pop_prev[[2]] = qual(pop_prev[[1]])
   H_norm[[1]] = pop_prev[[1]] - matrix(colMeans(pop_prev[[1]]), nrow=pop_size, ncol=dims, byrow=TRUE)
   H_norm[[2]] = pop_prev[[2]]
-
-
+  N_runif = pop_size*dims
 
   result = list()
   result$values = c()
@@ -110,6 +109,7 @@ de = function(dims, range, pop_size, diff_factor, init, select, crossover,
       break;
     }
     pop_next[[1]] = select(pop_prev, pop_size) + diff_factor*diff_vector(H_norm[[1]], pop_size)
+                    + rnorm(N_runif, mean = 20, sd = noise_sd)
     pop_next[[1]] = crossover(pop_prev[[1]], pop_next[[1]], cr)
     pop_next_fit = range_fit(pop_next[[1]], range)
     pop_next[[2]] = qual(pop_next_fit)
@@ -235,7 +235,7 @@ save_results = function(de_result) {
 
 runExperiment = function(experiment_name, dims, range, pop_size, diff_factor, init, select, crossover,
                          cr, qual, generations, diff_size, range_fit, N_history = pop_size,
-                         best_possible = NA, near_enough = NA) {
+                         noise_sd = 1, best_possible = NA, near_enough = NA) {
   result = de(dims,
               range,
               pop_size,
@@ -249,6 +249,7 @@ runExperiment = function(experiment_name, dims, range, pop_size, diff_factor, in
               diff_size,
               range_fit[[1]],
               N_history,
+              noise_sd,
               best_possible,
               near_enough);
 
