@@ -3,6 +3,7 @@ library(cec2005benchmark)
 library(cec2013)
 
 C_EXP       = c(crossover_exp,      "exp",      "Standard exponential crossover function."                             )
+C_EXP_PERM  = c(crossover_exp_perm, "exp_p",    "Standard exponential crossover function with mask permutation."       )
 C_BIN       = c(crossover_bin,      "bin",      "Standard binary crossover function."                                  )
 I_UNIF      = c(initialize_unif,    "unif",     "Standard uniform initialization function."                            )
 S_BEST      = c(select_best,        "best",     "Standard best selection function."                                    )

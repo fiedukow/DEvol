@@ -31,6 +31,12 @@ crossover_exp = function(x, y, cr) {
   mod*x + (1-mod)*y
 }
 
+crossover_exp_perm = function(x, y, cr) {
+  mod = t(replicate(nrow(x), cummin(runif(ncol(x)) > cr)))
+  mod = sample(mod)
+  mod*x + (1-mod)*y
+}
+
 range_fit_truncate = function(p, range) {
   pmin(pmax(p, range[1]), range[2])
 }
