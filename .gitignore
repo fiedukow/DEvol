@@ -4,4 +4,5 @@ experiments.r
 results/*.txt
 results/*.png
 results/*.html
+results/*.r
 

@@ -229,7 +229,7 @@ save_results = function(de_result) {
   # Maybe dump quality function values as well?
   write(de_result$values, file=paste("./results/", de_result$experiment_name, "_values.txt", sep=""))
   write(de_result$values, file=paste("./results/", de_result$experiment_name, "_middle.txt", sep=""))
-  system(paste("./gen_html_report.sh ", de_result$experiment_name, sep=""))
+  system(paste("./gen_html_report.sh \"", de_result$experiment_name, "\"", sep=""))
   dump("de_result", file=paste("./results/", de_result$experiment_name, "_dump.r", sep=""))
 }
 
