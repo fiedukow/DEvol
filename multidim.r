@@ -1,3 +1,5 @@
+library(stringr) #str_replace to support markdown bug
+
 # MINIMIZE OR MAXIMIZE
 best = min
 which.best = which.min
@@ -208,7 +210,7 @@ save_results = function(de_result) {
     paste(" * Perfect Known Value = ", de_result$best_possible, sep = ""),
     paste(" * Good Enough Range = ", de_result$near_enough, sep = ""),
     paste(""),
-    paste("![](./", de_result$experiment_name, ".png)", sep=""),
+    paste("![](./", str_replace_all(de_result$experiment_name, " ", "%20"), ".png)", sep=""),
     paste(""),
     paste("---------------------------------------"),
     paste(""),
