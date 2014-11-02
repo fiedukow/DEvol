@@ -8,11 +8,13 @@ dims = c(10,30,50)
 N_hist_factors = c(1,2,10)
 
 result = list()
+last_init_pop = c()
 
 for(qual in qual_funs) {
   result[[qual[[2]]]] = list()
 for(dim in dims) {
   result[[qual[[2]]]][[dim]] = list()
+  INIT = I_UNIF
 for(N_hist_factor in N_hist_factors) {
   result[[qual[[2]]]][[dim]][[N_hist_factor]] =
     runExperiment(experiment_name = paste(qual[[3]], " DIM = ", dim, "; Hfactor = ", N_hist_factor, "", sep=""),
@@ -20,7 +22,7 @@ for(N_hist_factor in N_hist_factors) {
                   range = c(-100,100),
                   pop_size = 10*dim,
                   diff_factor = 0.9,
-                  init = I_UNIF,
+                  init = INIT,
                   select = S_RAND,
                   crossover = C_BIN,
                   cr = 0.9,
@@ -30,6 +32,8 @@ for(N_hist_factor in N_hist_factors) {
                   range_fit = RF_MIRROR,
                   N_history = 10*dim*N_hist_factor,
                   noise_sd = 0.33)
+  last_init_pop = result[[qual[[2]]]][[dim]][[N_hist_factor]]$init_pop
+  INIT = c(function(n, dims, range) { last_init_pop }, "Reuse last init.", "Use same values as for previous experiment")
 }
 }
 }

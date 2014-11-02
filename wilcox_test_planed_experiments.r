@@ -23,6 +23,6 @@ for(qual in qual_funs) {
   dec = cbind(dec, c2)
 }
 
-write.csv(dec, paste("WilcoxonH=", H,".csv", sep=""));
+write.csv(format(dec, nsmall=5), paste("WilcoxonH=", H,".csv", sep=""));
 }
 

@@ -98,6 +98,7 @@ de = function(dims, range, pop_size, diff_factor, init, select, crossover,
   result = list()
   result$values = c()
   result$mid_values = c()
+  result$init_pop = pop_prev[[1]]
 
   begin = Sys.time()
   for(i in 1:generations) {
