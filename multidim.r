@@ -4,6 +4,7 @@ library(stringr) #str_replace to support markdown bug
 best = min
 which.best = which.min
 better = `<`
+worst = Inf
 
 initialize_unif = function(n, dims, range) {
   matrix(replicate(n, runif(dims, range[1], range[2])), ncol=dims, byrow = TRUE)
@@ -99,12 +100,17 @@ de = function(dims, range, pop_size, diff_factor, init, select, crossover,
   result$values = c()
   result$mid_values = c()
   result$init_pop = pop_prev[[1]]
+  result$record_value = worst
+  result$record_mid_value = worst
 
   begin = Sys.time()
   for(i in 1:generations) {
     best_value = qual(pop_prev[[1]][which.best(pop_prev[[2]]), ])
     result$values[i] = best_value
-    result$mid_values[i] = qual(colMeans(pop_prev[[1]]))
+    result$record_value = best(result$record_value, best_value)
+    this_mid_value = qual(colMeans(pop_prev[[1]]))
+    result$mid_values[i] = this_mid_value
+    result$record_mid_value = best(result$record_mid_value, this_mid_value)
 
     if (!is.na(best_possible) && !is.na(near_enough) &&
         abs(qual(best_value) - best_possible) < near_enough) {
@@ -207,7 +213,9 @@ save_results = function(de_result) {
     paste(" * F = ", de_result$diff_factor, sep = ""),
     paste(" * generations = ", de_result$generation, sep = ""),
     paste(" * generationsMax = ", de_result$generation_max, sep = ""),
-    paste(" * Best Found Value = ", de_result$best_qual, sep = ""),
+    paste(" * Last Generation Best = ", de_result$best_qual, sep = ""),
+    paste(" * Record element value = ", de_result$record_value, sep = ""),
+    paste(" * Record mid value = ", de_result$record_mid_value, sep = ""),
     paste(" * Perfect Known Value = ", de_result$best_possible, sep = ""),
     paste(" * Good Enough Range = ", de_result$near_enough, sep = ""),
     paste(""),
