@@ -92,7 +92,8 @@ de = function(dims, range, pop_size, diff_factor, init, select, crossover,
   H_norm = list()
   pop_prev[[1]] = init(pop_size, dims, range)
   pop_prev[[2]] = qual(pop_prev[[1]])
-  H_norm[[1]] = pop_prev[[1]] - matrix(colMeans(pop_prev[[1]]), nrow=pop_size, ncol=dims, byrow=TRUE)
+  mean_pop_prev = mean(dist(pop_prev[[1]]))
+  H_norm[[1]] = (pop_prev[[1]] - matrix(colMeans(pop_prev[[1]]), nrow=pop_size, ncol=dims, byrow=TRUE)) / mean_pop_prev
   H_norm[[2]] = pop_prev[[2]]
   N_runif = pop_size*dims
 
@@ -117,7 +118,7 @@ de = function(dims, range, pop_size, diff_factor, init, select, crossover,
       print(paste("Found good enough in ", i, " generation."))
       break;
     }
-    pop_next[[1]] = select(pop_prev, pop_size) + diff_factor*diff_vector(H_norm[[1]], pop_size)
+    pop_next[[1]] = select(pop_prev, pop_size) + mean_pop_prev*diff_factor*diff_vector(H_norm[[1]], pop_size)
                     + rnorm(N_runif, mean = 20, sd = noise_sd)
     pop_next[[1]] = crossover(pop_prev[[1]], pop_next[[1]], cr)
     pop_next_fit = range_fit(pop_next[[1]], range)
@@ -129,8 +130,10 @@ de = function(dims, range, pop_size, diff_factor, init, select, crossover,
     pop_next_fit = pop_prev[[1]]*mod + pop_next_fit*(1-mod)
     pop_next[[2]] = pop_prev[[2]]*mod + pop_next[[2]]*(1-mod)
 
+    H_norm_next = pop_next[[1]] - matrix(colMeans(pop_next[[1]]), nrow=pop_size, ncol=dims, byrow=TRUE)
+    mean_pop_next = mean(dist(pop_next[[1]]))
     H_norm[[1]] = rbind(H_norm[[1]],
-                        pop_next[[1]] - matrix(colMeans(pop_next[[1]]), nrow=pop_size, ncol=dims, byrow=TRUE))
+                        H_norm_next/mean_pop_next)
     H_norm[[2]] = pop_next[[2]]
 
     # Shift History window
@@ -140,6 +143,7 @@ de = function(dims, range, pop_size, diff_factor, init, select, crossover,
 
     pop_next[[1]] = pop_next_fit
     pop_prev = pop_next
+    mean_pop_prev = mean_pop_next
   }
   result$generation = length(result$values)
   result$generation_max = generations
