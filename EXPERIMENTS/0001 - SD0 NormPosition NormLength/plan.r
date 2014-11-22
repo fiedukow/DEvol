@@ -57,7 +57,7 @@ for(N_hist_factor in N_hist_factors) {
       result[[qual[[2]]]][[dim]][[N_hist_factor]][["COLLECT"]][["BEST_MID_SERIES"]][i] =
       result[[qual[[2]]]][[dim]][[N_hist_factor]][["FULL"]][[i]]$record_mid_value
       last_init_pop = result[[qual[[2]]]][[dim]][[N_hist_factor]][["FULL"]][[i]]$init_pop
-      #INIT = c(function(n, dims, range) { last_init_pop[1:n,] }, "Reuse last init.", "Use same values as for previous experiment")
+      INIT = c(function(n, dims, range) { last_init_pop[1:n,] }, "Reuse last init.", "Use same values as for previous experiment")
     } else {
       print(paste("Mean Norm - ", qual[[3]], " DIM = ", dim, "; Hfactor = ", N_hist_factor_n, "; [", i, "]", sep=""))
       result[[qual[[2]]]][[dim]][[N_hist_factor]][["FULL"]][[i]] =
@@ -82,7 +82,7 @@ for(N_hist_factor in N_hist_factors) {
       result[[qual[[2]]]][[dim]][[N_hist_factor]][["COLLECT"]][["BEST_MID_SERIES"]][i] =
         result[[qual[[2]]]][[dim]][[N_hist_factor]][["FULL"]][[i]]$record_mid_value
       last_init_pop = result[[qual[[2]]]][[dim]][[N_hist_factor]][["FULL"]][[i]]$init_pop
-      #INIT = c(function(n, dims, range) { last_init_pop[1:n,] }, "Reuse last init.", "Use same values as for previous experiment")
+      INIT = c(function(n, dims, range) { last_init_pop[1:n,] }, "Reuse last init.", "Use same values as for previous experiment")
     }
   }
 }
