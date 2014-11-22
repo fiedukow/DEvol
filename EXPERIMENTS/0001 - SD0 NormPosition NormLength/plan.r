@@ -39,7 +39,7 @@ for(N_hist_factor in N_hist_factors) {
         runExperiment(experiment_name = paste("Small Population Mean Norm - ", qual[[3]], " DIM = ", dim, "; Hfactor = ", N_hist_factor_n, "; [", i, "]", sep=""),
                       dims = dim,
                       range = c(-100,100),
-                      pop_size = (2*dim)/abs(N_hist_factor_n), #10
+                      pop_size = (10*dim)/abs(N_hist_factor_n), #10
                       diff_factor = 0.9,
                       init = INIT,
                       select = S_RAND,
@@ -49,15 +49,15 @@ for(N_hist_factor in N_hist_factors) {
                       generations = 10*abs(N_hist_factor_n), #1000
                       diff_size = 1,
                       range_fit = RF_MIRROR,
-                      N_history = ((2*dim)/abs(N_hist_factor_n))*max(1,N_hist_factor_n), #10
-                      noise_sd = 0,
+                      N_history = ((10*dim)/abs(N_hist_factor_n))*max(1,N_hist_factor_n), #10
+                      noise_sd = 0.33,
                       experiment_suite=SUITE)
       result[[qual[[2]]]][[dim]][[N_hist_factor]][["COLLECT"]][["BEST_SERIES"]][i] =
         result[[qual[[2]]]][[dim]][[N_hist_factor]][["FULL"]][[i]]$record_value
       result[[qual[[2]]]][[dim]][[N_hist_factor]][["COLLECT"]][["BEST_MID_SERIES"]][i] =
       result[[qual[[2]]]][[dim]][[N_hist_factor]][["FULL"]][[i]]$record_mid_value
       last_init_pop = result[[qual[[2]]]][[dim]][[N_hist_factor]][["FULL"]][[i]]$init_pop
-      INIT = c(function(n, dims, range) { last_init_pop[1:n,] }, "Reuse last init.", "Use same values as for previous experiment")
+      #INIT = c(function(n, dims, range) { last_init_pop[1:n,] }, "Reuse last init.", "Use same values as for previous experiment")
     } else {
       print(paste("Mean Norm - ", qual[[3]], " DIM = ", dim, "; Hfactor = ", N_hist_factor_n, "; [", i, "]", sep=""))
       result[[qual[[2]]]][[dim]][[N_hist_factor]][["FULL"]][[i]] =
@@ -75,14 +75,14 @@ for(N_hist_factor in N_hist_factors) {
                       diff_size = 1,
                       range_fit = RF_MIRROR,
                       N_history = 2*dim*N_hist_factor_n, #10
-                      noise_sd = 0,
+                      noise_sd = 0.33,
                       experiment_suite=SUITE)
       result[[qual[[2]]]][[dim]][[N_hist_factor]][["COLLECT"]][["BEST_SERIES"]][i] =
         result[[qual[[2]]]][[dim]][[N_hist_factor]][["FULL"]][[i]]$record_value
       result[[qual[[2]]]][[dim]][[N_hist_factor]][["COLLECT"]][["BEST_MID_SERIES"]][i] =
         result[[qual[[2]]]][[dim]][[N_hist_factor]][["FULL"]][[i]]$record_mid_value
       last_init_pop = result[[qual[[2]]]][[dim]][[N_hist_factor]][["FULL"]][[i]]$init_pop
-      INIT = c(function(n, dims, range) { last_init_pop[1:n,] }, "Reuse last init.", "Use same values as for previous experiment")
+      #INIT = c(function(n, dims, range) { last_init_pop[1:n,] }, "Reuse last init.", "Use same values as for previous experiment")
     }
   }
 }

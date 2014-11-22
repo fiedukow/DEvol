@@ -1,4 +1,8 @@
 <a href="../..">BACK</a>
+<h1><?php echo basename(dirname(realpath("."))); ?></h1>
+<pre>
+<?php include("../description.txt"); ?>
+</pre>
 <h3>Experiments results.</h3>
 <ul>
 <?php
