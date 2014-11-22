@@ -6,7 +6,7 @@ source("named_functions.r")
 
 qual_funs = list(CEC_2013_1, CEC_2013_2, CEC_2013_9, CEC_2013_10)
 dims = c(10,30,50)
-N_hist_factors = c("1","2","10","0","-2","2","-10","10") ##### LOWEST ABSOLUTE VALUE FIRST!
+N_hist_factors = c("1","2","10","100","0","-2","2","-10","10") ##### LOWEST ABSOLUTE VALUE FIRST!
 smaller_pop = FALSE
 
 result = list()
