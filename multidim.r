@@ -159,7 +159,6 @@ de = function(dims, range, pop_size, diff_factor, init, select, crossover,
 }
 
 save_results = function(de_result) {
-  dir.create("./results", showWarnings = FALSE)
   png(filename = paste("./EXPERIMENTS/",de_result$experiment_suite,"/single_results/", de_result$experiment_name, ".png", sep=""),
       width = 800, height = 600, units = "px", pointsize = 12,
       bg = "white")
