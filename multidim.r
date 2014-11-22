@@ -180,7 +180,7 @@ save_results = function(de_result) {
          col=c("blue","red"),
          bty="n")
   dev.off()
-  fileConn<-file(paste("./results/", de_result$experiment_name, ".txt", sep=""))
+  fileConn<-file(paste("./EXPERIMENTS/",de_result$experiment_suite,"/single_results/", de_result$experiment_name, ".txt", sep=""))
   writeLines(paste(
     paste("Experiment: ", de_result$experiment_name, "; ",
           paste("DE", de_result$select[[2]], de_result$diff_size, de_result$crossover[[2]], sep="/"),
@@ -238,19 +238,19 @@ save_results = function(de_result) {
   sep="\n"), fileConn)
   close(fileConn)
 
-  write(de_result$best_element, file=paste("./results/", de_result$experiment_name, "_best.txt", sep=""))
-  write.table(de_result$last_pop[[1]], file=paste("./results/", de_result$experiment_name, "_pop.txt", sep=""),
+  write(de_result$best_element, file=paste("./EXPERIMENTS/",de_result$experiment_suite,"/single_results/", de_result$experiment_name, "_best.txt", sep=""))
+  write.table(de_result$last_pop[[1]], file=paste("./EXPERIMENTS/",de_result$experiment_suite,"/single_results/", de_result$experiment_name, "_pop.txt", sep=""),
               col.names=F, row.names=F)
   # Maybe dump quality function values as well?
-  write(de_result$values, file=paste("./results/", de_result$experiment_name, "_values.txt", sep=""))
-  write(de_result$mid_values, file=paste("./results/", de_result$experiment_name, "_middle.txt", sep=""))
-  system(paste("./gen_html_report.sh \"", de_result$experiment_name, "\"", sep=""))
-  dump("de_result", file=paste("./results/", de_result$experiment_name, "_dump.r", sep=""))
+  write(de_result$values, file=paste("./EXPERIMENTS/",de_result$experiment_suite,"/single_results/", de_result$experiment_name, "_values.txt", sep=""))
+  write(de_result$mid_values, file=paste("./EXPERIMENTS/",de_result$experiment_suite,"/single_results/", de_result$experiment_name, "_middle.txt", sep=""))
+  system(paste("./gen_html_report.sh \"", de_result$experiment_name, "\" \"",de_result$experiment_suite,"\"", sep=""))
+  dump("de_result", file=paste("./EXPERIMENTS/",de_result$experiment_suite,"/single_results/", de_result$experiment_name, "_dump.r", sep=""))
 }
 
 runExperiment = function(experiment_name, dims, range, pop_size, diff_factor, init, select, crossover,
                          cr, qual, generations, diff_size, range_fit, N_history = pop_size,
-                         noise_sd = 1, best_possible = NA, near_enough = NA) {
+                         noise_sd = 1, best_possible = NA, near_enough = NA, experiment_suite="unsuited") {
   result = de(dims,
               range,
               pop_size,
@@ -281,6 +281,7 @@ runExperiment = function(experiment_name, dims, range, pop_size, diff_factor, in
   result$range = range
   result$experiment_name = experiment_name
   result$range_fit = range_fit
+  result$experiment_suite = experiment_suite
 
   save_results(result)
 

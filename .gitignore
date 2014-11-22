@@ -1,8 +1,8 @@
 experiments.r
 .RData
 .Rhistory
-results/*.txt
-results/*.png
-results/*.html
-results/*.r
+EXPERIMENTS/*/single_results/*.txt
+EXPERIMENTS/*/single_results/*.png
+EXPERIMENTS/*/single_results/*.html
+EXPERIMENTS/*/single_results/*.r
 

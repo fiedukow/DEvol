@@ -1,5 +1,5 @@
+<a href="../..">BACK</a>
 <h3>Experiments results.</h3>
-<a href="http://github.com/fiedukow/DEvol/">More informations</a>
 <ul>
 <?php
 $files = glob('{,.}*.html',GLOB_BRACE);
