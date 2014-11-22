@@ -46,11 +46,11 @@ for(N_hist_factor in N_hist_factors) {
                       crossover = C_BIN,
                       cr = 0.9,
                       qual = qual,
-                      generations = 10*abs(N_hist_factor_n), #1000
+                      generations = 1000*abs(N_hist_factor_n), #1000
                       diff_size = 1,
                       range_fit = RF_MIRROR,
                       N_history = ((10*dim)/abs(N_hist_factor_n))*max(1,N_hist_factor_n), #10
-                      noise_sd = 0.33,
+                      noise_sd = 0.0,
                       experiment_suite=SUITE)
       result[[qual[[2]]]][[dim]][[N_hist_factor]][["COLLECT"]][["BEST_SERIES"]][i] =
         result[[qual[[2]]]][[dim]][[N_hist_factor]][["FULL"]][[i]]$record_value
@@ -64,18 +64,18 @@ for(N_hist_factor in N_hist_factors) {
         runExperiment(experiment_name = paste("Mean Norm - ", qual[[3]], " DIM = ", dim, "; Hfactor = ", N_hist_factor_n, "; [", i, "]", sep=""),
                       dims = dim,
                       range = c(-100,100),
-                      pop_size = 2*dim, #10
+                      pop_size = 10*dim, #10
                       diff_factor = 0.9,
                       init = INIT,
                       select = S_RAND,
                       crossover = C_BIN,
                       cr = 0.9,
                       qual = qual,
-                      generations = 10, #1000
+                      generations = 1000, #1000
                       diff_size = 1,
                       range_fit = RF_MIRROR,
-                      N_history = 2*dim*N_hist_factor_n, #10
-                      noise_sd = 0.33,
+                      N_history = 10*dim*N_hist_factor_n, #10
+                      noise_sd = 0,
                       experiment_suite=SUITE)
       result[[qual[[2]]]][[dim]][[N_hist_factor]][["COLLECT"]][["BEST_SERIES"]][i] =
         result[[qual[[2]]]][[dim]][[N_hist_factor]][["FULL"]][[i]]$record_value
