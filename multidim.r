@@ -25,7 +25,7 @@ diff_vector = function(pop, N) {
 }
 
 crossover_bin = function(x, y, cr) {
-  mod = t(replicate(nrow(x), (runif(ncol(x)) < cr)))
+  mod = t(replicate(nrow(x), (runif(ncol(x)) > cr)))
   mod*x + (1-mod)*y
 }
 
@@ -101,7 +101,6 @@ de = function(dims, range, pop_size, diff_factor, init, select, crossover,
   col_means = colMeans(pop_prev[[1]])
   col_means_matrix = matrix(col_means, nrow=pop_size, ncol=dims, byrow=TRUE)
   H_norm[[1]] = (pop_prev[[1]] - col_means_matrix) / mean_pop_prev
-  H_norm[[2]] = pop_prev[[2]]
   N_runif = pop_size*dims
 
   result = list()
@@ -114,7 +113,7 @@ de = function(dims, range, pop_size, diff_factor, init, select, crossover,
   begin = Sys.time()
   for(i in 1:generations) {
     ##### DETERMINE GENERATION WIDE VALUES
-    mid_point = matrix(colMeans(pop_prev[[1]]), ncol=dim)
+    mid_point = matrix(colMeans(pop_prev[[1]]), ncol=dims)
     H_unnorm = t(t(H_norm[[1]]*mean_pop_prev)+as.vector(mid_point))
 
     ##### SAVING GENERATION DETAILS
@@ -135,9 +134,9 @@ de = function(dims, range, pop_size, diff_factor, init, select, crossover,
       draw_population(pop_prev, last_candidats, H_unnorm, mid_point, range, qual, i, name)
 
     ##### GENERATING NEW POPULATION
-    pop_next[[1]] = select(pop_prev, pop_size)
-                    + diff_factor*diff_vector(H_unnorm, pop_size)
-                    + rnorm(N_runif, mean = 0, sd = noise_sd)
+    pop_next[[1]] = select(pop_prev, pop_size) +
+                    diff_factor*diff_vector(H_unnorm, pop_size) +
+                    rnorm(N_runif, mean = 0, sd = noise_sd)
     pop_next[[1]] = crossover(pop_prev[[1]], pop_next[[1]], cr)
     pop_next_fit = range_fit(pop_next[[1]], range)
     pop_next[[2]] = qual(pop_next_fit)
@@ -155,13 +154,10 @@ de = function(dims, range, pop_size, diff_factor, init, select, crossover,
     mean_pop_next = mean(dist(pop_next[[1]]))
     H_norm[[1]] = rbind(H_norm[[1]],
                         H_norm_next/mean_pop_next)
-    H_norm[[2]] = rbind(H_norm[[2]],
-                        pop_next[[2]])
 
     ###### SHIFTING HISTORY WINDOW
     N = nrow(H_norm[[1]])
     H_norm[[1]] = H_norm[[1]][max(1, N - N_history + 1):N, ]
-    H_norm[[2]] = H_norm[[2]][max(1, N - N_history + 1):N]
 
     ###### NEXT LOOP PREPARATION
     pop_next[[1]] = pop_next_fit
