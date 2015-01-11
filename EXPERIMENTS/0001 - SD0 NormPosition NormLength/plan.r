@@ -4,7 +4,7 @@ setwd("/home//fiedukow/repo/DEvol/")
 source("multidim.r")
 source("named_functions.r")
 
-qual_funs = list(CEC_2013_1, CEC_2013_2, CEC_2013_9, CEC_2013_10)
+qual_funs = list(CEC_2013_9)
 dims = c(10,30,50)
 N_hist_factors = c("1","2","10","100","0","-2","2","-10","10") ##### LOWEST ABSOLUTE VALUE FIRST!
 smaller_pop = FALSE
@@ -24,7 +24,7 @@ for(dim in dims) {
     result[[qual[[2]]]][[dim]][[paste0("S",N_hist_factor)]][["FULL"]] = list()
     result[[qual[[2]]]][[dim]][[paste0("S",N_hist_factor)]][["COLLECT"]] = list()
   }
-for (i in 1:25) {
+for (i in 1:5) {
   INIT = I_UNIF
   smaller_pop = FALSE
 for(N_hist_factor in N_hist_factors) {
@@ -69,7 +69,7 @@ for(N_hist_factor in N_hist_factors) {
                       init = INIT,
                       select = S_RAND,
                       crossover = C_BIN,
-                      cr = 0.9,
+                      cr = 1,
                       qual = qual,
                       generations = 1000, #1000
                       diff_size = 1,
