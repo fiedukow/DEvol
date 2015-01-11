@@ -133,6 +133,11 @@ de = function(dims, range, pop_size, diff_factor, init, select, crossover,
     if (dims == 2)
       draw_population(pop_prev, last_candidats, H_unnorm, mid_point, range, qual, i, name)
 
+    if (mean_pop_prev == 0.0) { #### Whole population in one point - stop this
+      print(paste0("Population in single point [",i,"]"))
+      break;
+    }
+
     ##### GENERATING NEW POPULATION
     pop_next[[1]] = select(pop_prev, pop_size) +
                     diff_factor*diff_vector(H_unnorm, pop_size) +
@@ -140,7 +145,7 @@ de = function(dims, range, pop_size, diff_factor, init, select, crossover,
     pop_next[[1]] = crossover(pop_prev[[1]], pop_next[[1]], cr)
     pop_next_fit = range_fit(pop_next[[1]], range)
     pop_next[[2]] = qual(pop_next_fit)
-    last_candidats = pop_next[[1]]
+    last_candidats = pop_next_fit
 
     ###### SELECTING BETTER FROM PAIRS
     # TODO better turnament then simple selecting better.
@@ -184,15 +189,18 @@ save_results = function(de_result) {
       width = 800, height = 600, units = "px", pointsize = 12,
       bg = "white")
   par(cex=1.2)
-  plot(de_result$values, type="l",
+  plot_best =     de_result$values     - de_result$best_possible + 0.0000001
+  plot_best_mid = de_result$mid_values - de_result$best_possible + 0.0000001
+  plot(plot_best, type="l",
        main=paste("DE", de_result$select[[2]], de_result$diff_size, de_result$crossover[[2]], sep="/"),
        xlab="generation",
        ylab="best quality function value",
        col="blue",
-       ylim = c(min(c(de_result$values, de_result$mid_values)),
-                max(c(de_result$values, de_result$mid_values))),
+       log="y",
+       ylim = c(min(c(plot_best, plot_best_mid)),
+                max(c(plot_best, plot_best_mid))),
        lwd=4)
-  lines(de_result$mid_values, col="red", lwd=2)
+  lines(plot_best_mid, col="red", lwd=2)
   par(par(xpd=TRUE))
   legend("top", c("best element in generation", "middle element of generation"),
          lty=c(1,1),
@@ -285,7 +293,7 @@ runExperiment = function(experiment_name, dims, range, pop_size, diff_factor, in
               range_fit[[1]],
               N_history,
               noise_sd,
-              best_possible,
+              qual[[4]],
               near_enough,
               name=experiment_name);
 
@@ -296,7 +304,7 @@ runExperiment = function(experiment_name, dims, range, pop_size, diff_factor, in
   result$diff_size = diff_size
   result$cr = cr
   result$diff_factor = diff_factor
-  result$best_possible = best_possible
+  result$best_possible = qual[[4]]
   result$qual = qual
   result$near_enough = near_enough
   result$range = range
