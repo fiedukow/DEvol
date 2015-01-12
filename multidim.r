@@ -262,7 +262,6 @@ save_results = function(de_result) {
     paste(" * [Final Population](./", de_result$experiment_name, "_pop.txt)", sep=""),
     paste(" * [best(generation)](./", de_result$experiment_name, "_values.txt)", sep=""),
     paste(" * [middle(generation)](./", de_result$experiment_name, "_middle.txt)", sep=""),
-    paste(" * [Raw result dump](./", de_result$experiment_name, "_dump.r)", sep=""),
   sep="\n"), fileConn)
   close(fileConn)
 
@@ -273,7 +272,6 @@ save_results = function(de_result) {
   write(de_result$values, file=paste("./EXPERIMENTS/",de_result$experiment_suite,"/single_results/", de_result$experiment_name, "_values.txt", sep=""))
   write(de_result$mid_values, file=paste("./EXPERIMENTS/",de_result$experiment_suite,"/single_results/", de_result$experiment_name, "_middle.txt", sep=""))
   system(paste("./gen_html_report.sh \"", de_result$experiment_name, "\" \"",de_result$experiment_suite,"\"", sep=""))
-  dump("de_result", file=paste("./EXPERIMENTS/",de_result$experiment_suite,"/single_results/", de_result$experiment_name, "_dump.r", sep=""))
 }
 
 runExperiment = function(experiment_name, dims, range, pop_size, diff_factor, init, select, crossover,
