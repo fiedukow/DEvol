@@ -1,14 +1,17 @@
 \documentclass[11pt]{report}
-%Gummi|065|=)
-\title{\textbf{Welcome to Gummi 0.6.5}}
-\author{Alexander van der Mey\\
-		Wei-Ning Huang\\
-		Dion Timmermann}
-\date{}
 
 \usepackage[polish]{babel}
-\selectlanguage{polish}
+\usepackage{polski}
 \usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{indentfirst}
+\usepackage{type1ec}
+\selectlanguage{polish}
+\frenchspacing
+
+\title{\textbf{Algorytm ewolucji różnicowej - wpływ wykorzystania archiwum do mutacji różnicowej na jakość wyników.}}
+\author{Andrzej Fiedukowicz}
+\date{}
 
 \usepackage{fancyhdr}
 \pagestyle{fancy}
@@ -33,23 +36,160 @@
 \maketitle
 \tableofcontents
 
-\chapter{X}
-\section{Before you start}
-\section{AAA}
-\subsection{SS}
-\subsubsection{SSS}
 
-You are now using Gummi 0.6.5. Many new exciting features have been added to the 0.6 series. The document editor is now a tabbed instance, allowing multiple documents to be worked on simultaneously. Using the new projects menu, you can group files together for easy access. 
+%\section{Abstract}
+\chapter{Wstęp}
+\par{
+Problem optymalizacji jest jednym z najczęściej pojawiających się w praktycznych zastosowaniach problemów [Źródło/Zmiękczenie].
+Jego powszechność a także rosnący stopień skomplikowania konkretnych zadań stawianych przed systemami informatycznymi rozwiązującymi ten problem skłania do poszukiwania coraz doskonalszych metod jego rozwiązywania [?].
+}
+\section{Problematyka / Definicja problemu (motywacje?)} %Tu czy w przeglądzie literatury??
+\par{
+Praca ta, umiejsciowiona została w kontekście rozwiązywania problemów optymalizacji gdzie analityczna forma funkcji optymalizowanej nie jest znana lub analityczne wyznaczenie jej ekstremum jest niemożliwe. Zakłada się bowiem, że zadanie jest zdefiniowane następująco [Strojnowski]:
+}
+\par{
+	f: X -> R
+	min f(x); x należy do X
+Gdzie: 
+ 	- f - funkcja optymalizowana
+	- X - dziedzina funkcji f (zbiór potencjalnych rozwiązań)
+Dodatkowo zakłada się także możliwość zbadania wartości funkcji f w dowolnym punkcie ze zbioru X, jednak brak możliwości bezpośredniego zbadania jakichkolwiek innych własności tejże funkcji.
+}
+\par{
+Przy tych założeniach, należy zauważyć, że jeśli zbiór X jest nieskończenie liczny (nawet przeliczalny), nie jest możliwe zweryfikowanie, czy wyznaczony punkt jest rzeczywistym rozwiązaniem zadanego problemu. Co więcej, w wielu przypadkach (brak istnienia hiperpłaszczyzny X, takiej, że w każdym jej punkcie wartość funkcji jest równa poszukiwanemu ekstremum) prawdopodobieństwo odnalezienia rozwiązania problemu (niezależnie od metody), wynosi zero.
+}
+\par{
+Mając to na względzie by problem można było uznać za rozwiązany, należy go przeformułować tak, że rozwiązaniem jest dowolny element x ze zbioru X, jednak jego jakość wyznaczana jest przez wartość funkcji f w tym punkcie. Dla tak sformułowanego problemu możliwe jest porównywanie różnych metod przeglądania przestrzeni X pod względem jakości otrzymanego rozwiązania.
+}
+\par{
+Warto zwrócić uwagę, że pomimo iż między różnymi rozwiązaniami problemu istnieje relacja częściowego porządku generowana przez wartość funkcji f, to jednak przy przyjętych założeniach wartość (rozumiana jako liczba rzeczywista) tej funkcji nie niesie żadnej dodatkowej informacji. Z tego też powodu, wszelkie badania porównawcze przeprowawdzane na poszczególnych metodykach muszą być oparte na tej właśnie relacji porządku.
+}
+\par{
+// To chyba można sobie darować - nie ma znaczenia dla wywodu ?
+// Ważnym faktem jest to, że jeśli metodę rozwiązania problemu wraz z jej parametrami uznamy za element zbioru dopuszczalnych metod rozwiązywania D. To problem wyboru metody optymalizacji staje się problemem optymalizacyjnym.
+}
 
-Support for two high-level {\LaTeX} building systems, \emph{rubber}\footnote{https://launchpad.net/rubber/} \& \emph{latexmk}\footnote{http://www.phys.psu.edu/{\textasciitilde}collins/software/latexmk-jcc/} has been added to this release as well. Your preferred typesetter can be configured through the Compilation tab in the Preferences menu. Typesetters that are not installed on your system will not be selectable. 
+\section{Motywacje(?)}
+\section{Cel}
+\section{Proponowana modyfikacja} %tutaj??
 
-Added for your viewing convenience is a continuous preview mode for the PDF. This mode is enabled by default, but can also be disabled through the \emph{(View $\rightarrow$ Page layout in preview)} menu. Complementary to this feature is SyncTeX integration, which allows you to synchronize the position in your editor with the PDF preview. 
+\chapter{Przegląd literatury}
+\section{Podejscie heurystyczne do problemu optymalizacji}
+\par{
+(Czym jest, dlaczego jest stosowane, odnieśnie do klasycznych algorytmów)
+}
+\par{
+(Algorytm ewolucyjny jako przykład rozwiązania heurystycznego)
+}
+\section{Algorytmy ewolucyjne}
+\par{
+(Czemu heurystyczny?)
+}
+\par{
+(Idea i Schemat działania)
+}
+\par{
+(Problemy)
+}
+\par{
+(Odmiany i schematy?)
+}
+\par{
+(Parametry)
+}
+\par{
+(Alg. genetyczne - wspomnienie, bez rozwijania wątku)
+}
+\par{
+(Eksploracja vs. Eksplatacja)
+}
+\subsection{Ewolucja różnicowa}
+\par{
+(Ogólny opis)
+}
+\par{
+(Czym się różni od klasycznych algorytmów ewolucyjnych)
+}
+\par{
+(Zalety i wady w kontekście problemu optymalizacji)
+}
+\par{
+(Parametry)
+}
+\par{
+(Wyniki w kontekście innych metod)
+}
+\par{
+(Idea punktu środkowego)
+}
 
-\section{Feedback}
-We hope you will enjoy using this release as much as we enjoyed creating it. If you have comments, suggestions or wish to report an issue you are experiencing - contact us at: \emph{http://gummi.midnightcoding.org}.
+\subsubsection{Podejście do archiwum}
+\par{(Odniesienia w literaturze) - i gdzie ta literatura :(}
+\par{(Dotychczasowe wnioski)}
 
-\section{One more thing}
-If you are wondering where your old default text is; it has been stored as a template. The template menu can be used to access and restore it. 
+\section{Metodyka badań (opisywać tak szeroko?)}
+\subsection{Modelowanie statystyczne}
+\par{
+(Czemu służy, dlaczego potrzebne do tych badań)
+}
+\subsection{Testy statystyczne}
+\par{
+(Ogólna koncepcja, p-value)
+}
+\subsection{Testy parametryczne}
+\par{
+(Co to jest i kiedy się stosuje)
+}
+\subsubsection{Test T-studenta}
+\par{
+(Jak działa, ZAŁOŻENIA)
+}
+\par{
+(Wady zalety).
+}
+
+\subsection{Testy nieparametryczne}
+\par{
+(Co to jest i kiedy się stosuje)
+}
+\subsubsection{Test wilcoxona}
+\par{
+(Opis, działanie, ZAŁOŻENIA)
+}
+\par{
+(Wady zalety)
+}
+\section{Benchmarki blackboxowe}
+\par{
+(Czemu służą)
+}
+\par{
+(Dlaczego są dobrym odniesieniem)
+}
+
+\subsection{CEC}
+\par{
+(Opis benchmarka, funkcje testowe)
+}
+\par{
+(Implementacja w R)
+}
+
+%%%%%%%%%%%%%%%%%%% CHAPTER III
+
+\chapter{Badania}
+\section{Cel}
+\section{Plan eksperymentów}
+\section{Dobór parametrów}
+\section{Zbierane rezulataty}
+\subsection{Środek ciężkości populacji (DE/mid)}
+\section{Sposób analizy}
+
+\section{Wyniki (w załączniku?)}
+\section{Analiza wyników (wnioski)}
+
+\chapter{Podsumowanie}
+
 
 \bibliographystyle{plplain}
 \nocite{*}
