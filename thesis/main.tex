@@ -6,13 +6,19 @@
 \usepackage[T1]{fontenc}
 \usepackage{indentfirst}
 \usepackage{type1ec}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+
+
+
 \selectlanguage{polish}
 \frenchspacing
 
-\title{\textbf{Algorytm ewolucji różnicowej - wpływ wykorzystania archiwum do mutacji różnicowej na jakość wyników.}}
+\title{\textbf{Algorytm ewolucji różnicowej -- wpływ wykorzystania archiwum do mutacji różnicowej na jakość wyników.}}
 \author{Andrzej Fiedukowicz}
 \date{}
 
+\usepackage{mathtools}
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 
@@ -36,40 +42,103 @@
 \maketitle
 \tableofcontents
 
+\newpage
+\subsubsection{Streszczenie}
+\par{
+\emph{
+Algorytmy ewolucji różnicowej (DE) występują w wielu wariantach i odmianach, których właściwości są cały czas badane. Jedną z proponowanych modyfikacji tego algorytmu stanowi wykorzystanie przy operatorze mutacji różnicowej osobników pochodzących z szerszego niż jednopokoleniowego okna historii [PrzydaloBySięŹródło, jeśli nie -- zmiana sformułowania].
+}
+}
+\par{
+\emph{
+Niniejsza praca opisuje proces opracowywania metody zastosowania archiwum osobników w celu poprawy jakości wyników uzyskiwanych w ewolucji różnicowej. W dalszej części praca skupia się na sprawdzeniu hipotezy o możliwości poprawy klasycznego schematu ewolucji różnicowej DE/rand/1/bin przez wykorzystanie archiwum.
+Badania skuteczności poszczególnych metod opracowane są w oparciu o zestaw funkcji testowych opracowanych w ramach konferencji IEEE Congress on Evolutionary Computation 2013 (CEC2013) [Potrzebne Źródło].
+}
+}
+\par{
+\emph{
+Niniejsza praca odnosi się także do możliwości i skuteczności wykorzystania w procesie ewolucji różnicowej punktu środkowego populacji, badając jego wartość w czasie działania wszystkich testowanych wariantów algorymtów.
+}
+}
+\subsubsection{Słowa kluczowe}
+\par{
+\emph{Ewolucja Różnicowa, DE, Algorytmy Ewolucyjne, AE, Optymalizacja, Optymalizacja black-box}
+}
+\subsubsection{Abstract}
+\par{
+\emph{There are many forms of differential evolution algorithms (DE), which properties are yet to be discovered. One of possible modifications of those algorithms is using historical points to perform differential mutation. [PrzydałoBySięŹródło]}.
+}
+\par{
+\emph{
+This thesis describes development process of method of using such archive to increase DE results quality. Hereafter this thesis is checking hipotesis about possibility of improving classic DE/rand/1/bin by using archive. All experiments performed during this reasearch are based on benchmark functions set developed during the IEEE Congress of Evolutionary Computation 2013 conference (CEC2013) [Potrzebne Źródło].
+}
+}
+\par{
+\emph{
+This thesis also refers to a possiblity and effectiveness of using middle point of population to improve quality of DE results by checking its value in all tested variants of DE. 
+}
+}
+\subsubsection{Keywords}
+\par{
+\emph{Differential Evolution, DE, Evolutionary Algorithms, EA, Optimialization, Black-box optimalization}
+}
 
-%\section{Abstract}
 \chapter{Wstęp}
 \par{
-Problem optymalizacji jest jednym z najczęściej pojawiających się w praktycznych zastosowaniach problemów [Źródło/Zmiękczenie].
-Jego powszechność a także rosnący stopień skomplikowania konkretnych zadań stawianych przed systemami informatycznymi rozwiązującymi ten problem skłania do poszukiwania coraz doskonalszych metod jego rozwiązywania [?].
-}
-\section{Problematyka / Definicja problemu (motywacje?)} %Tu czy w przeglądzie literatury??
-\par{
-Praca ta, umiejsciowiona została w kontekście rozwiązywania problemów optymalizacji gdzie analityczna forma funkcji optymalizowanej nie jest znana lub analityczne wyznaczenie jej ekstremum jest niemożliwe. Zakłada się bowiem, że zadanie jest zdefiniowane następująco [Strojnowski]:
+Problem optymalizacji jest jednym z najczęściej pojawiających się w praktycznych zastosowaniach problemów numerycznych. Sama powszechność podstawowego problemu, ale także możliwość sprowadzenia do problemu optymalizacji problemów klasyfikacji, regresji, grupowania czy też określając szerzej -- uczenia maszynowego \cite{SpringerIntroToEvol}, sprawia, że przed algorytmami optymalizacji stawiane są coraz bardziej złożone i wymagające zadania.
 }
 \par{
-	f: X -> R
-	min f(x); x należy do X
-Gdzie: 
- 	- f - funkcja optymalizowana
-	- X - dziedzina funkcji f (zbiór potencjalnych rozwiązań)
-Dodatkowo zakłada się także możliwość zbadania wartości funkcji f w dowolnym punkcie ze zbioru X, jednak brak możliwości bezpośredniego zbadania jakichkolwiek innych własności tejże funkcji.
-}
-\par{
-Przy tych założeniach, należy zauważyć, że jeśli zbiór X jest nieskończenie liczny (nawet przeliczalny), nie jest możliwe zweryfikowanie, czy wyznaczony punkt jest rzeczywistym rozwiązaniem zadanego problemu. Co więcej, w wielu przypadkach (brak istnienia hiperpłaszczyzny X, takiej, że w każdym jej punkcie wartość funkcji jest równa poszukiwanemu ekstremum) prawdopodobieństwo odnalezienia rozwiązania problemu (niezależnie od metody), wynosi zero.
-}
-\par{
-Mając to na względzie by problem można było uznać za rozwiązany, należy go przeformułować tak, że rozwiązaniem jest dowolny element x ze zbioru X, jednak jego jakość wyznaczana jest przez wartość funkcji f w tym punkcie. Dla tak sformułowanego problemu możliwe jest porównywanie różnych metod przeglądania przestrzeni X pod względem jakości otrzymanego rozwiązania.
-}
-\par{
-Warto zwrócić uwagę, że pomimo iż między różnymi rozwiązaniami problemu istnieje relacja częściowego porządku generowana przez wartość funkcji f, to jednak przy przyjętych założeniach wartość (rozumiana jako liczba rzeczywista) tej funkcji nie niesie żadnej dodatkowej informacji. Z tego też powodu, wszelkie badania porównawcze przeprowawdzane na poszczególnych metodykach muszą być oparte na tej właśnie relacji porządku.
-}
-\par{
-// To chyba można sobie darować - nie ma znaczenia dla wywodu ?
-// Ważnym faktem jest to, że jeśli metodę rozwiązania problemu wraz z jej parametrami uznamy za element zbioru dopuszczalnych metod rozwiązywania D. To problem wyboru metody optymalizacji staje się problemem optymalizacyjnym.
+Stale zwiększający się poziom trudności problemów optymalizacyjnych jak i ciągła niedoskonałość dotychczas wytworzonych metod ich rozwiązywania powoduje duże zainteresowanie badaniami dotyczącymi tworzenia coraz doskonalszych, szybszych i dających lepsze rezultaty algorytmów owe problemy rozwiązujących \cite{StateOfArt}.
 }
 
-\section{Motywacje(?)}
+\section{Definicja problemu}
+\par{
+Praca ta, umiejsciowiona została w kontekście rozwiązywania problemów optymalizacji gdzie analityczne wyznaczenie ekstremum funkcji jest niemożliwe bądź w ogóle nie jest znana jej analityczna forma. Zakłada się bowiem, że zadanie jest zdefiniowane następująco \cite{StrojnowskiOptymalizacja2}:
+}
+\newtheorem{OptDefinition}{Definition}
+\par{
+\begin{OptDefinition}
+Problem globalnej optymalizacji funkcji $f: X \rightarrow \mathbb{R}$ polega na wyznaczeniu takiego $x_0 \in X$, że:
+\begin{center}
+	$\forall_{x \in X} f(x_0) \leq f(x)$
+\end{center}
+\end{OptDefinition}
+\par{
+Dla celów tej pracy przyjmuje się możliwość zbadania wartości funkcji $f$ w dowolnym punkcie ze zbioru $X$, jednak brak możliwości bezpośredniego zbadania jakichkolwiek innych własności tejże funkcji. W tej formie problem ten można nazwać problemem optymalizacji funkcji zadanej w formie reaktywnej (\emph{Black-box optimization}).
+}
+\par{
+W ramach rozpatrywanych problemów istnieje także możliwość, że dziedzina funkcji $f$ jest szersza niż zbiór rozwiązań dopuszczalnych. W takich wypadkach mówimy o problemie optymalizacji z ograniczeniami.
+\begin{OptDefinition}
+Problem globalnej optymalizacji funkcji $f: X \rightarrow \mathbb{R}$ z ograniczeni $X_D \subset X$ polega na wyznaczeniu takiego $x_0 \in X_D$, że:
+\begin{center}
+	$\forall_{x \in X_D} f(x_0) \leq f(x)$
+\end{center}
+\end{OptDefinition}
+Dla tego rodzaju problemów, możliwe jest wyznaczanie wartości funkcji w całej jej dziedzinie $X$, jednak poszukiwane rozwiązanie musi pochodzić z ograniczonego zbioru $X_D$.
+Problem globalnej optymalizacji funkcji z ogarniczeniami stanowi uogólnienie problemu optymalizacji globalnej bez ogarniczeń.
+}
+\par{
+Szczególnym przypadkiem problemu optymalizacji globalnej z ogarniczeniami jest przeszukiwanie przestrzeni ciągłej. 
+\begin{OptDefinition}
+Problem globalnej optymalizacji funkcji $f: \mathbb{R}^n \rightarrow \mathbb{R}$ z ograniczeniem $X_D = \{x \in \mathbb{R}^n: g_1(x) \leq 0, g_2(x) \leq 0, \ldots, g_m(x) \leq 0\}$ nazywamy problemem optymalizacji globalnej przestrzeni ciągłej z ogarniczeniami nierównościowymi.
+\end{OptDefinition}
+W tym wariancie przyjmuje się, że $X = \mathbb{R}^n$ gdzie $n \in \mathbb{N}$ a $X_D$ zdefiniowane jest przez funkcje ograniczeń.
+}
+
+\par{
+Przy tych założeniach, należy zauważyć, że dla każdego z powyższych problemów jeśli zbiór $X$ jest nieskończenie liczny (nawet przeliczalny), nie jest możliwe zweryfikowanie, czy wyznaczony punkt jest rozwiązaniem zadanego problemu. Co więcej, w wielu przypadkach (brak istnienia hiperpłaszczyzny $X$, takiej, że w każdym jej punkcie wartość funkcji jest równa poszukiwanemu ekstremum) prawdopodobieństwo odnalezienia rozwiązania problemu (niezależnie od metody przeszukiwania przestrzeni) wynosi zero.
+}
+\par{
+Mając to na względzie by problem można było uznać za rozwiązany, należy go przeformułować tak, że rozwiązaniem jest dowolny element $x \in X_D$, a jego jakość wyznaczana jest przez wartość funkcji $f$ w tym punkcie. Dla tak zadanego problemu możliwe jest porównywanie różnych metod przeglądania przestrzeni $X_D$ pod względem jakości otrzymanego rozwiązania.
+}
+\par{
+Niniejsza praca będzie skupiała się na rozwiązywaniu tak przeformułowanego problemu optymalizacji globalnej funkcji w przestrzeni ciągłej z ograniczeniami nierównościowymi. Ze względu na zwięzłość zapisu w dalszej części pracy problem ten nazywany będzie \textbf{problemem optymalizacji} lub po prostu \textbf{problemem}. 
+}
+\par{
+Warto zwrócić uwagę, że pomimo iż między różnymi rozwiązaniami problemu istnieje relacja częściowego porządku generowana przez wartość funkcji $f$, to jednak przy przyjętych założeniach wartość (rozumiana jako liczba rzeczywista) tej funkcji nie niesie żadnej dodatkowej informacji. Z tego też powodu, wszelkie badania porównawcze przeprowawdzane na poszczególnych metodologiach rozwiązywania problemu muszą być oparte na tej właśnie relacji porządku.
+}
+
+\section{Motywacje}
 \section{Cel}
 \section{Proponowana modyfikacja} %tutaj??
 
