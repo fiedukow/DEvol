@@ -1,5 +1,5 @@
-\documentclass[11pt]{report}
-
+\documentclass[11pt,a4paper]{report}
+\usepackage{fullpage}
 \usepackage[polish]{babel}
 \usepackage{polski}
 \usepackage[utf8]{inputenc}
@@ -8,13 +8,15 @@
 \usepackage{type1ec}
 \usepackage{amsthm}
 \usepackage{amsfonts}
+\headsep = 30pt
+%\linespread{2}
 
 
 
 \selectlanguage{polish}
 \frenchspacing
 
-\title{\textbf{Algorytm ewolucji różnicowej -- wpływ wykorzystania archiwum do mutacji różnicowej na jakość wyników.}}
+\title{\textbf{Wpływ wykorzystania archiwum do mutacji różnicowej w algorytmie ewolucji różnicowej na jakość optymalizacji przestrzeni ciągłej.}}
 \author{Andrzej Fiedukowicz}
 \date{}
 
@@ -139,7 +141,18 @@ Warto zwrócić uwagę, że pomimo iż między różnymi rozwiązaniami problemu
 }
 
 \section{Motywacje}
+\par{
+Jednym z podejść do zdefiniowanego powyżej problemu optymalizacji jest wykorzystanie algorytmów ewolucji różnicowej (DE) \cite{RainerStorn}. Algorytm ten zaproponowany w 1954 r. od wielu lat rozwijany w ramach licznych prac naukowych cieszy się zwykle bardzo dobrymi rezultatami w testach jakościowych. 
+}
+
 \section{Cel}
+\par{
+Celem pracy jest zbadanie zmodyfikowanego klasycznego algorytmu ewolucji różnicowej \cite{RainerStorn} tak by wektory mutacji różnicowej były budowane w oparciu o osobniki z parametryzowanej liczby ostatnich pokoleń.
+Zbadana zostanie jakość wyników otrzymywanych przez algorytm wykorzystujący różne wielkości okna archiwum a także przez klasyczny algorytm ewolucji różnicowej.
+}
+\par{
+W ramach pracy zostanie także zbadana teza o możliwości poprawy jakości otrzymywanych przez ewolucję różnicą wyników przy ograniczonym budżecie zapytań przy wykorzystaniu punktu środkowego populacji.
+}
 \section{Proponowana modyfikacja} %tutaj??
 
 \chapter{Przegląd literatury}
@@ -190,6 +203,7 @@ Warto zwrócić uwagę, że pomimo iż między różnymi rozwiązaniami problemu
 }
 \par{
 (Idea punktu środkowego)
+(Metody uwzględniania ograniczeń)
 }
 
 \subsubsection{Podejście do archiwum}
@@ -245,6 +259,8 @@ Warto zwrócić uwagę, że pomimo iż między różnymi rozwiązaniami problemu
 }
 
 %%%%%%%%%%%%%%%%%%% CHAPTER III
+\chapter{Algorytm DEA}
+
 
 \chapter{Badania}
 \section{Cel}

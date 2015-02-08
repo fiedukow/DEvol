@@ -54,6 +54,17 @@ State-of-the-Art
 Swagatam Das, Member, IEEE, and Ponnuthurai Nagaratnam Suganthan, Senior Member, IEEE
 file:///home/fiedukow/repo/DEvol/knowledge/ASurvayofTheStateOfArt.pdf
 
+!!Szczepankiewicz Wroniak Arabas uwzglednianie ograniczen
+
+
+Zestawienie wyników CEC2013 roznych DE:
+Success-History Based Parameter Adaptation for
+Differential Evolution
+Ryoji Tanabe and Alex Fukunaga
+Graduate School of Arts and Sciences
+The University of Tokyo
+http://metahack.org/CEC2013-SHADE.pdf
+
 
 http://www.r-project.org/
 
