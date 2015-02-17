@@ -8,15 +8,16 @@
 \usepackage{type1ec}
 \usepackage{amsthm}
 \usepackage{amsfonts}
+\usepackage{listings}
 \headsep = 30pt
-%\linespread{2}
+\linespread{2}
 
 
 
 \selectlanguage{polish}
 \frenchspacing
 
-\title{\textbf{Wpływ wykorzystania archiwum do mutacji różnicowej w algorytmie ewolucji różnicowej na jakość optymalizacji przestrzeni ciągłej.}}
+\title{\textbf{Wpływ wykorzystania archiwum do mutacji różnicowej w algorytmie ewolucji różnicowej na jakość optymalizacji w przestrzeni ciągłej.}}
 \author{Andrzej Fiedukowicz}
 \date{}
 
@@ -48,13 +49,13 @@
 \subsubsection{Streszczenie}
 \par{
 \emph{
-Algorytmy ewolucji różnicowej (DE) występują w wielu wariantach i odmianach, których właściwości są cały czas badane. Jedną z proponowanych modyfikacji tego algorytmu stanowi wykorzystanie przy operatorze mutacji różnicowej osobników pochodzących z szerszego niż jednopokoleniowego okna historii [PrzydaloBySięŹródło, jeśli nie -- zmiana sformułowania].
+Algorytmy ewolucji różnicowej (DE) występują w wielu wariantach i odmianach, których właściwości są cały czas badane. Jedną z proponowanych modyfikacji tego algorytmu stanowi wykorzystanie przy operatorze mutacji różnicowej osobników pochodzących z szerszego niż jednopokoleniowego okna historii [MS:PrzydaloBySięŹródło, jeśli nie -- zmiana sformułowania].
 }
 }
 \par{
 \emph{
 Niniejsza praca opisuje proces opracowywania metody zastosowania archiwum osobników w celu poprawy jakości wyników uzyskiwanych w ewolucji różnicowej. W dalszej części praca skupia się na sprawdzeniu hipotezy o możliwości poprawy klasycznego schematu ewolucji różnicowej DE/rand/1/bin przez wykorzystanie archiwum.
-Badania skuteczności poszczególnych metod opracowane są w oparciu o zestaw funkcji testowych opracowanych w ramach konferencji IEEE Congress on Evolutionary Computation 2013 (CEC2013) [Potrzebne Źródło].
+Badania skuteczności poszczególnych metod opracowane są w oparciu o zestaw funkcji testowych opracowanych w ramach konferencji IEEE Congress on Evolutionary Computation 2013 (CEC2013) [MS:Potrzebne Źródło].
 }
 }
 \par{
@@ -64,15 +65,15 @@ Niniejsza praca odnosi się także do możliwości i skuteczności wykorzystania
 }
 \subsubsection{Słowa kluczowe}
 \par{
-\emph{Ewolucja Różnicowa, DE, Algorytmy Ewolucyjne, AE, Optymalizacja, Optymalizacja black-box}
+\emph{Ewolucja Różnicowa, DE, Algorytmy Ewolucyjne, AE, Optymalizacja, Optymalizacja black0--box}
 }
 \subsubsection{Abstract}
 \par{
-\emph{There are many forms of differential evolution algorithms (DE), which properties are yet to be discovered. One of possible modifications of those algorithms is using historical points to perform differential mutation. [PrzydałoBySięŹródło]}.
+\emph{There are many forms of differential evolution algorithms (DE), which properties are yet to be discovered. One of possible modifications of those algorithms is using historical points to perform differential mutation. [MS:PrzydałoBySięŹródło]}.
 }
 \par{
 \emph{
-This thesis describes development process of method of using such archive to increase DE results quality. Hereafter this thesis is checking hipotesis about possibility of improving classic DE/rand/1/bin by using archive. All experiments performed during this reasearch are based on benchmark functions set developed during the IEEE Congress of Evolutionary Computation 2013 conference (CEC2013) [Potrzebne Źródło].
+This thesis describes development process of method of using such archive to increase DE results quality. Hereafter this thesis is checking hipotesis about possibility of improving classic DE/rand/1/bin by using archive. All experiments performed during this reasearch are based on benchmark functions set developed during the IEEE Congress of Evolutionary Computation 2013 conference (CEC2013) [MS:Potrzebne Źródło].
 }
 }
 \par{
@@ -82,7 +83,7 @@ This thesis also refers to a possiblity and effectiveness of using middle point 
 }
 \subsubsection{Keywords}
 \par{
-\emph{Differential Evolution, DE, Evolutionary Algorithms, EA, Optimialization, Black-box optimalization}
+\emph{Differential Evolution, DE, Evolutionary Algorithms, EA, Optimialization, Black--box optimalization}
 }
 
 \chapter{Wstęp}
@@ -106,7 +107,7 @@ Problem globalnej optymalizacji funkcji $f: X \rightarrow \mathbb{R}$ polega na 
 \end{center}
 \end{OptDefinition}
 \par{
-Dla celów tej pracy przyjmuje się możliwość zbadania wartości funkcji $f$ w dowolnym punkcie ze zbioru $X$, jednak brak możliwości bezpośredniego zbadania jakichkolwiek innych własności tejże funkcji. W tej formie problem ten można nazwać problemem optymalizacji funkcji zadanej w formie reaktywnej (\emph{Black-box optimization}).
+Dla celów tej pracy przyjmuje się możliwość zbadania wartości funkcji $f$ w dowolnym punkcie ze zbioru $X$, jednak brak możliwości bezpośredniego zbadania jakichkolwiek innych własności tejże funkcji. W tej formie problem ten można nazwać problemem optymalizacji funkcji zadanej w formie reaktywnej (\emph{Black--box optimization}).
 }
 \par{
 W ramach rozpatrywanych problemów istnieje także możliwość, że dziedzina funkcji $f$ jest szersza niż zbiór rozwiązań dopuszczalnych. W takich wypadkach mówimy o problemie optymalizacji z ograniczeniami.
@@ -124,7 +125,7 @@ Szczególnym przypadkiem problemu optymalizacji globalnej z ogarniczeniami jest 
 \begin{OptDefinition}
 Problem globalnej optymalizacji funkcji $f: \mathbb{R}^n \rightarrow \mathbb{R}$ z ograniczeniem $X_D = \{x \in \mathbb{R}^n: g_1(x) \leq 0, g_2(x) \leq 0, \ldots, g_m(x) \leq 0\}$ nazywamy problemem optymalizacji globalnej przestrzeni ciągłej z ogarniczeniami nierównościowymi.
 \end{OptDefinition}
-W tym wariancie przyjmuje się, że $X = \mathbb{R}^n$ gdzie $n \in \mathbb{N}$ a $X_D$ zdefiniowane jest przez funkcje ograniczeń.
+W tym wariancie przyjmuje się, że $X = \mathbb{R}^n$ gdzie $n \in \mathbb{N}$, a $X_D$ zdefiniowane jest przez funkcje ograniczeń.
 }
 
 \par{
@@ -142,36 +143,79 @@ Warto zwrócić uwagę, że pomimo iż między różnymi rozwiązaniami problemu
 
 \section{Motywacje}
 \par{
-Jednym z podejść do zdefiniowanego powyżej problemu optymalizacji jest wykorzystanie algorytmów ewolucji różnicowej (DE) \cite{RainerStorn}. Algorytm ten zaproponowany w 1954 r. od wielu lat rozwijany w ramach licznych prac naukowych cieszy się zwykle bardzo dobrymi rezultatami w testach jakościowych. 
+Jednym z podejść do zdefiniowanego powyżej problemu optymalizacji jest wykorzystanie algorytmów ewolucji różnicowej (DE) \cite{RainerStorn}. Algorytm ten zaproponowany w 1995r. od wielu lat rozwijany w ramach licznych prac naukowych \cite{Opara} cieszy się zwykle bardzo dobrymi rezultatami w testach jakościowych \cite{CEC2013Comp}. 
+}
+\par{
+Typową procedurą przy heurystycznych algorytmach optymalizacyjnych jest wykorzystywanie do generowania kolejnych punktów w przestrzeni przeszukiwań punktów z okna historii o zmiennej szerokości [MS:MożeJakieśŹródło?]. W przypadku klasycznego algorytmu ewolucji różnicowej, okno historii ma rozmiar równy liczności populacji -- starsze punkty nie są wykorzystywane w kolejnych pokoleniach. Choć w przeszłości podjemowano próby wykorzystywania szerszego okna historii w tym algorytmie [MS:Gdzie?], temat ten zwykle występował przy okazji innych badań i nie był osobno zbadany /Note:AleCzyNaPewno?/. Praca ta będzie starała się dokładnie zbadać możliwości wykorzystnia tego rodzaju strategii i określić w jaki sposób wykorzystanie tej strategii wpłynie na jakość uzyskiwanych przy pomocy ewolucji różnicowej wyników.
 }
 
 \section{Cel}
 \par{
 Celem pracy jest zbadanie zmodyfikowanego klasycznego algorytmu ewolucji różnicowej \cite{RainerStorn} tak by wektory mutacji różnicowej były budowane w oparciu o osobniki z parametryzowanej liczby ostatnich pokoleń.
-Zbadana zostanie jakość wyników otrzymywanych przez algorytm wykorzystujący różne wielkości okna archiwum a także przez klasyczny algorytm ewolucji różnicowej.
+}
+\par{
+Przebadane zostaną możliwe podejścia do wykorzystania tych osobników i wynikające z nich zmiany jakości działania algorytmu. W wyniku tych działań zdefiniowany zostanie możliwie najskuteczniejszy algorytm parametryzowany ilością pokoleń uwzględnianych w oknie historii (zwany dalej \emph{DEArch}).
+}
+\par{
+Cel pracy stanowi także zbadanie gotowego algorytmu \emph{DEArch} przy różnych wartościach nowego parametru i ustalenie jak zmiana parametru wpływa na jakość wyników. Otrzymane rezultaty zostaną następnie zestawione z klasycznym algorytmem ewolucji różnicowej a także przedstawione w kontekście zmodyfikowanych wariantów ewolucji różnicowej przebadanych w ramach konferencji CEC2013 /Note: Długa nazwa?/.
 }
 \par{
 W ramach pracy zostanie także zbadana teza o możliwości poprawy jakości otrzymywanych przez ewolucję różnicą wyników przy ograniczonym budżecie zapytań przy wykorzystaniu punktu środkowego populacji.
 }
-\section{Proponowana modyfikacja} %tutaj??
+\par{
+Wszelkie badania jakościowe w ramach pracy będą opracowane przy użyciu testowych funkcji wyspecyfikowanych w ramach konferencji CEC2013 i porównania rezultatów otrzymanych w określonym w ramach konferencji budżecie zapytań o wartości funkcji [MS: GdzieJestWyspecyfikowanyBudżet?].
+}
 
 \chapter{Przegląd literatury}
 \section{Podejscie heurystyczne do problemu optymalizacji}
 \par{
-(Czym jest, dlaczego jest stosowane, odnieśnie do klasycznych algorytmów)
+Do rozwiązywnia problemów optymalizacji ze względu na ich złożoność i (w wielu przypadkach) brak możliwości odnalezienia precyzyjnego rozwiązania stosuje się algorytmy o charakterze heurystycznym. Algorytmy te mają za zadanie rozwiązywać problemy w sposób przybliżony tj. z założenia nie muszą podać rozwiązania dokładnego. Są one stosowane zamiast algorytmów dokładnych tam, gdzie: nie jest możliwe stworzenie precyzyjnego algorytmu, nie jest znany precyzyjny algorytm, precyzyjny algorytm jest zbyt kosztowny w wykonaniu. Algorytmy tej klasy bywają stosowane jako rozwiązanie kompromisowe pomiędzy jakością rozwiązania a czasem jego poszukiwania.
 }
 \par{
-(Algorytm ewolucyjny jako przykład rozwiązania heurystycznego)
+Podejście tego rodzaju niosą za sobą ciekawe konsekwencje. Warto zauważyć, że ponieważ z definicji prowadzą one do rozwiązania nie koniecznie najlepszego, to jeśli istnieje metoda porównywania jakości wyników, można także mówić o porównywaniu jakości działania różnych algorytmów w kontekście danego zadania. Mimo, iż wiele z algorytmów heurystycznych ma charakter niedeterministyczny (tj. dla tego samego wejścia mogą wygenerować dwa różne wyjścia) posługując się narzędziami statystyki i probabilistyki można wysnuwać wnioski dt. jakości algorymtów w kontekście problemu. /Note: A w sekcji o benchmarkach - funkcje są skonstruowane tak, by dawać możliwy obraz jakości algorytmu jako takiego pozwalając go oceniać w oderwaniu od problemu!/
 }
+\par{
+Wartym wspomnienia w kontekście algorytmów heurystycznych jest sposób ich konstruowania. Często dyktowany jest on intuicją, a podstawy teoretyczne działania tego rodzaju algorytmów bywają badane dużo później \cite{Opara}. Tego rodzaju podejście pozwoliło na stworzenie wielu dobrze sprawujących się algorytmów, lecz zarazem ich analityczne badanie pozwala na dokładniejsze zrozumienie problematyki, uogólnienie lub uproszczenie reguł ich działania \cite{Opara}. /Note: I co z tą myślą? W pracy postaramy się chociaż trochę zwrócić uwagę na teorię?/
+}
+
+
 \section{Algorytmy ewolucyjne}
 \par{
-(Czemu heurystyczny?)
+Przykładem algorytmów heurystycznych stosowanych do rozwiązywania problemu optymalizacyjnego są algorytmy należące do grupy algorytmów ewolucyjnych (ang. \emph{Evolutionary Algorithms} -- AE) \cite{WykladyEvol,SpringerIntroToEvol}. Algorytmy te, wzorowane na ewolucji naturalnej operują pojęciami takimi jak osobnik, środowisko czy przystosowanie w celu adaptacyjnego przeszukiwania przestrzeni optymalizacyjnej.
 }
 \par{
-(Idea i Schemat działania)
+Ogólna idea stojąca za algorytmami ewolucyjnymi, polega na opisaniu genotypu osobników, z których następnie można odczytać fenotyp (stanowiący punkt przestrzeni przeszukiwań) oceniany przez środowisko (funkcję optymalizowaną). Osobniki -- podobnie jak osobniki w naturze -- podlegają krzyżowaniu oraz niewielkim mutacjom, walcząc między sobą o zasoby naturalne. Zgodnie z teorią doboru naturalnego, osobniki gorzej dostosowane do środowiska są -- w szerokiej perspektywnie czasowej i przy odpowiednio dużej populacji -- wypierane przez te dostosowane lepiej [MS: MożeJakieśŹródłoNaDobórNaturalny? Darwin?].
 }
 \par{
-(Problemy)
+/Note:Obrazek ze schematem EA?/
+}
+\par{
+W związku z powyższą analogią w ramach algorytmów ewolucyjnych wyróżnia się następujące operatory:
+\begin{description}
+  \item[Krzyżowanie] -- to operator opisujący w jaki sposób na podstwie genotypu dwóch lub więcej osobników wytworzyć genotyp jednego lub więcej osobnika potomnego.
+  \item[Mutacja] -- to operator wprowadzający genotypie wybranego osobnika losowe (nieznaczne) zabużenie.
+  \item[Selekcja] -- to operator odpowiadający selekcji naturalnej, który oceniając osobniki na podstawie przystsowania ich fenotypu do środowiska odrzuca część znich preferując pozostawienie w populacji osobników lepiej dostosowanych.
+  \item[Dobór do krzyżowania] -- to operator wybierający zestawy osobników podlegające krzyżowaniu. Operator ten opisuje znany z natury mechanizm preferencji (fenotypowej) organizmów przy rozmnażaniu.
+  \item[Dobór do mutacji] -- to operator wybierający, które spośród osobników w populacji należy poddać mutacji. Odpowiada on zmiennemu w zależności od fenotypu organizmu prawdopodobieństwu wystąpienia u niego mutacji.
+  \item[Inicjalizacja] -- to operator nieco oderwany od teorii ewolucji (gdyż ta nie opisuje powstawania pierwszych organizmów) opisujący sposób wygenerowania populacji początkowej spośród wszystkich możliwych genotypów.
+  %%% dopasowanie do zakresu
+\end{description}
+}
+\par{
+Ogólny schamat działania algorytmu ewolucyjnego opiera się o iteracyjną adaptację populacji aż do ustalonego warunku stopu, według następujących kroków:
+\lstset{language=C}
+\begin{lstlisting}[frame=single]
+P = Inicjalizacja(N)
+while (!Stop) {
+	P += Krzyzowanie(DoborDoKrzyzowania(P))
+	P += Mutacja(DoborDoMutacji(P))
+	P = Selekcja(P)
+}
+// Note: Uzyc symboli matematycznych zbiorow zamiast += 
+\end{lstlisting}
+}
+\par{
+W tym miejscu warto nadmienić, że choć w powyższym opisie algorytmów ewolucyjnych jest wprost mowa o podziale na genotyp i fenotyp, to na potrzeby zdefiniowanego problemu pojęcie fenotypu będzie wystarczające. Algorytmy opierające się o operacje na zakodowanym genotypie oderwanym od jego semantyki stanowią odrębną gałąź algorytmów ewolucyjnych i są nazywane algorytmami genetycznymi. Algorytmy te, ze względu na specyfikę swojego działania wymagają odpowiedniej reprezentacji danych i odpowiednio dobranych do reprezentacji operatorów. W przypadku rozważanego w pracy problemu optymalizacji, operowanie bezpośrednio na fenotypie ocenianym przez środowisko (a więc wektorach liczb rzeczywistych dla których wyznaczane są wartości funkcji optymalizowanej) ze względu na właściwości i możliwości samych liczb rzeczywistych wydaje się być w zupełności wystarczające. Zagadnienie podziału na genotyp i fenotyp będzie w dalszej części pracy zaniedbane.
 }
 \par{
 (Odmiany i schematy?)
@@ -180,7 +224,7 @@ W ramach pracy zostanie także zbadana teza o możliwości poprawy jakości otrz
 (Parametry)
 }
 \par{
-(Alg. genetyczne - wspomnienie, bez rozwijania wątku)
+(Problemy, także te przy badaniu właściwości)
 }
 \par{
 (Eksploracja vs. Eksplatacja)
@@ -203,11 +247,13 @@ W ramach pracy zostanie także zbadana teza o możliwości poprawy jakości otrz
 }
 \par{
 (Idea punktu środkowego)
+}
+\par{
 (Metody uwzględniania ograniczeń)
 }
 
 \subsubsection{Podejście do archiwum}
-\par{(Odniesienia w literaturze) - i gdzie ta literatura :(}
+\par{(Odniesienia w literaturze)}
 \par{(Dotychczasowe wnioski)}
 
 \section{Metodyka badań (opisywać tak szeroko?)}
@@ -258,9 +304,12 @@ W ramach pracy zostanie także zbadana teza o możliwości poprawy jakości otrz
 (Implementacja w R)
 }
 
-%%%%%%%%%%%%%%%%%%% CHAPTER III
-\chapter{Algorytm DEA}
-
+\chapter{Algorytm DEArch}
+\section{Podejścia do wykorzystania archiwum}
+\subsection{Brak normalizacji}
+\subsection{Normalizacja}
+\subsection{Inne podejścia}
+\section{Definicja algorytmu}
 
 \chapter{Badania}
 \section{Cel}

@@ -1,0 +1,224 @@
+\documentclass[11pt]{report}
+
+\usepackage[polish]{babel}
+\usepackage[latin2]{inputenc}
+
+\title{\textbf{Algorytm ewolucji ró¿nicowej - wp³yw wykorzystania archiwum do mutacji ró¿nicowej na jako¶æ wyników.}}
+\author{Andrzej Fiedukowicz}
+\date{}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\fancyhead{}
+\fancyhead[R]{\thepage}
+\renewcommand{\chaptermark}[1]{\markboth{\chaptername\ \thechapter.\ #1}{}}
+\fancyhead[L]{\leftmark}
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\fancyheadoffset[]{0pt}
+
+\fancypagestyle{plain}{
+\fancyhf{}
+\fancyfoot[C]{\bfseries \thepage}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+
+%\section{Abstract}
+\chapter{Wstêp}
+\paragraph{
+Problem optymalizacji jest jednym z najczê¶ciej pojawiaj±cych siê w praktycznych zastosowaniach problemów [¬ród³o/Zmiêkczenie].
+Jego powszechno¶æ a tak¿e rosn±cy stopieñ skomplikowania konkretnych zadañ stawianych przed systemami informatycznymi rozwi±zuj±cymi ten problem sk³ania do poszukiwania coraz doskonalszych metod jego rozwi±zywania [?].
+}
+\section{Problematyka / Definicja problemu (motywacje?)} %Tu czy w przegl±dzie literatury??}
+\paragraph{
+Praca ta, umiejsciowiona zosta³a w kontek¶cie rozwi±zywania problemów optymalizacji gdzie analityczna forma funkcji optymalizowanej nie jest znana lub analityczne wyznaczenie jej ekstremum jest niemo¿liwe. Zak³ada siê bowiem, ¿e zadanie jest zdefiniowane nastêpuj±co [Strojnowski]:
+}
+\paragraph{
+	f: X -> R
+	min f(x); x nale¿y do X
+Gdzie: 
+ 	- f - funkcja optymalizowana
+	- X - dziedzina funkcji f (zbiór potencjalnych rozwi±zañ)
+Dodatkowo zak³ada siê tak¿e mo¿liwo¶æ zbadania warto¶ci funkcji f w dowolnym punkcie ze zbioru X, jednak brak mo¿liwo¶ci bezpo¶redniego zbadania jakichkolwiek innych w³asno¶ci tej¿e funkcji.
+}
+\paragraph{
+Przy tych za³o¿eniach, nale¿y zauwa¿yæ, ¿e je¶li zbiór X jest nieskoñczenie liczny (nawet przeliczalny), nie jest mo¿liwe zweryfikowanie, czy wyznaczony punkt jest rzeczywistym rozwi±zaniem zadanego problemu. Co wiêcej, w wielu przypadkach (brak istnienia hiperp³aszczyzny X, takiej, ¿e w ka¿dym jej punkcie warto¶æ funkcji jest równa poszukiwanemu ekstremum) prawdopodobieñstwo odnalezienia rozwi±zania problemu (niezale¿nie od metody), wynosi zero.
+}
+\paragraph{
+Maj±c to na wzglêdzie by problem mo¿na by³o uznaæ za rozwi±zany, nale¿y go przeformu³owaæ tak, ¿e rozwi±zaniem jest dowolny element x ze zbioru X, jednak jego jako¶æ wyznaczana jest przez warto¶æ funkcji f w tym punkcie. Dla tak sformu³owanego problemu mo¿liwe jest porównywanie ró¿nych metod przegl±dania przestrzeni X pod wzglêdem jako¶ci otrzymanego rozwi±zania.
+}
+\paragraph{
+Warto zwróciæ uwagê, ¿e pomimo i¿ miêdzy ró¿nymi rozwi±zaniami problemu istnieje relacja czê¶ciowego porz±dku generowana przez warto¶æ funkcji f, to jednak przy przyjêtych za³o¿eniach warto¶æ (rozumiana jako liczba rzeczywista) tej funkcji nie niesie ¿adnej dodatkowej informacji. Z tego te¿ powodu, wszelkie badania porównawcze przeprowawdzane na poszczególnych metodykach musz± byæ oparte na tej w³a¶nie relacji porz±dku.
+}
+\paragraph{
+// To chyba mo¿na sobie darowaæ - nie ma znaczenia dla wywodu ?
+// Wa¿nym faktem jest to, ¿e je¶li metodê rozwi±zania problemu wraz z jej parametrami uznamy za element zbioru dopuszczalnych metod rozwi±zywania D. To problem wyboru metody optymalizacji staje siê problemem optymalizacyjnym.
+}
+
+\section{Motywacje(?)}
+\section{Cel}
+\section{Proponowana modyfikacja} %tutaj??
+
+\chapter{Przegl±d literatury}
+\section{Podejscie heurystyczne do problemu optymalizacji}
+\paragraph{
+(Czym jest, dlaczego jest stosowane, odnie¶nie do klasycznych algorytmów)
+}
+\paragraph{
+(Algorytm ewolucyjny jako przyk³ad rozwi±zania heurystycznego)
+}
+\section{Algorytmy ewolucyjne}
+\paragraph{
+(Czemu heurystyczny?)
+}
+\paragraph{
+(Idea i Schemat dzia³ania)
+}
+\paragraph{
+(Problemy)
+}
+\paragraph{
+(Odmiany i schematy?)
+}
+\paragraph{
+(Parametry)
+}
+\paragraph{
+(Alg. genetyczne - wspomnienie, bez rozwijania w±tku)
+}
+\paragraph{
+(Eksploracja vs. Eksplatacja)
+}
+\subsection{Ewolucja ró¿nicowa}
+\paragraph{
+(Ogólny opis)
+}
+\paragraph{
+(Czym siê ró¿ni od klasycznych algorytmów ewolucyjnych)
+}
+\paragraph{
+(Zalety i wady w kontek¶cie problemu optymalizacji)
+}
+\paragraph{
+(Parametry)
+}
+\paragraph{
+(Wyniki w kontek¶cie innych metod)
+}
+\paragraph{
+(Idea punktu ¶rodkowego)
+}
+
+\subsubsection{Podej¶cie do archiwum}
+\paragraph{(Odniesienia w literaturze) - i gdzie ta literatura :(}
+\paragraph{(Dotychczasowe wnioski)}
+
+\section{Metodyka badañ (opisywaæ tak szeroko?)}
+\subsection{Modelowanie statystyczne}
+\paragraph{
+(Czemu s³u¿y, dlaczego potrzebne do tych badañ)
+}
+\subsection{Testy statystyczne}
+\paragraph{
+(Ogólna koncepcja, p-value)
+}
+\subsection{Testy parametryczne}
+\paragraph{
+(Co to jest i kiedy siê stosuje)
+}
+\subsubsection{Test T-studenta}
+\paragraph{
+(Jak dzia³a, ZA£O¯ENIA)
+}
+\paragraph{
+(Wady zalety).
+}
+
+\subsection{Testy nieparametryczne}
+\paragraph{
+(Co to jest i kiedy siê stosuje)
+}
+\subsubsection{Test wilcoxona}
+\paragraph{
+(Opis, dzia³anie, ZA£O¯ENIA)
+}
+\paragraph{
+(Wady zalety)
+}
+\section{Benchmarki blackboxowe}
+\paragraph{
+(Czemu s³u¿±)
+}
+\paragraph{
+(Dlaczego s± dobrym odniesieniem)
+}
+
+\subsection{CEC}
+\paragraph{
+(Opis benchmarka, funkcje testowe)
+}
+\paragraph{
+(Implementacja w R)
+}
+
+%%%%%%%%%%%%%%%%%%% CHAPTER III
+
+\chapter{Badania}
+\section{Cel}
+\section{Plan eksperymentów}
+\section{Dobór parametrów}
+\section{Zbierane rezulataty}
+\subsection{¦rodek ciê¿ko¶ci populacji (DE/mid)}
+\section{Sposób analizy}
+
+\section{Wyniki (w za³±czniku?)}
+\section{Analiza wyników (wnioski)}
+
+\chapter{Podsumowanie}
+
+
+\bibliographystyle{plplain}
+\nocite{*}
+\bibliography{bibliography}
+
+\end{document}
+    <end>$</end>
+        </context>
+
+        <context id="escape" style-ref="special-char">
+            <match>\\.</match>
+        </context>
+
+        <!-- usual quoted string, ends at line end, \ is an escape char -->
+        <context id="string" style-ref="string" end-at-line-end="true" class="string" class-disabled="no-spell-check">
+            <start>"</start>
+            <end>"</end>
+            <include>
+                <context ref="escape"/>
+                <context ref="line-continue"/>
+            </include>
+        </context>
+
+        <!-- same thing but with single quote marks -->
+        <context id="single-quoted-string" style-ref="string" end-at-line-end="true" class="string" class-disabled="no-spell-check">
+            <start>'</start>
+            <end>'</end>
+            <include>
+                <context ref="escape"/>
+                <context ref="line-continue"/>
+            </include>
+        </context>
+
+        <!-- Dummy context, needed to load the style mappings when parsing v1 files -->
+        <context id="def"/>
+
+    </definitions>
+</language>
