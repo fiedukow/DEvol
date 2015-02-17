@@ -83,6 +83,27 @@ draw_population = function(pop, pop_next, archive, mid, range, qual, no, name = 
   dev.off()
 }
 
+fit_norm = function(n, mean, sd, range) {
+  v = rnorm(n, mean, sd)
+  v[which(v<range[1])] = range[1]
+  v[which(v>range[2])] = range[2]
+  return(v)
+}
+
+fit_cauchy = function(n, HH, scale, range) {
+  H_el = sample(HH, n, replace=TRUE)
+  v = rcauchy(n, H_el, scale)
+  to_small = which(v < range[1])
+  N = length(to_small)
+  while (N > 0) {
+    v[to_small] = rcauchy(N, H_el[to_small], scale)
+    to_small = which(v < range[1])
+    N = length(to_small)
+  }
+  v[which(v>range[2])] = range[2]
+  return(v)
+}
+
 de = function(dims, range, pop_size, diff_factor, init, select, crossover,
               cr, qual, generations, diff_size, range_fit = range_fit_mirror,
               N_history = pop_size, noise_sd = 1, best_possible = NA, near_enough = NA, name="") {
@@ -102,16 +123,22 @@ de = function(dims, range, pop_size, diff_factor, init, select, crossover,
   col_means_matrix = matrix(col_means, nrow=pop_size, ncol=dims, byrow=TRUE)
   H_norm[[1]] = (pop_prev[[1]] - col_means_matrix) / mean_pop_prev
   N_runif = pop_size*dims
+  HH_MAX = 100
+  HH = rep(diff_factor, HH_MAX)
+  last_diff_factor = diff_factor
 
   result = list()
   result$values = c()
   result$mid_values = c()
+  result$adaptive_diff_factor = c()
   result$init_pop = pop_prev[[1]]
   result$record_value = worst
   result$record_mid_value = worst
 
   begin = Sys.time()
   for(i in 1:generations) {
+    diff_factors = fit_cauchy(pop_size, HH, 0.1, c(0,1))
+
     ##### DETERMINE GENERATION WIDE VALUES
     mid_point = matrix(colMeans(pop_prev[[1]]), ncol=dims)
     H_unnorm = t(t(H_norm[[1]]*mean_pop_prev)+as.vector(mid_point))
@@ -121,6 +148,7 @@ de = function(dims, range, pop_size, diff_factor, init, select, crossover,
     result$record_value = best(result$record_value, result$values[i])
     result$mid_values[i] = qual(mid_point)
     result$record_mid_value = best(result$record_mid_value, result$mid_values[i])
+    result$adaptive_diff_factor[i] = last_diff_factor
 
     ##### CHECKING IF STOP IS POSSIBLE (GOAL REACHED)
     if (!is.na(best_possible) && !is.na(near_enough) &&
@@ -140,7 +168,7 @@ de = function(dims, range, pop_size, diff_factor, init, select, crossover,
 
     ##### GENERATING NEW POPULATION
     pop_next[[1]] = select(pop_prev, pop_size) +
-                    diff_factor*diff_vector(H_unnorm, pop_size) +
+                    diff_factors * diff_vector(H_unnorm, pop_size) +
                     rnorm(N_runif, mean = 0, sd = noise_sd)
     pop_next[[1]] = crossover(pop_prev[[1]], pop_next[[1]], cr)
     pop_next_fit = range_fit(pop_next[[1]], range)
@@ -153,6 +181,12 @@ de = function(dims, range, pop_size, diff_factor, init, select, crossover,
     pop_next[[1]] = pop_prev[[1]]*mod + pop_next[[1]]*(1-mod)
     pop_next_fit = pop_prev[[1]]*mod + pop_next_fit*(1-mod)
     pop_next[[2]] = pop_prev[[2]]*mod + pop_next[[2]]*(1-mod)
+
+    ###### ADAPTATION
+    if (sum(1-mod) != 0) {
+      last_diff_factor = mean(diff_factors[which(mod == 0)])
+      HH[(i%%HH_MAX) + 1] = last_diff_factor
+    }
 
     ###### UPDATING NORMALIZED ARCHIVE
     H_norm_next = t(t(pop_next[[1]]) - as.vector(mid_point))
@@ -262,6 +296,7 @@ save_results = function(de_result) {
     paste(" * [Final Population](./", de_result$experiment_name, "_pop.txt)", sep=""),
     paste(" * [best(generation)](./", de_result$experiment_name, "_values.txt)", sep=""),
     paste(" * [middle(generation)](./", de_result$experiment_name, "_middle.txt)", sep=""),
+    paste(" * [F(generation)](./", de_result$experiment_name, "_F.txt)", sep=""),
   sep="\n"), fileConn)
   close(fileConn)
 
@@ -271,6 +306,7 @@ save_results = function(de_result) {
   # Maybe dump quality function values as well?
   write(de_result$values, file=paste("./EXPERIMENTS/",de_result$experiment_suite,"/single_results/", de_result$experiment_name, "_values.txt", sep=""))
   write(de_result$mid_values, file=paste("./EXPERIMENTS/",de_result$experiment_suite,"/single_results/", de_result$experiment_name, "_middle.txt", sep=""))
+  write(de_result$adaptive_diff_factor, file=paste("./EXPERIMENTS/",de_result$experiment_suite,"/single_results/", de_result$experiment_name, "_F.txt", sep=""))
   system(paste("./gen_html_report.sh \"", de_result$experiment_name, "\" \"",de_result$experiment_suite,"\"", sep=""))
 }
 
