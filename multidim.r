@@ -3,7 +3,7 @@ library(stringr) #str_replace to support markdown bug
 # MINIMIZE OR MAXIMIZE
 best = min
 which.best = which.min
-better = `<`
+better = `<=`
 worst = Inf
 
 initialize_unif = function(n, dims, range) {
@@ -104,6 +104,14 @@ fit_cauchy = function(n, HH, scale, range) {
   return(v)
 }
 
+MeanWL = function(F_values, DeltaQuality) {
+  #print(DeltaQuality)
+  weight_Q = DeltaQuality / sum(DeltaQuality)
+  if (min(weight_Q) < 0)
+    stop("Weight of F in F adaptation cannot be negative!")
+  return (sum(weight_Q * (F_values^2)) / sum(weight_Q * F_values))
+}
+
 de = function(dims, range, pop_size, diff_factor, init, select, crossover,
               cr, qual, generations, diff_size, range_fit = range_fit_mirror,
               N_history = pop_size, noise_sd = 1, best_possible = NA, near_enough = NA, name="") {
@@ -138,6 +146,12 @@ de = function(dims, range, pop_size, diff_factor, init, select, crossover,
   begin = Sys.time()
   for(i in 1:generations) {
     diff_factors = fit_cauchy(pop_size, HH, 0.1, c(0,1))
+    N_best = round(pop_size * runif(pop_size, 2/pop_size, 0.2))
+
+    ##### SORT POP_PREV TO BE ABLE TO APPLY P-TO-BEST
+    pop_order = order(pop_prev[[2]])
+    pop_prev[[1]] = pop_prev[[1]][pop_order,]
+    pop_prev[[2]] = pop_prev[[2]][pop_order]
 
     ##### DETERMINE GENERATION WIDE VALUES
     mid_point = matrix(colMeans(pop_prev[[1]]), ncol=dims)
@@ -167,7 +181,9 @@ de = function(dims, range, pop_size, diff_factor, init, select, crossover,
     }
 
     ##### GENERATING NEW POPULATION
+    PBestSelection = sapply(N_best, function(n) { sample(n, 1) })
     pop_next[[1]] = select(pop_prev, pop_size) +
+                    diff_factors * (pop_prev[[1]][PBestSelection,] - pop_prev[[1]]) +
                     diff_factors * diff_vector(H_unnorm, pop_size) +
                     rnorm(N_runif, mean = 0, sd = noise_sd)
     pop_next[[1]] = crossover(pop_prev[[1]], pop_next[[1]], cr)
@@ -184,7 +200,8 @@ de = function(dims, range, pop_size, diff_factor, init, select, crossover,
 
     ###### ADAPTATION
     if (sum(1-mod) != 0) {
-      last_diff_factor = mean(diff_factors[which(mod == 0)])
+      last_diff_factor = MeanWL(diff_factors[which(mod == 0)],
+                                pop_prev[[2]][which(mod==0)]- pop_next[[2]][which(mod==0)])
       HH[(i%%HH_MAX) + 1] = last_diff_factor
     }
 
@@ -209,7 +226,7 @@ de = function(dims, range, pop_size, diff_factor, init, select, crossover,
   result$generation_max = generations
   result$best_element = pop_prev[[1]][which.best(pop_prev[[2]]), ]
   result$best_qual = qual(result$best_element)
-  result$time_taken = as.numeric(Sys.time())-as.numeric(begin)
+  result$time_taken = as.numeric(Sys.time()) - as.numeric(begin)
   result$H_norm = H_norm
   result$last_pop = pop_prev
   result$middle = mid_point

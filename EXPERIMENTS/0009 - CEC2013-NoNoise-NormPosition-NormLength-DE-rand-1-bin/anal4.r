@@ -18,7 +18,7 @@ for(dim in dims) {
   for(qual in qual_funs) {
     s = c()
     s = cbind(s, min(result_matrix[[qual[[2]]]][[dim]][,paste0("S10.BEST")]) - qual[[4]])
-    s = rbind(s, median(result_matrix[[qual[[2]]]][[dim]][,paste0("S10.BEST")]) - qual[[4]])
+    s = rbind(s, mean(result_matrix[[qual[[2]]]][[dim]][,paste0("S10.BEST")]) - qual[[4]])
     s = rbind(s, max(result_matrix[[qual[[2]]]][[dim]][,paste0("S10.BEST")]) - qual[[4]])
     r = rbind(r, t(s))
   }
