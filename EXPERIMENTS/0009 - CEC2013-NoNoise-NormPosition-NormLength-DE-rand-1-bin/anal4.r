@@ -24,3 +24,8 @@ for(dim in dims) {
   }
   l[[dim]] = r
 }
+
+X = read.csv("knowledge/ExternalData/DEVariants-CEC2013-Results.csv")
+d = as.numeric(format(l[[30]][,2], digits=3, scientific=TRUE))
+X[,"DEArch"] = d
+apply(apply(X, 1, rank), 1, mean)

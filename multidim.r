@@ -115,6 +115,10 @@ MeanWL = function(F_values, DeltaQuality) {
 de = function(dims, range, pop_size, diff_factor, init, select, crossover,
               cr, qual, generations, diff_size, range_fit = range_fit_mirror,
               N_history = pop_size, noise_sd = 1, best_possible = NA, near_enough = NA, name="") {
+  ##### CONST SECTION - IT MAY OR SHOULD BE CHANGED TO PARAM
+  HH_MAX = 100
+  REINIT_DST = ((10^(-3))/sqrt(dims)) ## Minimal average distance which doesnt cause reinitialization.
+
   if (N_history < pop_size)
     stop("History must be at least 1 population long")
   if (N_history %% pop_size != 0)
@@ -131,9 +135,10 @@ de = function(dims, range, pop_size, diff_factor, init, select, crossover,
   col_means_matrix = matrix(col_means, nrow=pop_size, ncol=dims, byrow=TRUE)
   H_norm[[1]] = (pop_prev[[1]] - col_means_matrix) / mean_pop_prev
   N_runif = pop_size*dims
-  HH_MAX = 100
   HH = rep(diff_factor, HH_MAX)
   last_diff_factor = diff_factor
+
+  last_improved_pop_id = 1
 
   result = list()
   result$values = c()
@@ -159,6 +164,8 @@ de = function(dims, range, pop_size, diff_factor, init, select, crossover,
 
     ##### SAVING GENERATION DETAILS
     result$values[i] = qual(pop_prev[[1]][which.best(pop_prev[[2]]), ])
+    if (result$values[i] < result$record_value)
+      last_improved_pop_id = i
     result$record_value = best(result$record_value, result$values[i])
     result$mid_values[i] = qual(mid_point)
     result$record_mid_value = best(result$record_mid_value, result$mid_values[i])
@@ -198,18 +205,25 @@ de = function(dims, range, pop_size, diff_factor, init, select, crossover,
     pop_next_fit = pop_prev[[1]]*mod + pop_next_fit*(1-mod)
     pop_next[[2]] = pop_prev[[2]]*mod + pop_next[[2]]*(1-mod)
 
+    improved = which(mod ==0)
+    any_improvement = (sum(1-mod) != 0)
+
     ###### ADAPTATION
-    if (sum(1-mod) != 0) {
-      last_diff_factor = MeanWL(diff_factors[which(mod == 0)],
-                                pop_prev[[2]][which(mod==0)]- pop_next[[2]][which(mod==0)])
+    if (any_improvement) {
+      last_diff_factor = MeanWL(diff_factors[improved],
+                                pop_prev[[2]][improved] - pop_next[[2]][improved])
       HH[(i%%HH_MAX) + 1] = last_diff_factor
     }
 
     ###### UPDATING NORMALIZED ARCHIVE
-    H_norm_next = t(t(pop_next[[1]]) - as.vector(mid_point))
     mean_pop_next = mean(dist(pop_next[[1]]))
-    H_norm[[1]] = rbind(H_norm[[1]],
-                        H_norm_next/mean_pop_next)
+    if (any_improvement) {
+      H_norm_next = t(t(pop_next[[1]][improved,]) - as.vector(mid_point))
+      if (length(improved) == 1)
+        H_norm_next = t(H_norm_next) ### TODO: Remove this ugly hack
+      H_norm[[1]] = rbind(H_norm[[1]],
+                          H_norm_next/mean_pop_next)
+    }
 
     ###### SHIFTING HISTORY WINDOW
     N = nrow(H_norm[[1]])
@@ -221,6 +235,24 @@ de = function(dims, range, pop_size, diff_factor, init, select, crossover,
 
     ####### ITS HEAVY SO WE ARE AVOIDING CALCULATING IT AGAIN AT THE BEGINING OF THE LOOP
     mean_pop_prev = mean_pop_next
+
+    ###### DECIDE IF WE WANT TO REINITIALIZE
+    if (mean_pop_next < REINIT_DST) {
+      last_improved_pop_id = i
+      last_candidats = matrix()
+      pop_prev = list()
+      pop_next = list()
+      H_norm = list()
+      pop_prev[[1]] = init(pop_size, dims, range)
+      pop_prev[[2]] = qual(pop_prev[[1]])
+      mean_pop_prev = mean(dist(pop_prev[[1]]))
+      col_means = colMeans(pop_prev[[1]])
+      col_means_matrix = matrix(col_means, nrow=pop_size, ncol=dims, byrow=TRUE)
+      H_norm[[1]] = (pop_prev[[1]] - col_means_matrix) / mean_pop_prev
+      N_runif = pop_size*dims
+      HH = rep(diff_factor, HH_MAX)
+      last_diff_factor = diff_factor
+    }
   }
   result$generation = length(result$values)
   result$generation_max = generations
