@@ -179,8 +179,8 @@ de = function(dims, range, pop_size, diff_factor, init, select, crossover,
     }
 
     ##### DRAWING GENERATION IF POSSIBLE
-    if (dims == 2)
-      draw_population(pop_prev, last_candidats, H_unnorm, mid_point, range, qual, i, name)
+    #if (dims == 2)
+    #  draw_population(pop_prev, last_candidats, H_unnorm, mid_point, range, qual, i, name)
 
     if (mean_pop_prev == 0.0) { #### Whole population in one point - stop this
       print(paste0("Population in single point [",i,"]"))
