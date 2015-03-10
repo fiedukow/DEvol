@@ -41,6 +41,7 @@
 \renewcommand{\footrulewidth}{0pt}}
 
 \begin{document}
+\DeclareGraphicsExtensions{.pdf,.png,.jpg}
 
 \maketitle
 \tableofcontents
@@ -88,7 +89,7 @@ This thesis also refers to a possiblity and effectiveness of using middle point 
 
 \chapter{Wstęp}
 \par{
-Problem optymalizacji jest jednym z najczęściej pojawiających się w praktycznych zastosowaniach problemów numerycznych. Sama powszechność podstawowego problemu, ale także możliwość sprowadzenia do problemu optymalizacji problemów klasyfikacji, regresji, grupowania czy też określając szerzej -- uczenia maszynowego \cite{SpringerIntroToEvol}, sprawia, że przed algorytmami optymalizacji stawiane są coraz bardziej złożone i wymagające zadania.
+Problem optymalizacji jest jednym z najczęściej pojawiających się w praktycznych zastosowaniach problemów numerycznych. Sama powszechność podstawowego problemu, ale także możliwość sprowadzenia do problemu optymalizacji problemów klasyfikacji, regresji, grupowania czy też określając szerzej -- uczenia maszynowego \cite{SearchingInteligent,SpringerIntroToEvol}, sprawia, że przed algorytmami optymalizacji stawiane są coraz bardziej złożone i wymagające zadania.
 }
 \par{
 Stale zwiększający się poziom trudności problemów optymalizacyjnych jak i ciągła niedoskonałość dotychczas wytworzonych metod ich rozwiązywania powoduje duże zainteresowanie badaniami dotyczącymi tworzenia coraz doskonalszych, szybszych i dających lepsze rezultaty algorytmów owe problemy rozwiązujących \cite{StateOfArt}.
@@ -177,7 +178,49 @@ Podejście tego rodzaju niosą za sobą ciekawe konsekwencje. Warto zauważyć, 
 \par{
 Wartym wspomnienia w kontekście algorytmów heurystycznych jest sposób ich konstruowania. Często dyktowany jest on intuicją, a podstawy teoretyczne działania tego rodzaju algorytmów bywają badane dużo później \cite{Opara}. Tego rodzaju podejście pozwoliło na stworzenie wielu dobrze sprawujących się algorytmów, lecz zarazem ich analityczne badanie pozwala na dokładniejsze zrozumienie problematyki, uogólnienie lub uproszczenie reguł ich działania \cite{Opara}. /Note: I co z tą myślą? W pracy postaramy się chociaż trochę zwrócić uwagę na teorię?/
 }
+\newpage
+\subsection{Model heurystycznego algorytmu optymalizacyjnego}
+\par{
+Algorymty heurystyczne, służące rozwiązywaniu problemu optymalizacji, opierają się o ideę dominiemywania pewnych właściwości przeszukiwanej przestrzeni na podstawie punktów już sprawdzonych i przyjętych \emph{a priori} złożeń. Mając na względzie ten fakt, jak i wcześniej przedstawiony problem, definiując \cite{SearchingInteligent} zadanie optymalizacyjne jako czwórkę $\Pi = \langle{}X,~f,~S,~T\rangle$ gdzie:
+\begin{itemize}
+\item $X$ -- przestrzeń przeszukiwań
+\item $f$ -- funkcja optymalizowana
+\item $S$ -- zbiór punktów początkowych 
+\item $T$ -- kryterium zatrzymania
+\end{itemize}
+możemy określić także metodę przeszukiwania jako \cite{SearchingInteligent} trójkę $M = \langle{}X,~I,~O\rangle$, gdzie:
+\begin{itemize}
+\item $X$ -- przestrzeń przeszukiwań 
+\item $I$ -- operator inicjacji -- $I: S \times U \rightarrow X$
+\item $O$ -- operator zagregowany -- $X: \Pi \times H \times U \rightarrow X$
+\end{itemize}
+Jako $U$ oznaczono przestrzeń sekwencji losowych, natomiast jako $H$ -- dotychczas otrzymane przez algorytm wyniki badania zadania $\Pi$.
+}
+\subsection{Archiwum}
 
+\par{
+W kontekście przedstawionego powyżej modelu, można zauważyć, że isotą konkretnego algorytmu optymalizacyjnego jest operator zagregowany $O$, na którego działanie wpływ ma wyłącznie sam problem ($\Pi$), ewentualne wyniki pseudolosowych operacji ($U$) oraz wyniki otrzymane dotychczas przez algorytm przy badaniu optymalizowanej funkcji ($H$). Ten ostatni element nazywany jest \textbf{archiwum} i stanowi centralny punkt proponowanej modyfikacji algorytmu ewolucji różnicowej -- stąd zostanie on bardziej dokładnie opisany.
+}
+\par{
+Szeroka definicja archiwum, nie wymaga by miało ono w jakikolwiek sposób ograniczoną pojemność. W skrajnym wypadku można więc pokazać algorytm, wykorzystujący wszystkie zbadane dotąd wartości funkcji optymalizowanej. Typowe algorytmy operują jednak tylko na oknie archiwum będącym podzbiorem $H$ (Rysunek \ref{ModelArchiwumImg}). Taka charakterystyka algorytmów jest uzasadniona w szczególności ze względu na:
+\par{
+\begin{itemize}
+\item Kosztowność przechowywania i przetwarzania całego archiwum.
+\item Brak poprawy jakości algorytmu przy wykorzystaniu większej ilości punktów w archiwum lub poprawę niewystarczającą względem dodatkowych kosztów przetwarzania.
+\item Brak cennych dla działania algorytmu informacji i przesłanek w starszych punktach archiwum.
+\end{itemize}
+}
+\begin{figure}[htb]
+\begin{center}\includegraphics[scale=0.5]{img/ModelArchiwumFIFO2}\end{center}
+\caption{Działanie heurystycznego algorytmu optymalizacyjnego z oknem archiwum wielkości równej dwukrotności osobników generowanych przez pojedynczą iterację. Zastosowano okno archiwum będące kolejką FIFO.}
+\label{ModelArchiwumImg}
+\end{figure}
+\par{
+I tak na przykład w opisanym w rozdziale \ref{DEvol_section} klasycznym algorytmie ewolucji różnicowej, mamy do czynienia z archiwum o rozmiarze równym wielkości populacji. Oznacza to, że do przeprowadzenia iteracji $N+1.$ algorytmu, oprócz $\Pi$ oraz $U$ potrzebujemy także wyniku $N.$ iteracji, ale już nie wyniku iteracji $N-1$. a tym bardziej całego archiwum $H$.
+}
+\par{
+Tego rodzaju ograniczenia w wykorzystywaniu archiwum $H$ skłaniają do rozważań nad możliwością i stosownością wykorzystania informacji lub przesłanek ukrytych w nieużwanej części archiwum do poprawienia funkcjonowania algorytmu. Nie jest koncepcją nową [IGdzieŹródło] by parametryzować wykorzystywaną wielkość okna archiwum -- umożliwiając w ten sposób strojenie algorytmu oraz poprawianie jakości uzyskiwanych rezultatów. Pojawia się więc przypuszczenie, że także w przypadku ewolucji różnicowej powiększenie wykorzystywanego okna archiwum może umożliwiać uzyskiwanie lepszych jakościowo wyników optymalizacji.
+}
 
 \section{Algorytmy ewolucyjne}
 \par{
@@ -201,35 +244,36 @@ W związku z powyższą analogią w ramach algorytmów ewolucyjnych wyróżnia s
   %%% dopasowanie do zakresu
 \end{description}
 }
+\newpage
 \par{
 Ogólny schamat działania algorytmu ewolucyjnego opiera się o iteracyjną adaptację populacji aż do ustalonego warunku stopu, według następujących kroków:
 \lstset{language=C}
-\begin{lstlisting}[frame=single]
+\begin{lstlisting}[frame=single,mathescape]
 P = Inicjalizacja(N)
-while (!Stop) {
-	P += Krzyzowanie(DoborDoKrzyzowania(P))
-	P += Mutacja(DoborDoMutacji(P))
+while (!stop) {
+	P $\cup$ Krzyzowanie(DoborDoKrzyzowania(P))
+	P $\cup$ Mutacja(DoborDoMutacji(P))
 	P = Selekcja(P)
 }
-// Note: Uzyc symboli matematycznych zbiorow zamiast += 
 \end{lstlisting}
 }
 \par{
 W tym miejscu warto nadmienić, że choć w powyższym opisie algorytmów ewolucyjnych jest wprost mowa o podziale na genotyp i fenotyp, to na potrzeby zdefiniowanego problemu pojęcie fenotypu będzie wystarczające. Algorytmy opierające się o operacje na zakodowanym genotypie oderwanym od jego semantyki stanowią odrębną gałąź algorytmów ewolucyjnych i są nazywane algorytmami genetycznymi. Algorytmy te, ze względu na specyfikę swojego działania wymagają odpowiedniej reprezentacji danych i odpowiednio dobranych do reprezentacji operatorów. W przypadku rozważanego w pracy problemu optymalizacji, operowanie bezpośrednio na fenotypie ocenianym przez środowisko (a więc wektorach liczb rzeczywistych dla których wyznaczane są wartości funkcji optymalizowanej) ze względu na właściwości i możliwości samych liczb rzeczywistych wydaje się być w zupełności wystarczające. Zagadnienie podziału na genotyp i fenotyp będzie w dalszej części pracy zaniedbane.
 }
+\subsubsection{Eksploracja i Eksploatacja}
 \par{
-(Odmiany i schematy?)
+Ważnymi pojęciami opisującymi sposób w jaki osobniki w ramach algorytmów ewolucyjnych przszukują przestrzeń są pojęcia \textbf{eksporacji} i \textbf{eksploatacji}. Definiują one dwutorowe działanie grup osobników:
+\begin{description}
+  \item[Eksploracja] -- to proces poszukiwania nowych, przyciągających osobniki obszarów przestrzeni przeszukiwań charakteryzujących się niską wartością funkcji przystosowania. Pojęcie to opisuje proces poszukiwania w całej przestrzeni obszarów przyciągania wielu minimów lokalnych. 
+  \item[Eksploatacja] -- to proces badania obszaru przestrzeni przeszukiwań charakteryzującego się niską średnią wartością funkcji przystosowania. Pojęcie to opisuje proces poszukiwania minimum lokalnego przez punkty zawierające się w jego obszarze przyciągania.
+\end{description}
 }
 \par{
-(Parametry)
+Uzyskanie właściwego balansu między tymi dwoma aspektami działania algorytmów ewolucyjnych jest kluczowe dla powodzenia algorytmu ewolucyjnego. Efekt sterowania siłą dwóch charakterystyk przeszukiwań otrzymuje się, przez odpowiednie definiowanie operatorów oraz ich parametrów. W szczególności, zadaniem operatora krzyżowania jest przede wszystkim prowadzenie populacji w kierunku ekspoalatacji, natomiast zadaniem mutacji jest generowanie punktów poza w danej chwili badanym obszarem przyciągania - a więc eksploracja przestrzeni przeszukiwań. Istosnym elementem regulującym tę równowagę jest także operator selekcji, której charakter znacząco wpływa na przeżywalność i siłę przyciągania osobników pionierów (wygenerowanych losowo, nielicznych punktów, w nowym, atrakcyjnym obszarze przyciągania).
 }
-\par{
-(Problemy, także te przy badaniu właściwości)
-}
-\par{
-(Eksploracja vs. Eksplatacja)
-}
+
 \subsection{Ewolucja różnicowa}
+\label{DEvol_section}
 \par{
 (Ogólny opis)
 }
@@ -305,11 +349,16 @@ W tym miejscu warto nadmienić, że choć w powyższym opisie algorytmów ewoluc
 }
 
 \chapter{Algorytm DEArch}
+
+\par{
+
+}
 \section{Podejścia do wykorzystania archiwum}
-\subsection{Brak normalizacji}
-\subsection{Normalizacja}
-\subsection{Inne podejścia}
-\section{Definicja algorytmu}
+\subsection{Wybór punktów do archiwum}
+\subsection{Podejście do normalizacji}
+
+Podstawowym celem modyfikacji algorytmu ewolucji różnicowej, było ograniczenie ilości osobników w pokoleniu bez utraty ilości możliwych do wygenerowania wektorów różnicowych. Mając to założenie na względzie rozpatrzono kilka wariantów archiwum punktów.
+\section{Kompletna definicja algorytmu}
 
 \chapter{Badania}
 \section{Cel}
