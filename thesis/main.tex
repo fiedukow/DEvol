@@ -1,4 +1,4 @@
-\documentclass[11pt,a4paper]{report}
+\documentclass[12pt,a4paper]{report}
 \usepackage{fullpage}
 \usepackage[polish]{babel}
 \usepackage{polski}
@@ -10,7 +10,7 @@
 \usepackage{amsfonts}
 \usepackage{listings}
 \headsep = 30pt
-%\linespread{2}
+%\linespread{1}
 
 
 
@@ -46,6 +46,10 @@
 \maketitle
 \tableofcontents
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% INTRO
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
 \subsubsection{Streszczenie}
 \par{
@@ -66,7 +70,7 @@ Niniejsza praca odnosi się także do możliwości i skuteczności wykorzystania
 }
 \subsubsection{Słowa kluczowe}
 \par{
-\emph{Ewolucja Różnicowa, DE, Algorytmy Ewolucyjne, AE, Optymalizacja, Optymalizacja black0--box}
+\emph{Ewolucja Różnicowa, DE, Algorytmy Ewolucyjne, AE, Optymalizacja, Optymalizacja black--box}
 }
 \subsubsection{Abstract}
 \par{
@@ -84,8 +88,12 @@ This thesis also refers to a possiblity and effectiveness of using middle point 
 }
 \subsubsection{Keywords}
 \par{
-\emph{Differential Evolution, DE, Evolutionary Algorithms, EA, Optimialization, Black--box optimalization}
+\emph{Differential Evolution, DE, Evolutionary Algorithms, EA, Optimization, Black--box optimization}
 }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% CHAPTER 1: Wstęp
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \chapter{Wstęp}
 \par{
@@ -97,7 +105,7 @@ Stale zwiększający się poziom trudności problemów optymalizacyjnych jak i c
 
 \section{Definicja problemu}
 \par{
-Praca ta, umiejsciowiona została w kontekście rozwiązywania problemów optymalizacji gdzie analityczne wyznaczenie ekstremum funkcji jest niemożliwe bądź w ogóle nie jest znana jej analityczna forma. Zakłada się bowiem, że zadanie jest zdefiniowane następująco \cite{StrojnowskiOptymalizacja2}:
+Praca ta, umiejscowiona została w kontekście rozwiązywania problemów optymalizacji gdzie analityczne wyznaczenie ekstremum funkcji jest niemożliwe bądź w ogóle nie jest znana jej analityczna forma. Zakłada się bowiem, że zadanie jest zdefiniowane następująco \cite{StrojnowskiOptymalizacja2}:
 }
 \newtheorem{OptDefinition}{Definition}
 \par{
@@ -119,12 +127,12 @@ Problem globalnej optymalizacji funkcji $f: X \rightarrow \mathbb{R}$ z ogranicz
 \end{center}
 \end{OptDefinition}
 Dla tego rodzaju problemów, możliwe jest wyznaczanie wartości funkcji w całej jej dziedzinie $X$, jednak poszukiwane rozwiązanie musi pochodzić z ograniczonego zbioru $X_D$.
-Problem globalnej optymalizacji funkcji z ogarniczeniami stanowi uogólnienie problemu optymalizacji globalnej bez ogarniczeń.
+Problem globalnej optymalizacji funkcji z ograniczeniami stanowi uogólnienie problemu optymalizacji globalnej bez ograniczeń.
 }
 \par{
-Szczególnym przypadkiem problemu optymalizacji globalnej z ogarniczeniami jest przeszukiwanie przestrzeni ciągłej. 
+Szczególnym przypadkiem problemu optymalizacji globalnej z ograniczeniami jest przeszukiwanie przestrzeni ciągłej. 
 \begin{OptDefinition}
-Problem globalnej optymalizacji funkcji $f: \mathbb{R}^n \rightarrow \mathbb{R}$ z ograniczeniem $X_D = \{x \in \mathbb{R}^n: g_1(x) \leq 0, g_2(x) \leq 0, \ldots, g_m(x) \leq 0\}$ nazywamy problemem optymalizacji globalnej przestrzeni ciągłej z ogarniczeniami nierównościowymi.
+Problem globalnej optymalizacji funkcji $f: \mathbb{R}^n \rightarrow \mathbb{R}$ z ograniczeniem $X_D = \{x \in \mathbb{R}^n: g_1(x) \leq 0, g_2(x) \leq 0, \ldots, g_m(x) \leq 0\}$, gdzie $g_1, g_2 \ldots g_m: \mathbb{R}^n \rightarrow \mathbb{R}$, nazywamy problemem optymalizacji globalnej przestrzeni ciągłej z ograniczeniami nierównościowymi.
 \end{OptDefinition}
 W tym wariancie przyjmuje się, że $X = \mathbb{R}^n$ gdzie $n \in \mathbb{N}$, a $X_D$ zdefiniowane jest przez funkcje ograniczeń.
 }
@@ -139,56 +147,72 @@ Mając to na względzie by problem można było uznać za rozwiązany, należy g
 Niniejsza praca będzie skupiała się na rozwiązywaniu tak przeformułowanego problemu optymalizacji globalnej funkcji w przestrzeni ciągłej z ograniczeniami nierównościowymi. Ze względu na zwięzłość zapisu w dalszej części pracy problem ten nazywany będzie \textbf{problemem optymalizacji} lub po prostu \textbf{problemem}. 
 }
 \par{
-Warto zwrócić uwagę, że pomimo iż między różnymi rozwiązaniami problemu istnieje relacja częściowego porządku generowana przez wartość funkcji $f$, to jednak przy przyjętych założeniach wartość (rozumiana jako liczba rzeczywista) tej funkcji nie niesie żadnej dodatkowej informacji. Z tego też powodu, wszelkie badania porównawcze przeprowawdzane na poszczególnych metodologiach rozwiązywania problemu muszą być oparte na tej właśnie relacji porządku.
+Warto zwrócić uwagę, że pomimo iż między różnymi rozwiązaniami problemu istnieje relacja częściowego porządku generowana przez wartość funkcji $f$, to jednak przy przyjętych założeniach wartość (rozumiana jako liczba rzeczywista) tej funkcji nie niesie żadnej dodatkowej informacji. Z tego też powodu, wszelkie badania porównawcze przeprowadzane na poszczególnych metodologiach rozwiązywania problemu muszą być oparte na tej właśnie relacji porządku.
 }
 
 \section{Motywacje}
 \par{
-Jednym z podejść do zdefiniowanego powyżej problemu optymalizacji jest wykorzystanie algorytmów ewolucji różnicowej (DE) \cite{RainerStorn}. Algorytm ten zaproponowany w 1995r. od wielu lat rozwijany w ramach licznych prac naukowych \cite{Opara} cieszy się zwykle bardzo dobrymi rezultatami w testach jakościowych \cite{CEC2013Comp}. 
+Jednym z podejść do zdefiniowanego powyżej problemu optymalizacji jest wykorzystanie algorytmów ewolucji różnicowej (DE) \cite{RainerStorn}. Algorytm ten zaproponowany w 1995r. od wielu lat rozwijany w ramach licznych prac naukowych \cite{Opara,SpringerIntroToEvol} cieszy się zwykle bardzo dobrymi rezultatami w testach jakościowych \cite{CEC2013Comp}. 
 }
 \par{
-Typową procedurą przy heurystycznych algorytmach optymalizacyjnych jest wykorzystywanie do generowania kolejnych punktów w przestrzeni przeszukiwań punktów z okna historii o zmiennej szerokości [MS:MożeJakieśŹródło?]. W przypadku klasycznego algorytmu ewolucji różnicowej, okno historii ma rozmiar równy liczności populacji -- starsze punkty nie są wykorzystywane w kolejnych pokoleniach. Choć w przeszłości podjemowano próby wykorzystywania szerszego okna historii w tym algorytmie [MS:Gdzie?], temat ten zwykle występował przy okazji innych badań i nie był osobno zbadany /Note:AleCzyNaPewno?/. Praca ta będzie starała się dokładnie zbadać możliwości wykorzystnia tego rodzaju strategii i określić w jaki sposób wykorzystanie tej strategii wpłynie na jakość uzyskiwanych przy pomocy ewolucji różnicowej wyników.
+Typową procedurą przy heurystycznych algorytmach optymalizacyjnych jest wykorzystywanie do generowania kolejnych punktów w przestrzeni przeszukiwań punktów z okna historii o zmiennej szerokości [MS:MożeJakieśŹródło?]. W przypadku klasycznego algorytmu ewolucji różnicowej, okno historii ma rozmiar równy liczności populacji -- starsze punkty nie są wykorzystywane w kolejnych pokoleniach. Choć w przeszłości podejmowano próby wykorzystywania szerszego okna historii w tym algorytmie \cite{JADE,SHADE}, temat ten zwykle występował przy okazji innych badań i nie był osobno zbadany /Note:AleCzyNaPewno?/. Praca ta będzie starała się dokładnie zbadać możliwości wykorzystania tego rodzaju strategii i określić w jaki sposób wykorzystanie tej strategii wpłynie na jakość uzyskiwanych przy pomocy ewolucji różnicowej wyników.
 }
 
 \section{Cel}
 \par{
-Celem pracy jest zbadanie zmodyfikowanego klasycznego algorytmu ewolucji różnicowej \cite{RainerStorn} tak by wektory mutacji różnicowej były budowane w oparciu o osobniki z parametryzowanej liczby ostatnich pokoleń.
+Celem pracy jest zbadanie zmodyfikowanego klasycznego algorytmu ewolucji różnicowej tak by wektory mutacji różnicowej były budowane w oparciu o osobniki z parametryzowanej liczby ostatnich pokoleń.
 }
 \par{
 Przebadane zostaną możliwe podejścia do wykorzystania tych osobników i wynikające z nich zmiany jakości działania algorytmu. W wyniku tych działań zdefiniowany zostanie możliwie najskuteczniejszy algorytm parametryzowany ilością pokoleń uwzględnianych w oknie historii (zwany dalej \emph{DEArch}).
 }
 \par{
-Cel pracy stanowi także zbadanie gotowego algorytmu \emph{DEArch} przy różnych wartościach nowego parametru i ustalenie jak zmiana parametru wpływa na jakość wyników. Otrzymane rezultaty zostaną następnie zestawione z klasycznym algorytmem ewolucji różnicowej a także przedstawione w kontekście zmodyfikowanych wariantów ewolucji różnicowej przebadanych w ramach konferencji CEC2013 /Note: Długa nazwa?/.
+Cel pracy stanowi także zbadanie gotowego algorytmu \emph{DEArch} przy różnych wartościach nowego parametru i ustalenie jak zmiana parametru wpływa na jakość wyników. Otrzymane rezultaty zostaną następnie zestawione z klasycznym algorytmem ewolucji różnicowej a także przedstawione w kontekście zmodyfikowanych wariantów ewolucji różnicowej przebadanych w ramach konferencji CEC2013 (\emph{IEEE Congress on Evolutionary Computation}).
 }
 \par{
 W ramach pracy zostanie także zbadana teza o możliwości poprawy jakości otrzymywanych przez ewolucję różnicą wyników przy ograniczonym budżecie zapytań przy wykorzystaniu punktu środkowego populacji.
 }
 \par{
-Wszelkie badania jakościowe w ramach pracy będą opracowane przy użyciu testowych funkcji wyspecyfikowanych w ramach konferencji CEC2013 i porównania rezultatów otrzymanych w określonym w ramach konferencji budżecie zapytań o wartości funkcji [MS: GdzieJestWyspecyfikowanyBudżet?].
+Wszelkie badania jakościowe w ramach pracy będą opracowane przy użyciu testowych funkcji wyspecyfikowanych w ramach konferencji CEC2013 i porównania rezultatów otrzymanych w określonym w ramach konferencji budżecie zapytań o wartości funkcji \cite{Li13benchmarkfunctions}.
 }
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% CHAPTER 2: Przeląd literatury
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%% Model heurystyczny
 \chapter{Przegląd literatury}
 \section{Podejscie heurystyczne do problemu optymalizacji}
 \par{
-Do rozwiązywnia problemów optymalizacji ze względu na ich złożoność i (w wielu przypadkach) brak możliwości odnalezienia precyzyjnego rozwiązania stosuje się algorytmy o charakterze heurystycznym. Algorytmy te mają za zadanie rozwiązywać problemy w sposób przybliżony tj. z założenia nie muszą podać rozwiązania dokładnego. Są one stosowane zamiast algorytmów dokładnych tam, gdzie: nie jest możliwe stworzenie precyzyjnego algorytmu, nie jest znany precyzyjny algorytm, precyzyjny algorytm jest zbyt kosztowny w wykonaniu. Algorytmy tej klasy bywają stosowane jako rozwiązanie kompromisowe pomiędzy jakością rozwiązania a czasem jego poszukiwania.
+Do rozwiązywania problemów optymalizacji ze względu na ich złożoność i (w wielu przypadkach) brak możliwości odnalezienia precyzyjnego rozwiązania stosuje się algorytmy o charakterze heurystycznym. Algorytmy te mają za zadanie rozwiązywać problemy w sposób przybliżony tj. z założenia nie muszą podać rozwiązania dokładnego. Są one stosowane zamiast algorytmów dokładnych tam, gdzie: 
+\begin{itemize}
+\item nie jest możliwe stworzenie precyzyjnego algorytmu
+\item nie jest znany precyzyjny algorytm
+\item precyzyjny algorytm jest zbyt kosztowny w wykonaniu
+\end{itemize}
 }
 \par{
-Podejście tego rodzaju niosą za sobą ciekawe konsekwencje. Warto zauważyć, że ponieważ z definicji prowadzą one do rozwiązania nie koniecznie najlepszego, to jeśli istnieje metoda porównywania jakości wyników, można także mówić o porównywaniu jakości działania różnych algorytmów w kontekście danego zadania. Mimo, iż wiele z algorytmów heurystycznych ma charakter niedeterministyczny (tj. dla tego samego wejścia mogą wygenerować dwa różne wyjścia) posługując się narzędziami statystyki i probabilistyki można wysnuwać wnioski dt. jakości algorymtów w kontekście problemu. /Note: A w sekcji o benchmarkach - funkcje są skonstruowane tak, by dawać możliwy obraz jakości algorytmu jako takiego pozwalając go oceniać w oderwaniu od problemu!/
+Algorytmy tej klasy bywają stosowane jako rozwiązanie kompromisowe pomiędzy jakością rozwiązania a czasem jego poszukiwania.
+}
+\par{
+Podejście tego rodzaju niosą za sobą ciekawe konsekwencje. Warto zauważyć, że ponieważ z definicji prowadzą one do rozwiązania nie koniecznie najlepszego, to jeśli istnieje metoda porównywania jakości wyników, można także mówić o porównywaniu jakości działania różnych algorytmów w kontekście danego zadania. Mimo, iż wiele z algorytmów heurystycznych ma charakter niedeterministyczny (tj. dla tego samego wejścia mogą wygenerować dwa różne wyjścia) posługując się narzędziami statystyki i probabilistyki można wysnuwać wnioski dt. jakości algorytmów w kontekście problemu. /Note: A w sekcji o benchmarkach - funkcje są skonstruowane tak, by dawać możliwy obraz jakości algorytmu jako takiego pozwalając go oceniać w oderwaniu od problemu!/
 }
 \par{
 Wartym wspomnienia w kontekście algorytmów heurystycznych jest sposób ich konstruowania. Często dyktowany jest on intuicją, a podstawy teoretyczne działania tego rodzaju algorytmów bywają badane dużo później \cite{Opara}. Tego rodzaju podejście pozwoliło na stworzenie wielu dobrze sprawujących się algorytmów, lecz zarazem ich analityczne badanie pozwala na dokładniejsze zrozumienie problematyki, uogólnienie lub uproszczenie reguł ich działania \cite{Opara}. /Note: I co z tą myślą? W pracy postaramy się chociaż trochę zwrócić uwagę na teorię?/
 }
 \newpage
 \subsection{Model heurystycznego algorytmu optymalizacyjnego}
+\label{Model}
 \par{
-Algorymty heurystyczne, służące rozwiązywaniu problemu optymalizacji, opierają się o ideę dominiemywania pewnych właściwości przeszukiwanej przestrzeni na podstawie punktów już sprawdzonych i przyjętych \emph{a priori} złożeń. Mając na względzie ten fakt, jak i wcześniej przedstawiony problem, definiując \cite{SearchingInteligent} zadanie optymalizacyjne jako czwórkę $\Pi = \langle{}X,~f,~S,~T\rangle$ gdzie:
+Algorymty heurystyczne, służące rozwiązywaniu problemu optymalizacji, opierają się o ideę domniemywania pewnych właściwości przeszukiwanej przestrzeni na podstawie punktów już sprawdzonych i przyjętych \emph{a priori} złożeń. Mając na względzie ten fakt, jak i wcześniej przedstawiony problem, definiując \cite{SearchingInteligent} zadanie optymalizacyjne jako czwórkę $\Pi = \langle{}X,~f,~S,~T\rangle$ gdzie:
 \begin{itemize}
 \item $X$ -- przestrzeń przeszukiwań
 \item $f$ -- funkcja optymalizowana
 \item $S$ -- zbiór punktów początkowych 
 \item $T$ -- kryterium zatrzymania
 \end{itemize}
-możemy określić także metodę przeszukiwania jako \cite{SearchingInteligent} trójkę $M = \langle{}X,~I,~O\rangle$, gdzie:
+możemy określić także metodę przeszukiwania jako trójkę $M = \langle{}X,~I,~O\rangle$ \cite{SearchingInteligent}, gdzie:
 \begin{itemize}
 \item $X$ -- przestrzeń przeszukiwań 
 \item $I$ -- operator inicjacji -- $I: S \times U \rightarrow X$
@@ -196,38 +220,48 @@ możemy określić także metodę przeszukiwania jako \cite{SearchingInteligent}
 \end{itemize}
 Jako $U$ oznaczono przestrzeń sekwencji losowych, natomiast jako $H$ -- dotychczas otrzymane przez algorytm wyniki badania zadania $\Pi$.
 }
-\subsection{Archiwum}
 
+%%%%% Archiwum
+\subsection{Archiwum}
 \par{
-W kontekście przedstawionego powyżej modelu, można zauważyć, że isotą konkretnego algorytmu optymalizacyjnego jest operator zagregowany $O$, na którego działanie wpływ ma wyłącznie sam problem ($\Pi$), ewentualne wyniki pseudolosowych operacji ($U$) oraz wyniki otrzymane dotychczas przez algorytm przy badaniu optymalizowanej funkcji ($H$). Ten ostatni element nazywany jest \textbf{archiwum} i stanowi centralny punkt proponowanej modyfikacji algorytmu ewolucji różnicowej -- stąd zostanie on bardziej dokładnie opisany.
+W kontekście przedstawionego powyżej modelu, można zauważyć, że istotą konkretnego algorytmu optymalizacyjnego jest operator zagregowany $O$, na którego działanie wpływ ma wyłącznie sam problem ($\Pi$), ewentualne wyniki pseudolosowych operacji ($U$) oraz wyniki otrzymane dotychczas przez algorytm przy badaniu optymalizowanej funkcji ($H$). Ten ostatni element nazywany jest \textbf{archiwum} i stanowi centralny punkt proponowanej modyfikacji algorytmu ewolucji różnicowej -- stąd zostanie on bardziej dokładnie opisany.
 }
 \par{
 Szeroka definicja archiwum, nie wymaga by miało ono w jakikolwiek sposób ograniczoną pojemność. W skrajnym wypadku można więc pokazać algorytm, wykorzystujący wszystkie zbadane dotąd wartości funkcji optymalizowanej. Typowe algorytmy operują jednak tylko na oknie archiwum będącym podzbiorem $H$ (Rysunek \ref{ModelArchiwumImg}). Taka charakterystyka algorytmów jest uzasadniona w szczególności ze względu na:
 \par{
-\begin{itemize}
-\item Kosztowność przechowywania i przetwarzania całego archiwum.
-\item Brak poprawy jakości algorytmu przy wykorzystaniu większej ilości punktów w archiwum lub poprawę niewystarczającą względem dodatkowych kosztów przetwarzania.
-\item Brak cennych dla działania algorytmu informacji i przesłanek w starszych punktach archiwum.
+	\begin{itemize}
+		\item Kosztowność przechowywania i przetwarzania całego archiwum.
+		\item Brak poprawy jakości algorytmu przy wykorzystaniu większej ilości punktów w archiwum lub poprawę niewystarczającą względem dodatkowych kosztów przetwarzania.
+		\item Brak cennych dla działania algorytmu informacji i przesłanek w starszych punktach archiwum.
 \end{itemize}
 }
+
+%%%%% Rysunek: Model archiwum FIFO
 \begin{figure}[htb]
 \begin{center}\includegraphics[scale=0.5]{img/ModelArchiwumFIFO2}\end{center}
 \caption{Działanie heurystycznego algorytmu optymalizacyjnego z oknem archiwum wielkości równej dwukrotności osobników generowanych przez pojedynczą iterację. Zastosowano okno archiwum będące kolejką FIFO.}
 \label{ModelArchiwumImg}
 \end{figure}
+
 \par{
 I tak na przykład w opisanym w rozdziale \ref{DEvol_section} klasycznym algorytmie ewolucji różnicowej, mamy do czynienia z archiwum o rozmiarze równym wielkości populacji. Oznacza to, że do przeprowadzenia iteracji $N+1.$ algorytmu, oprócz $\Pi$ oraz $U$ potrzebujemy także wyniku $N.$ iteracji, ale już nie wyniku iteracji $N-1$. a tym bardziej całego archiwum $H$.
 }
 \par{
-Tego rodzaju ograniczenia w wykorzystywaniu archiwum $H$ skłaniają do rozważań nad możliwością i stosownością wykorzystania informacji lub przesłanek ukrytych w nieużwanej części archiwum do poprawienia funkcjonowania algorytmu. Nie jest koncepcją nową [IGdzieŹródło] by parametryzować wykorzystywaną wielkość okna archiwum -- umożliwiając w ten sposób strojenie algorytmu oraz poprawianie jakości uzyskiwanych rezultatów. Pojawia się więc przypuszczenie, że także w przypadku ewolucji różnicowej powiększenie wykorzystywanego okna archiwum może umożliwiać uzyskiwanie lepszych jakościowo wyników optymalizacji.
+Tego rodzaju ograniczenia w wykorzystywaniu archiwum $H$ skłaniają do rozważań nad możliwością i stosownością wykorzystania informacji lub przesłanek ukrytych w nieużywanej części archiwum do poprawienia funkcjonowania algorytmu. W dziedzinie algorytmów heurystycznych, nie jest koncepcją nową [IGdzieŹródło] by parametryzować wykorzystywaną wielkość okna archiwum -- umożliwiając w ten sposób strojenie algorytmu oraz poprawianie jakości uzyskiwanych rezultatów. Pojawia się więc przypuszczenie, że także w przypadku ewolucji różnicowej powiększenie wykorzystywanego okna archiwum może umożliwiać uzyskiwanie lepszych jakościowo wyników optymalizacji.
 }
 
-\section{Algorytmy ewolucyjne}
+
+%%%%% Ewolucja różnicowa
+\section{Ewolucja różnicowa}
+\label{DEvolChapter}
+
+%%%%% Standard Evol
+\subsection{Algorytmy z grupy ewolucyjnych}
 \par{
 Przykładem algorytmów heurystycznych stosowanych do rozwiązywania problemu optymalizacyjnego są algorytmy należące do grupy algorytmów ewolucyjnych (ang. \emph{Evolutionary Algorithms} -- AE) \cite{WykladyEvol,SpringerIntroToEvol}. Algorytmy te, wzorowane na ewolucji naturalnej operują pojęciami takimi jak osobnik, środowisko czy przystosowanie w celu adaptacyjnego przeszukiwania przestrzeni optymalizacyjnej.
 }
 \par{
-Ogólna idea stojąca za algorytmami ewolucyjnymi, polega na opisaniu genotypu osobników, z których następnie można odczytać fenotyp (stanowiący punkt przestrzeni przeszukiwań) oceniany przez środowisko (funkcję optymalizowaną). Osobniki -- podobnie jak osobniki w naturze -- podlegają krzyżowaniu oraz niewielkim mutacjom, walcząc między sobą o zasoby naturalne. Zgodnie z teorią doboru naturalnego, osobniki gorzej dostosowane do środowiska są -- w szerokiej perspektywnie czasowej i przy odpowiednio dużej populacji -- wypierane przez te dostosowane lepiej [MS: MożeJakieśŹródłoNaDobórNaturalny? Darwin?].
+Ogólna idea stojąca za algorytmami ewolucyjnymi, polega na opisaniu genotypu osobników, z których następnie można odczytać fenotyp (stanowiący punkt przestrzeni przeszukiwań) oceniany przez środowisko (funkcję optymalizowaną). Osobniki -- podobnie jak osobniki w naturze -- podlegają krzyżowaniu oraz niewielkim mutacjom, walcząc między sobą o zasoby naturalne. Zgodnie z teorią doboru naturalnego, osobniki gorzej dostosowane do środowiska są -- w szerokiej perspektywie czasowej i przy odpowiednio dużej populacji -- wypierane przez te dostosowane lepiej [MS: MożeJakieśŹródłoNaDobórNaturalny? Darwin?].
 }
 \par{
 /Note:Obrazek ze schematem EA?/
@@ -235,24 +269,23 @@ Ogólna idea stojąca za algorytmami ewolucyjnymi, polega na opisaniu genotypu o
 \par{
 W związku z powyższą analogią w ramach algorytmów ewolucyjnych wyróżnia się następujące operatory:
 \begin{description}
-  \item[Krzyżowanie] -- to operator opisujący w jaki sposób na podstwie genotypu dwóch lub więcej osobników wytworzyć genotyp jednego lub więcej osobnika potomnego.
-  \item[Mutacja] -- to operator wprowadzający genotypie wybranego osobnika losowe (nieznaczne) zabużenie.
-  \item[Selekcja] -- to operator odpowiadający selekcji naturalnej, który oceniając osobniki na podstawie przystsowania ich fenotypu do środowiska odrzuca część znich preferując pozostawienie w populacji osobników lepiej dostosowanych.
+  \item[Krzyżowanie] -- to operator opisujący w jaki sposób na podstawie genotypu dwóch lub więcej osobników wytworzyć genotyp jednego lub więcej osobnika potomnego.
+  \item[Mutacja] -- to operator wprowadzający genotypie wybranego osobnika losowe (nieznaczne) zabużanie.
+  \item[Selekcja] -- to operator odpowiadający selekcji naturalnej, który oceniając osobniki na podstawie przystosowania ich fenotypu do środowiska odrzuca część z nich preferując pozostawienie w populacji osobników lepiej dostosowanych.
   \item[Dobór do krzyżowania] -- to operator wybierający zestawy osobników podlegające krzyżowaniu. Operator ten opisuje znany z natury mechanizm preferencji (fenotypowej) organizmów przy rozmnażaniu.
   \item[Dobór do mutacji] -- to operator wybierający, które spośród osobników w populacji należy poddać mutacji. Odpowiada on zmiennemu w zależności od fenotypu organizmu prawdopodobieństwu wystąpienia u niego mutacji.
   \item[Inicjalizacja] -- to operator nieco oderwany od teorii ewolucji (gdyż ta nie opisuje powstawania pierwszych organizmów) opisujący sposób wygenerowania populacji początkowej spośród wszystkich możliwych genotypów.
   %%% dopasowanie do zakresu
 \end{description}
 }
-\newpage
 \par{
-Ogólny schamat działania algorytmu ewolucyjnego opiera się o iteracyjną adaptację populacji aż do ustalonego warunku stopu, według następujących kroków:
+Ogólny schemat działania algorytmu ewolucyjnego opiera się o iteracyjną adaptację populacji aż do ustalonego warunku stopu, według następujących kroków:
 \lstset{language=C}
 \begin{lstlisting}[frame=single,mathescape]
 P = Inicjalizacja(N)
 while (!stop) {
-	P $\cup$ Krzyzowanie(DoborDoKrzyzowania(P))
-	P $\cup$ Mutacja(DoborDoMutacji(P))
+	P = P $\cup$ Krzyzowanie(DoborDoKrzyzowania(P))
+	P = P $\cup$ Mutacja(DoborDoMutacji(P))
 	P = Selekcja(P)
 }
 \end{lstlisting}
@@ -262,26 +295,232 @@ W tym miejscu warto nadmienić, że choć w powyższym opisie algorytmów ewoluc
 }
 \subsubsection{Eksploracja i Eksploatacja}
 \par{
-Ważnymi pojęciami opisującymi sposób w jaki osobniki w ramach algorytmów ewolucyjnych przszukują przestrzeń są pojęcia \textbf{eksporacji} i \textbf{eksploatacji}. Definiują one dwutorowe działanie grup osobników:
+Ważnymi pojęciami opisującymi sposób w jaki osobniki w ramach algorytmów ewolucyjnych przeszukują przestrzeń są pojęcia \textbf{eksploracji} i \textbf{eksploatacji}. Definiują one dwutorowe działanie grup osobników:
 \begin{description}
   \item[Eksploracja] -- to proces poszukiwania nowych, przyciągających osobniki obszarów przestrzeni przeszukiwań charakteryzujących się niską wartością funkcji przystosowania. Pojęcie to opisuje proces poszukiwania w całej przestrzeni obszarów przyciągania wielu minimów lokalnych. 
   \item[Eksploatacja] -- to proces badania obszaru przestrzeni przeszukiwań charakteryzującego się niską średnią wartością funkcji przystosowania. Pojęcie to opisuje proces poszukiwania minimum lokalnego przez punkty zawierające się w jego obszarze przyciągania.
 \end{description}
 }
 \par{
-Uzyskanie właściwego balansu między tymi dwoma aspektami działania algorytmów ewolucyjnych jest kluczowe dla powodzenia algorytmu ewolucyjnego. Efekt sterowania siłą dwóch charakterystyk przeszukiwań otrzymuje się, przez odpowiednie definiowanie operatorów oraz ich parametrów. W szczególności, zadaniem operatora krzyżowania jest przede wszystkim prowadzenie populacji w kierunku ekspoalatacji, natomiast zadaniem mutacji jest generowanie punktów poza w danej chwili badanym obszarem przyciągania - a więc eksploracja przestrzeni przeszukiwań. Istosnym elementem regulującym tę równowagę jest także operator selekcji, której charakter znacząco wpływa na przeżywalność i siłę przyciągania osobników pionierów (wygenerowanych losowo, nielicznych punktów, w nowym, atrakcyjnym obszarze przyciągania).
+Uzyskanie właściwego balansu między tymi dwoma aspektami działania algorytmów ewolucyjnych jest kluczowe dla powodzenia algorytmu ewolucyjnego. Efekt sterowania siłą dwóch charakterystyk przeszukiwań otrzymuje się, przez odpowiednie definiowanie operatorów oraz ich parametrów. W szczególności, zadaniem operatora krzyżowania jest przede wszystkim prowadzenie populacji w kierunku eksploatacji, natomiast zadaniem mutacji jest generowanie punktów poza w danej chwili badanym obszarem przyciągania - a więc eksploracja przestrzeni przeszukiwań. Istotnym elementem regulującym tę równowagę jest także operator selekcji, której charakter znacząco wpływa na przeżywalność i siłę przyciągania osobników pionierów (wygenerowanych losowo, nielicznych punktów, w nowym, atrakcyjnym obszarze przyciągania).
 }
 
-\subsection{Ewolucja różnicowa}
+%%%%% Podstawowy DE
+\subsection{Podstawowy algorytm ewolucji różnicowej}
 \label{DEvol_section}
 \par{
-(Ogólny opis)
+Szczególnym przypadkiem algorytmu należącego do grupy algorytmów ewolucyjnych są algorytmy ewolucji różnicowej (ang.\emph{ differential evolution}, DE). Algorytmy te, zbudowane są w sposób zakładający ich wykorzystanie do przeszukiwania przestrzeni ciągłej co jest zgodne z przyjętą we wstępie definicją problemu. Ich specyfika zakłada wykorzystanie do operatora mutacji odpowiednio przeskalowanych wektorów przesunięć wygenerowanych z bieżącej populacji punktów (Rysunek \ref{DEvolMutationBasic}) \cite{SpringerIntroToEvol}.
 }
+
+%%%%% Rysunek: Mutacja w DE
+\begin{figure}[h]
+\begin{center}\includegraphics[scale=0.8]{img/BasicMutationSchema.png}\end{center}
+\caption{Schemat działania operatora mutacji w ewolucji różnicowej na przykładzie przestrzeni dwuwymiarowej.}
+\label{DEvolMutationBasic}
+\end{figure}
+
+
+\par{
+Zgodnie z tą zasadą schemat ewolucyjny w populacji o indeksie ${t}$ -- $\mathbf{X^t}$, składa się z następujących kroków:
+}
+
+%%%%% BAZOWY SCHEMAT DE
+\par{
+	\begin{description}
+	
+	
+  		\item[Generowanie mutantów]:\\
+  Ten krok polega na wygenerowaniu z wektora osobników mutantów $\mathbf{V^{t}}$ o długości równej wielkości populacji - tak by każdemu osobnikowi $\mathbf{x_i^{t}}$ odpowiadał osobnik mutant $\mathbf{v_i^{t}}$.
+  Do tego celu wykorzystywane są wybrane z populacji punkty - punkt mutowany oraz punkty wymagane do wygenerowania wektorów różnicowych. W najbardziej klasycznym wariancie algorytmu wszystkie te punkty są dla każdego $i$ generowane losowo \cite{SpringerIntroToEvol} (oznaczamy $r_1, r_2, r_3$).
+  W opisanym wariancie $\mathbf{v_i^{t}}$ wyznaczane jest jako:
+
+%%%%%% Podstawowe równanie mutacji różnicowej
+\begin{equation} \label{eq:DiffMutation}
+ \mathbf{v_i^{t}} = \mathbf{r_1} + F \cdot (\mathbf{r_2} - \mathbf{r_3})
+\end{equation}
+
+Gdzie $F$ to rzeczywistoliczbowy współczynnik skalujący najczęściej należący do przedziału $[0, 1]$. Literatura \cite{SpringerIntroToEvol} podaje również że w podstawowym wariancie ewolucji różnicowej zachodzi:
+\begin{center}
+ $\mathbf{x_1^{t}} \neq \mathbf{r_1} \neq \mathbf{r_3} \neq \mathbf{r_3}$
+\end{center}
+nie jest to jednak warunek wymagany dla każdego algorytmu tej klasy.
+
+
+	  \item[Krzyżowanie]:\\
+  W tym kroku każdy z osobników w populacji $\mathbf{X^{t}}$ jest krzyżowany z odpowiadającym mu osobnikiem z populacji mutantów $\mathbf{V^{t}}$ w celu wyłonienia osobnika dziecka $\mathbf{u_i^{t}}$ dla każdego osobnika $\mathbf{x_i^{t}}$. Choć do krzyżowania można stosować wiele różnych operatorów, najczęściej wybierane jest krzyżowanie wymieniające z różnym rozkładem prawdopodobieństwa. W najprostszym wypadku dwumianowy operator krzyżujący (ang. \emph{binominal crossover}) może być zdefiniowany następująco:
+  
+%% Krzyzowanie BIN
+\begin{equation}
+\label{eq:BasicCrossover}
+u_{i,j}^{t} = \left\{ \begin{array}{ll}
+v_{i,j}^{t} & \textrm{gdy $r \le Cr$}\\
+x_{i,j}^{t} & \textrm{w przeciwnym wypadku}\\
+\end{array} \right.
+\end{equation}
+Gdzie:
+\begin{itemize}
+\item $r$ -- zmienna losowa o rozkładzie jednostajnym na przedziale [0, 1]
+\item $Cr$ -- współczynnik krzyżowania, parametr algorytmu z dziedziny [0, 1]
+\end{itemize}
+Wartym odnotowania jest konieczność zapewnienia by do każdego osobnika dziecka $\mathbf{u_i^{t}}$ trafiła co najmniej jedna wartość z osobnika mutanta, a więc by zachodziło $\mathbf{u_i^{t}} \neq \mathbf{x_i^{t}}$ \cite{SpringerIntroToEvol}. Ze względu na prostotę zapisu element ten zaniedbano jednak w powyższej definicji.
+
+
+		\item[Selekcja]:\\
+Ostatnim elementem podstawowej strategii ewolucyjnej dla algorytmów ewolucji różnicowej jest wybór osobników spośród par $(\mathbf{x_i^{t}}, \mathbf{u_i^{t}})$. Wybór ten w typowym przypadku dokonywany jest wg. następującej formuły:
+$$
+\mathbf{x_{i}^{t+1}} = \left\{ \begin{array}{ll}
+\mathbf{v_{i}^{t}} & \textrm{gdy $f(v_i^t) \le f(x_i^t)$}\\
+\mathbf{x_{i}^{t}} & \textrm{w przeciwnym wypadku}\\
+\end{array} \right.
+$$
+Tego rodzaju podejście stanowi o elitarności wyboru osobników do kolejnych pokoleń, co powoduje zwiększenie możliwości eksploatacyjnych algorytmu kosztem jego możliwości eksploracyjnych.
+\end{description}
+}
+
+\par{TODO: Osadzenie DE w modelu \ref{Model}.}
+\par{TODO: Pseudokod.}
+\par{TODO: Czym można parametryzować}
+
+\subsection{DE a klasyczne strategie ewolucyjne}
+\par{
+Podstawową różnicą w stosunku do klasycznych strategii ewolucyjnych jest nietypowy schemat mutacji i ścisły dobór par poddawanych krzyżowaniu tak, by zawsze stanowiły one kombinację mutanta i osobnika z populacji  podstawowej.
+Wykorzystuje informacje zawartą populacji.
+Jest zbieżny.
+Eksploracja < Eksploatacja.
+TODO
+}
+
+
+\subsection{Podstawowe warianty ewolucji różnicowej}
+\subsubsection{Ilość par różnicowanych}
+\par{
+Opisany wyżej standardowy schemat ewolucji różnicowej, jest wersją podstawową, której zachowanie można na wiele sposobów zmodyfikować, pozostając nadal w tej klasie algorytmów. Podstawowa różnica jaką mogą charakteryzować się poszczególne instancje DE, to ilość par wykorzystywanych do mutacji różnicowej. W ewolucji różnicowej uogólnionej ze względu na ilość różnicowanych par, krok mutacji różnicowej (\ref{eq:DiffMutation}) zostaje zamieniony na \cite{PracticalInsights}:
+\begin{center}
+ $\mathbf{v_i^{t}} = \mathbf{r_1} + \sum_{d = 1}^D F_d \cdot (\mathbf{r_{j,1}} - \mathbf{r_{j,2}})$
+\end{center}
+gdzie jako $D$ oznaczono ilość elementów poddawanych mutacji różnicowej.
+}
+\par{
+W praktyce, najczęściej stosuje się $D = 1$ lub $D = 2 i F_1 = F_2$, ponieważ nie znaleziono przesłanek by dalsze zwiększenie wartości $D$ powodowało poprawę jakości otrzymywanych przy użyciu algorytmu wyników \cite{PracticalInsights}.
+\subsubsection{Schemat mutacji}
+\par{
+Najistotniejszą z punktu widzenia charakterystyki DE możliwością zmodyfikowania zachowania algorytmu jest możliwość, zamiany schematu mutacji. Podstawowy schemat mutacji (\emph{rand}) zakłada losowanie osobników $\mathbf{r_1}, \mathbf{r_2}, \mathbf{r_3}$ i postępowanie wg. schematu \ref{eq:DiffMutation}. W ramach licznych badań powstała jednak ogromna ilość wariantów bardziej wysublimowanych, takich jak:
+\begin{description}
+
+\item[rand] \cite{RainerStorn,SpringerIntroToEvol} -- wariant podstawowy
+\item[best] \cite{PracticalInsights} -- ten schemat zakłada zmianę schematu \ref{eq:DiffMutation} na:
+\begin{center}
+ $\mathbf{v_i^{t}} = \mathbf{x_{best}^t} + F \cdot (\mathbf{r_{1}} - \mathbf{r_{2}})$
+\end{center}
+gdzie $\mathbf{x_{best}^t}$ to osobnik z populacji $t$, który uzyskał najlepszy wynik oceny funkcją $f$. Schemat ten, promuje poszukiwanie rozwiązania wokół najlepszego dotychczas znalezionego osobnika, wedle rozrzutu bieżącej populacji. Pozwala to na adaptacyjne skupienie się populacji wokół lokalnego optimum i eksploatowanie jego możliwości, kosztem możliwości eksploracyjnych algorytmu.
+\item[mid] \cite{DEmid} -- ten schemat zakłada zmianę schematu \ref{eq:DiffMutation} na:
+\begin{center}
+ $\mathbf{v_i^{t}} = \mathbf{x_{mid}^t} + F \cdot (\mathbf{r_{1}} - \mathbf{r_{2}})$
+\end{center}
+gdzie $\mathbf{x_{mid}^t}$ to punkt środkowy populacji $t$ zdefiniowany jako:
+\begin{center}
+$x_{mid,j}^t = \frac{1}{n}\sum_{i=1}^n{x_{i,j}}$
+\end{center}
+gdzie $n$ to wielkość populacji. Schemat ten został opracowany niedawno i czerpie on swoją inspirację z podejrzenia o informacji niesionej przez środek populacji. Koncepcja ta zostanie rozwinięta w rozdziale \ref{MidPoint}.
+
+\item[current-to-rand] \cite{PracticalInsights} -- ten schemat zakłada zmianę schematu \ref{eq:DiffMutation} na:
+\begin{center}
+ $\mathbf{v_i^{t}} = K \cdot \mathbf{x_i^t} + (1 - K) \cdot \mathbf{r_{1}} + F \cdot (\mathbf{r_{2}} - \mathbf{r_{3}})$ \
+\end{center}
+W tym schemacie do standardowego schematu \emph{rand} dołącza się element wiążący mutanta ze sparowanym z nim osobnikiem z populacji podstawowej $\mathbf{X}$. Wykorzystuje się w tym celu zmienną $K \in [0, 1]$, która stanowi wagę dla osobnika z populacji podstawowej $\mathbf{x_i^t}$. W praktyce oznacza to, że mutant $\mathbf{v_i^t}$ powstaje przez przesunięcie punktu leżącego między $\mathbf{x_i^t}$ a losowo wybranym punktem z populacji $\mathbf{r_1}$ o przeskalowany współczynnikiem $F$ wektor między dwoma losowymi osobnikami z populacji (Rysunek \ref{current-to-rand-img}).
+
+%%%%% Rysunek: current-to-rand
+\begin{figure}[h]
+\begin{center}\includegraphics[scale=0.8]{img/current-to-rand-mutation.png}\end{center}
+\caption{Schemat mutacji różnicowej \emph{current-to-rand} na przykładzie przestrzeni dwuwymiarowej. Jeśli czerwony odcinek ma długość $l$, to odcinek niebieski ma długość $l \cdot K$}
+\label{current-to-rand-img}
+\end{figure}
+
+
+\item[current-to-best] \cite{PracticalInsights} -- ten schemat zakłada zmianę schematu \ref{eq:DiffMutation} na:
+\begin{center}
+ $\mathbf{v_i^{t}} = K \cdot \mathbf{x_i^t} + (1 - K) \cdot \mathbf{x_{best}^t} + F \cdot (\mathbf{r_{1}} - \mathbf{r_{2}})$
+\end{center}
+Schemat ten jest analogiczny do schematu \emph{current-to-rand}, jednak oparty o przesłankę związaną z najlepszym punktem populacji. Procedura ta, zakłada przesuwanie wygenerowanym wektorem punktu leżącego między odpowiadającemu danemu mutantowi osobnikiem z populacji podstawowej a punktem o najlepszej dotąd wartości funkcji optymalizowanej.
+
+
+\item[rand-to-best] \cite{PracticalInsights} -- ten schemat zakłada zmianę schematu \ref{eq:DiffMutation} na:
+\begin{center}
+ $\mathbf{v_i^{t}} = K \cdot \mathbf{x_{best}^t} + (1 - K) \cdot \mathbf{r_1} + F \cdot (\mathbf{r_{2}} - \mathbf{r_{3}})$
+\end{center}
+Schemat ten, podobnie jak dwa poprzednie opiera się o przypuszczenie, że istnieje możliwość poprawienia skuteczności algorytmu przez zwiększenie rozrzutu punktów początkowych w przestrzeni przeszukiwań. W tym jednak wypadku, mamy do czynienia z połączeniem koncepcji znanych ze schematów \emph{rand} i \emph{best} w celu (w miarę możliwości) uzyskania najlepszych cech obu z nich. Warunki eksploracyjne tego schematu są poprawione względem schematu \emph{best}, ze względu na możliwość odciągania punktów od lokalnego optimum przez osobniki znajdujące się w okolicy innego optimum. Zarazem, w przypadku dotarcia przez algorytm do fazy czysto eksploatacyjnej (skupienie wokół jednego minimum całej populacji), możliwości eksploatacyjne schematu \emph{best} zostają zachowane.
+
+\item[current-to-pbest] \cite{JADE} -- ten schemat zakłada zmianę schematu \ref{eq:DiffMutation} na:
+
+\begin{center}
+ $\mathbf{v_i^{t}} = \mathbf{x_i^t} + F \cdot (\mathbf{x_{r_{pbest}}^t} - x_i^t) + F \cdot (\mathbf{r_1} - \mathbf{r_{2}})$
+\end{center}
+gdzie $\mathbf{x_{r_{pbest}}^t}$ to osobnik wybrany losowo spośród $p \cdot n$ osobników o najniższej wartości funkcji optymalizowanej, $p \in (0,1]$. W niektórych pracach \cite{SHADE} proponowane jest dolne ograniczenie wartości $p$ jako $p_{min} = \frac{2}{n}$, co oznacza, że osobnik $\mathbf{x_{r_{pbest}}^t}$ jest zawsze losowany spośród co najmniej dwóch najlepszych osobników.
+
+Rozwiązanie to ma za zadanie dołączyć do zalet schematu \emph{current-to-best} dodatkowe rozrzucenie osobników w przeszukiwanej przestrzeni i osłabienie siły przyciągania jednego najmocniejszego osobnika, a więc zmniejszenie elitaryzmu całego algorytmu.
+
+
+
+
+\end{description}
+}
+\subsubsection{Schemat krzyżowania}
+\par{
+Krzyżowanie w klasycznym algorytmie ewolucji różnicowej, pełni kluczową rolę -- zapewnia powiązanie osobników mutantów z populacji $\mathbf{V}$ w pary z osobnikami z populacji bazowej $\mathbf{X}$. W ten sposób tworzy przyczynek do wykorzystywania par osobników do selekcji przez ich bezpośrednie porównanie. W bardziej wysublimowanych schematach mutacji opisanych w poprzednim podrozdziale, osobnik z bieżącej populacji bywa wykorzystywany już na etapie mutacji. Nie jest to regułą ani założeniem niezbędnym dla skonstruowania poprawnych operatorów dla ewolucji różnicowej, stąd też nawet w odbiegających od podstawowego wariantu wersjach algorytmów ewolucji różnicowej, krzyżowanie jest niezbędne dla poprawnego zachowania algorytmu.
+}
+
+\par{
+Typowo w literaturze spotyka się następujące schematy krzyżowania:
+\begin{description}
+\item[bin] -- podstawowy schemat krzyżowania zgody z równością \ref{eq:BasicCrossover}.
+\item[exp] -- schemat krzyżowania zamieniający równość \ref{eq:BasicCrossover}, na procedurę:
+\lstset{language=C}
+\begin{lstlisting}[frame=single,mathescape]
+j = 1
+while (a < cr $\land$ j $\le$ D) {
+	$u_{i,j}^t$ = $v_{i,j}^t$
+	j = j + 1
+}
+while (j < D) {
+	$u_{i,j}^t$ = $x_{i,j}^t$
+}
+\end{lstlisting}
+\end{description}
+}
+\subsubsection{Notacja}
+\par{
+Mając na względzie, że typowo algorytmy ewolucji różnicowej rozróżniane są między sobą na podstawie trzech wyżej wymienionych zmiennych - a więc: ilości par różnicowanych, schematu mutacji różnicowej i schematu krzyżowania, wprowadzono notację pozwalającą w sposób zwięzły opisać konkretną instancję algorytmu z grupy algorytmów ewolucji różnicowej \cite{PracticalInsights}:
+%%%%%% Zapis 
+\begin{center}
+\textbf{DE/M/D/C}
+\end{center}
+gdzie:
+\begin{itemize}
+\item \textbf{M} - schemat mutacji (np. \emph{rand}, \emph{current-to-pbest}).
+\item \textbf{D} - ilość par różnicowanych (zwykle \emph{1} lub \emph{2}).
+\item \textbf{C} - schemat krzyżowania (np. \emph{bin}, \emph{exp}).
+\end{itemize}
+I tak na przykład klasyczny algorytm ewolucji różnicowej (\ref{DEvol_section}) wg. tej notacji byłby opisany jako: DE/\emph{rand}/\emph{1}/\emph{bin}. Notacja ta będzie wykorzystywana w dalszej części pracy.
+}
+
+
+\subsection{Strategie adaptacji}
+\par{
+TODO:
+Dla każdego z opisanych schematów istnieją prace opisujące proces adaptacji parametrów na podstawie dotychczas uzyskiwanych rezultatów -- czyli wykorzystanie informacji historycznych, nie rzadko z okna historii $H$ o szerokości przekraczającej wielkość pojedynczego pokolenia \cite{zhang2009adaptive,JADE,SHADE}. Warto jednak zauważyć, że schemat \emph{p-to-best} został opracowany od razu wraz z mechanizmem adaptacji w ramach artykułu \cite{JADE}, stąd też schemat ten można traktować jaką integralną część tej strategii mutacji.
+}
+\subsection{Punkt środkowy populacji}
+\label{MidPoint}
+\par{
+Niedawno w badaniach nad algorytmami ewolucji różnicowej \cite{DEmid} pojawiła się koncepcja wykorzystania inforamcji niesionej przez punkt środkowy populacji do poprawy sposobu działania algorytmu. W pracy \cite{DEmid} podjęto próbę zbudowania nowego schematu mutacji, w którym punktem bazowym jest punkt środkowy populacji (DE/\emph{mid}/\emph{k}). Wnioskiem z tej pracy było stwierdzenie, iż dla większości funkcji zwłaszcza w wielowymiarowych przestrzeniach, wybór strategii \emph{mid} poprawia w sposób statystycznie istotny działanie algorytmu ewolucji różnicowej. W pracy zwrócono także uwagę, że punkt środkowy nie przynosi znaczącej poprawy lub wręcz jest mylący dla zadania, w przypadku funkcji o znacznej lokalnej zmienności (Note: W zasadzie to nie do końca jest prawda, to tylko moje domniemanie, nie wniosek z tej pracy). Jako przykład takiej funkcji wymieniono funkcję Weierstrassa wchodzącą w skład zestawu testowego CEC2013 (\ref{CEC2013chapter}).
+}
+\par{
+Praca ta jednoznacznie wskazała, że informacja zawarta w punkcie środkowym dla wielu problemów może być użyteczna. Intuicja podpowiada, że w szczególności w fazie eksploatacji okolic loklanego optimum punkt środkowy może być o wartości wyższej niż najlepsza. Taka własność punktu środkowego stanowiła by wytłumaczenie przewagi algorytmu DE/\emph{mid}/\emph{1} nad DE/\emph{best}/\emph{1}. W dalszej części pracy zbadano czy ta teoria ma odbicie w rzeczywistości oraz czy zamortyzowany zysk z wyliczania wartości funkcji optymalizowanej w punkcie środkowym pokryje związane z tym wyliczeniem koszta.
+}
+\subsection{Metoda uwzględniania ograniczeń}
+
 \par{
 (Czym się różni od klasycznych algorytmów ewolucyjnych)
-}
-\par{
-(Zalety i wady w kontekście problemu optymalizacji)
 }
 \par{
 (Parametry)
@@ -289,14 +528,8 @@ Uzyskanie właściwego balansu między tymi dwoma aspektami działania algorytm�
 \par{
 (Wyniki w kontekście innych metod)
 }
-\par{
-(Idea punktu środkowego)
-}
-\par{
-(Metody uwzględniania ograniczeń)
-}
 
-\subsubsection{Podejście do archiwum}
+\subsection{Podejście do archiwum}
 \par{(Odniesienia w literaturze)}
 \par{(Dotychczasowe wnioski)}
 
@@ -341,6 +574,7 @@ Uzyskanie właściwego balansu między tymi dwoma aspektami działania algorytm�
 }
 
 \subsection{CEC}
+\label{CEC2013chapter}
 \par{
 (Opis benchmarka, funkcje testowe)
 }
@@ -349,7 +583,6 @@ Uzyskanie właściwego balansu między tymi dwoma aspektami działania algorytm�
 }
 
 \chapter{Algorytm DEArch}
-
 \par{
 
 }
