@@ -607,10 +607,36 @@ TODO
 
 \subsection{Zaawansowne modyfikacje}
 \par{
-Do celów pracy wybrano dwie modyfikacje stosujące adaptację paramterów (rozdział \ref{Adaptation}), jak również powiększone okno historii (rozdział \ref{ArchiveLiterature}). Algorytm \emph{SHADE} \cite{SHADE} została wybrana, jako najlepiej sprawdzająca się modyfikacja ewolucji różnicowej \cite{CEC2013Comp}. Algorytm \emph{JADE} \cite{JADE} został wybrany jako pierwowzór \emph{SHADE}, który opiera się o prostrze acz ideologicznie podobne koncepcje. Specyfikę obu algorytmów opisano poniżej:
+Do celów pracy wybrano dwie modyfikacje stosujące adaptację paramterów (rozdział \ref{Adaptation}), jak również powiększone okno historii (rozdział \ref{ArchiveLiterature}). Algorytm \emph{SHADE} \cite{SHADE} został wybrany, jako najlepiej sprawdzająca się modyfikacja ewolucji różnicowej \cite{CEC2013Comp}. Algorytm \emph{JADE} \cite{JADE} został wybrany jako pierwowzór \emph{SHADE}, który opiera się o prostsze acz ideologicznie podobne koncepcje. Specyfikę obu algorytmów opisano poniżej:
 }
 \begin{description}
-\item[JADE] -- algorytm \emph{JADE} jest 
+\item[JADE] \cite{JADE} -- algorytm \emph{JADE} jest algorytmem ewolucji różnicowej, wykorzystującym schemat mutacji \emph{current-to-pbest} (zalecane $p \in [0.05, 0.2]$). Algorytm cechuje także indywidualna wartość współczynnika $F$ oraz $Cr$ dla każdego mutowanego i krzyżowanego osobnika w każdej kolejnej iteracji (oznaczenie $F_i^t$, $Cr_i^t$ lub po prostu $F_i$, $Cr_i$). Taka mnogość prób wykorzystywana jest, do adaptacji tych współczynników. Wartości tych współczynników zmieniane są na podstawie sukcesów bądź porażek przy stosowaniu ich konkretnych wartości. Ponadto, algorytm ten wykorzystuje archiwum punktów do generowania wektorów różnicowych. Stanowi więc on dalekie rozszerzenie podstawowej idei ewolucji różnicowej. Poniżej opisano kluczowe modyfikacje względem \emph{DE/rand/1/bin} występujące w algorytmie.
+\subsubsection{Archiwum}
+\par{
+W algorytmie \emph{JADE} zastosowano archiwum o wielkości dwóch populacji -- w postaci populacji bieżącej $\mathbf{X}$ i archiwum $\mathbf{A}$. Do archiwum trafiają punkty z populacji $\mathbf{X}$ zastąpione przez osobniki dzieci z populacji $\mathbf{Z}$. Ograniczenie wielkości archiwum $|A| \le \mu$ jest wymuszane na końcu każdej iteracji algorytmu, przez losowe usuwanie osobników z archiwum -- aż do uzyskania jego porządanej wielkości. Archiwum wykorzystywane jest w połączeniu z bieżącą populacją $\mathbf{X}$ wyłącznie do generowania wektorów różnicowych.
+}
+\subsubsection{Adaptacja $F_i$}
+\par{
+Mechanizm adaptacji współczynników $F_i$ opiera się o generowanie losowych wartości wokół zadoptowanej wartości $F_{mid}$ z rozkładem $cauchy(F_{mid}, 0.1)$ z ograniczeniem wartości $F_i \in [0, 1]$. Dla wartości poniżej tego zakresu wartość $F_i$ jest ponownie generowana. Dla wartości powyżej tego zakresu przyjmowane jest $F_i = 1$.
+}
+\par{
+Model adaptacji wymaga wprowadzenia pojęcia sukcesu.
+\par{
+\begin{OptDefinition}
+Sukcesem próby $i$ w iteracji $t$ nazywamy sytuację, gdy $\mathbf{x_i^{t+1} = z_i^t}$.
+\end{OptDefinition}
+}
+Oznaczmy także jako $S^t$ zbiór prób z iteracji $t$, które zakończyły się sukcesem.
+}
+\par{
+TODO: TO NIE JEST ŚREDNIA ARYTMETYCZNA TYLKO LEHMERA!
+Wartość $F_{mid}$ inicjalizowna jest przez wartość $0.5$. W kolejnych pokoleniach jest ona zmieniana na średnią ważoną $F_{mid}$ i wartości $F_{S^t}$ zdefiniowanej jako $F_{S^t}~=~\frac{1}{|S^t|}\sum_{s \in S^t} F_s$. Jako wagi przyjmuje się odpowiednio $c$ i $1 - c$, gdzie $c \in [0,1]$ jest dodatkowym parametrem algorytmu. Autorzy \cite{JADE} sugerują wykorzystanie wartości $c \in [0.05, 0.2]$.
+}
+
+\subsubsection{Adaptacja $Cr_i$}
+\par{
+Mechanizm adaptacji współczynników $Cr_i$ w algorytmie \emph{JADE} zbudowany jest na podobnej zasadzie jak mechanizm adaptacji współczynników $F_i$. Podobnie jak w przypadku $F_{mid}$, $Cr_{mid}$ jest generowany na podstawie średniej z wartości $Cr_i$ dla sukcesów. Tym razem jednak wykorzystana jest średnia arytmetyczna zamiast średniej Lehmera. Ponadto do generowania wartości $Cr_i$ dla poszczególnych wartości $i$ wykorzystywany jest rozkład normalny zamiast rozkładu cauchiego -- $N(Cr_{mid}, 0.1)$. Do adaptacji wartości $Cr_{mid}$ wykorzystywana jest ta sama stała $c$ co w przypadku adaptacji $F_{mid}$.
+}
 \item[SHADE] -- TODO
 \end{description}
 
