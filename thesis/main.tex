@@ -8,6 +8,7 @@
 \usepackage{type1ec}
 \usepackage{amsthm}
 \usepackage{amsfonts}
+\usepackage{algorithm}
 \usepackage{listings}
 \headsep = 30pt
 %\linespread{2}
@@ -182,7 +183,7 @@ Wszelkie badania jakościowe w ramach pracy będą opracowane przy użyciu testo
 
 
 %%%%% Model heurystyczny
-\chapter{Przegląd literatury}
+\chapter{Problematyka ewolucji różnicowej}
 \section{Podejscie heurystyczne do problemu optymalizacji}
 \par{
 Do rozwiązywania problemów optymalizacji ze względu na ich złożoność i (w wielu przypadkach) brak możliwości odnalezienia precyzyjnego rozwiązania stosuje się algorytmy o charakterze heurystycznym. Algorytmy te mają za zadanie rozwiązywać problemy w sposób przybliżony tj. z założenia nie muszą podać rozwiązania dokładnego. Są one stosowane zamiast algorytmów dokładnych tam, gdzie: 
@@ -347,12 +348,12 @@ nie jest to jednak warunek wymagany dla każdego algorytmu tej klasy.
 
 
 	  \item[Krzyżowanie]:\\
-  W tym kroku każdy z osobników w populacji $\mathbf{X^{t}}$ jest krzyżowany z odpowiadającym mu osobnikiem z populacji mutantów $\mathbf{V^{t}}$ w celu wyłonienia osobnika dziecka $\mathbf{u_i^{t}}$ dla każdego osobnika $\mathbf{x_i^{t}}$. Choć do krzyżowania można stosować wiele różnych operatorów, najczęściej wybierane jest krzyżowanie wymieniające z różnym rozkładem prawdopodobieństwa. W najprostszym wypadku dwumianowy wymieniający operator krzyżujący (ang. \emph{binominal crossover}) może być zdefiniowany następująco:
+  W tym kroku każdy z osobników w populacji $\mathbf{X^{t}}$ jest krzyżowany z odpowiadającym mu osobnikiem z populacji mutantów $\mathbf{V^{t}}$ w celu wyłonienia osobnika dziecka $\mathbf{z_i^{t}}$ dla każdego osobnika $\mathbf{x_i^{t}}$. Choć do krzyżowania można stosować wiele różnych operatorów, najczęściej wybierane jest krzyżowanie wymieniające z różnym rozkładem prawdopodobieństwa. W najprostszym wypadku dwumianowy wymieniający operator krzyżujący (ang. \emph{binominal crossover}) może być zdefiniowany następująco:
   
 %% Krzyzowanie BIN
 \begin{equation}
 \label{eq:BasicCrossover}
-u_{i,j}^{t} = \left\{ \begin{array}{ll}
+z_{i,j}^{t} = \left\{ \begin{array}{ll}
 v_{i,j}^{t} & \textrm{gdy $r \le Cr$}\\
 x_{i,j}^{t} & \textrm{w przeciwnym wypadku}\\
 \end{array} \right.
@@ -362,11 +363,11 @@ Gdzie:
 \item $r$ -- zmienna losowa o rozkładzie jednostajnym na przedziale [0, 1]
 \item $Cr$ -- współczynnik krzyżowania, parametr algorytmu z dziedziny [0, 1]
 \end{itemize}
-Wartym odnotowania jest konieczność zapewnienia by do każdego osobnika dziecka $\mathbf{u_i^{t}}$ trafiła co najmniej jedna wartość z osobnika mutanta, a więc by zachodziło $\mathbf{u_i^{t}}~\neq~\mathbf{x_i^{t}}$ \cite{SpringerIntroToEvol}. Ze względu na prostotę zapisu element ten zaniedbano jednak w powyższej definicji.
+Wartym odnotowania jest konieczność zapewnienia by do każdego osobnika dziecka $\mathbf{z_i^{t}}$ trafiła co najmniej jedna wartość z osobnika mutanta, a więc by zachodziło $\mathbf{z_i^{t}}~\neq~\mathbf{x_i^{t}}$ \cite{SpringerIntroToEvol}. Ze względu na prostotę zapisu element ten zaniedbano jednak w powyższej definicji.
 
 
 		\item[Selekcja]:\\
-Ostatnim elementem podstawowej strategii ewolucyjnej dla algorytmów ewolucji różnicowej jest wybór osobników spośród par $(\mathbf{x_i^{t}}, \mathbf{u_i^{t}})$. Wybór ten w typowym przypadku dokonywany jest wg. następującej formuły:
+Ostatnim elementem podstawowej strategii ewolucyjnej dla algorytmów ewolucji różnicowej jest wybór osobników spośród par $(\mathbf{x_i^{t}}, \mathbf{z_i^{t}})$. Wybór ten w typowym przypadku dokonywany jest wg. następującej formuły:
 $$
 \mathbf{x_{i}^{t+1}} = \left\{ \begin{array}{ll}
 \mathbf{v_{i}^{t}} & \textrm{gdy $f(v_i^t) \le f(x_i^t)$}\\
@@ -390,21 +391,51 @@ Działanie algorytmu ewolucji różnicowej zdeterminowane jest przez zestaw oper
 Podsumowując działanie klasycznego algorytmu ewolucji różnicowej można można posłużyć się poniższym pseudokodem, operującym na wprowadzonych w rozdziałach \ref{Model} i \ref{DEvol_section} symbolach:
 \lstset{language=C}
 \begin{lstlisting}[frame=single,mathescape]
-DifferentialEvolution($S$, $U$, $f$, $\mu$, $Cr$, $F$)
+EwolucjaRoznicowa($S$, $U$, $f$, $\mu$, $Cr$, $F$, $\mu$)
 {
-	X = $S$
-	while (!stop) {
-		V = Mutacja(X, U, $F$)
-		Z = Krzyzowanie(X, V, $U$, $Cr$)
-		X = Selekcja(Z, X, $f$)
-	}
-}
-\end{lstlisting}
+    X = $S$
+    while (!stop) {
+        V = Mutacja(X, $\mu$, $U$, $F$)
+        Z = Krzyzowanie(X, V, $\mu$, $U$, $Cr$)
+        X = Selekcja(Z, X, $\mu$, $f$)
+    }
+    return $argmax_{x \in X} f(x)$
 }
 
-\par{TODO: Osadzenie DE w modelu \ref{Model}.}
-\par{TODO: Pseudokod.}
-\par{TODO: Czym można parametryzować}
+Mutacja(X, $\mu$, $U$, $F$)
+{
+    for (i $\in$ 1:$\mu$) {
+        V[i] = X[$U_\mu$] + $F \cdot $(X[$U_\mu$] - X[$U_\mu$])
+    }
+    return V
+}
+
+Krzyzowanie(X, V, $\mu$, $U$, $Cr$)
+{
+    for (i $\in$ 1:$\mu$) {
+        for (j $\in$ 1:D) {
+            if ($Cr < U_u$)
+                Z[i][j] = V[i][j]
+            else
+                Z[i][j] = X[i][j]
+        }
+    }
+    return Z
+}
+
+Selekcja(Z, X, $\mu$, $f$) {
+    for (i $\in$ 1:$\mu$) {
+        if ($f($Z$) \le f($X$)$)
+            $X_{new}$[i] = Z[i]
+        else
+            $X_{new}$[i] = X[i]
+    }
+    return $X_{new}$
+}
+\end{lstlisting}
+
+Dla uproszczenia zapisu jako $U_\mu$ oznaczono liczbę losową wygenerowaną z przestrzeni $U$, z równym prawdopodobieństwem ze zbioru $[1, \mu] \cap \mathbb{N}$. Symbolem $U_u$ oznaczono natomiast liczbę losową wygenerowaną z przestrzeni $U$ z rozkładem $U(0,1)$.
+}
 
 \subsection{DE a klasyczne strategie ewolucyjne}
 \par{
@@ -503,11 +534,11 @@ Typowo w literaturze spotyka się następujące schematy krzyżowania:
 \begin{lstlisting}[frame=single,mathescape]
 j = 1
 while (r < $Cr$ $\land$ j $\le$ D) {
-	$u_{i,j}^t$ = $v_{i,j}^t$
+	$z_{i,j}^t$ = $v_{i,j}^t$
 	j = j + 1
 }
 while (j < D) {
-	$u_{i,j}^t$ = $x_{i,j}^t$
+	$z_{i,j}^t$ = $x_{i,j}^t$
 }
 \end{lstlisting}
 \end{description}
@@ -530,10 +561,17 @@ I tak na przykład klasyczny algorytm ewolucji różnicowej (\ref{DEvol_section}
 
 
 \subsection{Strategie adaptacji}
+\label{Adaptation}
 \par{
-TODO:
-Dla każdego z opisanych schematów istnieją prace opisujące proces adaptacji parametrów na podstawie dotychczas uzyskiwanych rezultatów -- czyli wykorzystanie informacji historycznych, nierzadko z okna historii $H$ o szerokości przekraczającej wielkość pojedynczego pokolenia \cite{zhang2009adaptive,JADE,SHADE}. Warto jednak zauważyć, że schemat \emph{p-to-best} został opracowany od razu wraz z mechanizmem adaptacji w ramach artykułu \cite{JADE}, stąd też schemat ten można traktować jaką integralną część tej strategii mutacji.
+Dla każdego z opisanych schematów istnieją prace opisujące proces adaptacji parametrów na podstawie dotychczas uzyskiwanych rezultatów \cite{zhang2009adaptive,JADE,SHADE}. Nierzadko proces adaptacji wykorzystanie informacje historii $H$ o szerokości przekraczającej wielkość pojedynczego pokolenia stąd metody adaptacji mogą być traktowane jako jedna z prób poprawy działania algorytmów ewolucji różnicowej przez poszerzenie okna archiwum.
 }
+\par{
+Opublikowane prace jednoznacznie wskazują, że proces adaptacji znacząco poprawia uzyskiwane w ramach ewolucji różnicowej wyniki. Stanowi to kolejną przesłankę pozwalającą oczekiwać poprawy rezultatów przez wykorzystanie szerszego okna historii.
+}
+\par{
+Dodatkowo należy odnotować, że adaptacyjne algorytmy ewolucyjne otrzymują najlepsze rezultaty w testach typu \emph{black-box} (spośród algorytmów klasy DE) \cite{CEC2013Comp}. Fakt ten staje się przyczynkiem do tego by sprawdzić, czy proponowany algorytm \emph{DEArch} będzie utrzymywał swoją charakterystykę jakości także względem tych modyfikacji.
+}
+
 \subsection{Punkt środkowy populacji}
 \label{MidPoint}
 \par{
@@ -543,27 +581,45 @@ Niedawno w badaniach nad algorytmami ewolucji różnicowej \cite{DEmid} pojawił
 Praca ta jednoznacznie wskazała, że informacja zawarta w punkcie środkowym dla wielu problemów może być użyteczna. Intuicja podpowiada, że w szczególności w fazie eksploatacji okolic loklanego optimum punkt środkowy może być o wartości wyższej niż najlepsza. Taka własność punktu środkowego stanowiła by wytłumaczenie przewagi algorytmu DE/\emph{mid}/\emph{1} nad DE/\emph{best}/\emph{1}. W dalszej części pracy zbadano czy ta teoria ma odbicie w rzeczywistości oraz czy zamortyzowany zysk z wyliczania wartości funkcji optymalizowanej w punkcie środkowym pokryje związane z tym wyliczeniem koszta.
 }
 \subsection{Metoda uwzględniania ograniczeń}
+\par{
+Praca \cite{Boundary}, pokazała że metoda uwzględniania ograniczeń przeszukiwanej przestrzeni ma istotny wpływ na jakość rezultatów uzyskiwanych przez algorytm ewolucji różnicowej. Praca wyszczególnia wiele typów dopasowywania punktów mutantów do zakresu:
+\begin{description}
+\item[Reinicjalizacja] (ang. \emph{Reinitialization} -- Powszechnie używana w algorytmach ewolucji różnicowej strategia \cite{Boundary}, która polega na zamianie punktu, który znalazł się poza ograniczeniami, na losowo wybrany (z rozkładem jednostajnym) punkt mieszczący się w ograniczeniach.
+\item[Ponowne próbkowanie] (ang. \emph{Resampling}) -- Metoda, która okazała się bardzo skuteczna, w szczególności w przypadku dużej ilości punktów nie mieszczących się w ograniczeniach. Polega ona na powtarzaniu procedury tworzenia mutanta na podstawie losowych wektorów różnicowych, do czasu osiągnięcia osobnika, który mieści się w ograniczeniach.
+\item[Odbijanie] (ang. \emph{Reflection}) -- Metoda polegająca na odbijaniu punktu względem wszystkich przekroczonych linii ograniczeń aż do czasu, gdy punkt znajdzie się wewnątrz przeszukiwanego obszaru przestrzeni.
+\item[Rzutowanie] (ang. \emph{Projection}) -- Metoda ta polega na rzutowaniu prostopadłym punktu na wszystkie przekroczone ograniczenia.
+\item[Zawijanie] (ang. \emph{Wrapping}) -- w tej metodzie, zakłada się, że obszar przeszukiwań jest skończonym wycinkiem hiperpłaszczyzny. Mając to na względzie, nakłada się tą skończoną podprzestrzeń na hipertorusa w ten sposób zyskując przestrzeń posiadającą wyłącznie punkty dopuszczalne a opisującą cały zbiór $\mathbb{R}^D$. Wadą tego rozwiązania jest fakt, że jeśli funkcja $f$ jest ciągła, to jej w nowej przestrzeni jej ciągłość może zostać zerwana.
+\item[Zachowywanie] (ang. \emph{Conservatism}) -- metoda ta polega na odrzuceniu dziecka $z_i$ jeśli znajdzie się ono poza obszarem przeszukiwania i w czasie selekcji wybranie osobnika $x_i$. Podejście to jest równoważne nadaniu funkcji kary za przejście poza granicę obszaru przeszukiwania, równej $\infty$ w każdym punkcie poza ograniczeniami.
+\end{description}
+}
+\par{
+Wyniki otrzymane w ramach \cite{Boundary} sugerują, że najlepiej sprawdzają się metodą uwzględniania ograniczeń jest \emph{resampling}. Poważnymi wadami tego rozwiązania jest znaczne skomplikowanie struktury algorytmu, ze względu na konieczne nawroty, a także koszta wynikające z dodatkowych obliczeń (zwłaszcza w przypadku dużego odsetka odrzucanych punktów). Z tych powodów zdecydowano, by odrzucić tę metodę i na czas pracy skorzystać z jednej z dwóch znacznie prostszych a dających podobne, obiecujące rezultaty -- \emph{odbijania} i \emph{rzutowania}. Spośród tych dwóch wariantów arbitralnie wybrano \emph{odbijanie} i ten sposób uwzględniania ograniczeń będzie wykorzystywany przy wszystkich testach w ramach pracy.
+}
 
+\subsection{Archiwum}
+\label{ArchiveLiterature}
 \par{
-(Czym się różni od klasycznych algorytmów ewolucyjnych)
+TODO
+(Odniesienia w literaturze)
+\cite{JADE,SHADE,ClusterArchiveDE,RobustArchiveDE,ArchivedDE}
 }
-\par{
-(Parametry)
-}
-\par{
-(Wyniki w kontekście innych metod)
-}
-
-\subsection{Podejście do archiwum}
-\par{(Odniesienia w literaturze)}
 \par{(Dotychczasowe wnioski)}
 
-\section{Metodyka badań (opisywać tak szeroko?)}
-\subsection{Modelowanie statystyczne}
+\subsection{Zaawansowne modyfikacje}
+\par{
+Do celów pracy wybrano dwie modyfikacje stosujące adaptację paramterów (rozdział \ref{Adaptation}), jak również powiększone okno historii (rozdział \ref{ArchiveLiterature}). Algorytm \emph{SHADE} \cite{SHADE} została wybrana, jako najlepiej sprawdzająca się modyfikacja ewolucji różnicowej \cite{CEC2013Comp}. Algorytm \emph{JADE} \cite{JADE} został wybrany jako pierwowzór \emph{SHADE}, który opiera się o prostrze acz ideologicznie podobne koncepcje. Specyfikę obu algorytmów opisano poniżej:
+}
+\begin{description}
+\item[JADE] -- algorytm \emph{JADE} jest 
+\item[SHADE] -- TODO
+\end{description}
+
+\chapter{Metodologia badań}
+\section{Modelowanie statystyczne}
 \par{
 (Czemu służy, dlaczego potrzebne do tych badań)
 }
-\subsection{Testy statystyczne}
+\section{Testy statystyczne}
 \par{
 (Ogólna koncepcja, p-value)
 }
@@ -583,14 +639,14 @@ Praca ta jednoznacznie wskazała, że informacja zawarta w punkcie środkowym dl
 \par{
 (Co to jest i kiedy się stosuje)
 }
-\subsubsection{Test wilcoxona}
+\subsection{Test Wilcoxona}
 \par{
 (Opis, działanie, ZAŁOŻENIA)
 }
 \par{
 (Wady zalety)
 }
-\section{Benchmarki blackboxowe}
+\section{Testy optymalizacyjne typu \emph{black-box}}
 \par{
 (Czemu służą)
 }
@@ -598,7 +654,7 @@ Praca ta jednoznacznie wskazała, że informacja zawarta w punkcie środkowym dl
 (Dlaczego są dobrym odniesieniem)
 }
 
-\subsection{CEC}
+\subsection{CEC-2013}
 \label{CEC2013chapter}
 \par{
 (Opis benchmarka, funkcje testowe)
@@ -606,6 +662,7 @@ Praca ta jednoznacznie wskazała, że informacja zawarta w punkcie środkowym dl
 \par{
 (Implementacja w R)
 }
+\subsubsection{Ewolucja różnicowa -- pozycja w CEC}
 
 \chapter{Algorytm DEArch}
 \par{
