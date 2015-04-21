@@ -10,7 +10,7 @@
 \usepackage{amsfonts}
 \usepackage{listings}
 \headsep = 30pt
-%\linespread{1}
+%\linespread{2}
 
 
 
@@ -270,11 +270,11 @@ Ogólna idea stojąca za algorytmami ewolucyjnymi, polega na opisaniu genotypu o
 W związku z powyższą analogią w ramach algorytmów ewolucyjnych wyróżnia się następujące operatory:
 \begin{description}
   \item[Krzyżowanie] -- to operator opisujący w jaki sposób na podstawie genotypu dwóch lub więcej osobników wytworzyć genotyp jednego lub więcej osobnika potomnego.
-  \item[Mutacja] -- to operator wprowadzający genotypie wybranego osobnika losowe (nieznaczne) zabużanie.
+  \item[Mutacja] -- to operator wprowadzający w genotypie wybranego osobnika losowe (nieznaczne) zabużanie.
   \item[Selekcja] -- to operator odpowiadający selekcji naturalnej, który oceniając osobniki na podstawie przystosowania ich fenotypu do środowiska odrzuca część z nich preferując pozostawienie w populacji osobników lepiej dostosowanych.
   \item[Dobór do krzyżowania] -- to operator wybierający zestawy osobników podlegające krzyżowaniu. Operator ten opisuje znany z natury mechanizm preferencji (fenotypowej) organizmów przy rozmnażaniu.
   \item[Dobór do mutacji] -- to operator wybierający, które spośród osobników w populacji należy poddać mutacji. Odpowiada on zmiennemu w zależności od fenotypu organizmu prawdopodobieństwu wystąpienia u niego mutacji.
-  \item[Inicjalizacja] -- to operator nieco oderwany od teorii ewolucji (gdyż ta nie opisuje powstawania pierwszych organizmów) opisujący sposób wygenerowania populacji początkowej spośród wszystkich możliwych genotypów.
+  \item[Inicjalizacja] -- to operator nieco oderwany od teorii ewolucji (gdyż ta nie opisuje powstawania pierwszych organizmów) opisujący sposób wygenerowania populacji początkowej spośród wszystkich możliwych genotypów. Operując na nomenklaturze z modelu opisanego w rozdziale \ref{Model}, operator ten jest funkcją przeprowadzającą zbiór punktów początkowych $S$ w początkowy zbiór genotypów.
   %%% dopasowanie do zakresu
 \end{description}
 }
@@ -282,7 +282,7 @@ W związku z powyższą analogią w ramach algorytmów ewolucyjnych wyróżnia s
 Ogólny schemat działania algorytmu ewolucyjnego opiera się o iteracyjną adaptację populacji aż do ustalonego warunku stopu, według następujących kroków:
 \lstset{language=C}
 \begin{lstlisting}[frame=single,mathescape]
-P = Inicjalizacja(N)
+P = Inicjalizacja()
 while (!stop) {
 	P = P $\cup$ Krzyzowanie(DoborDoKrzyzowania(P))
 	P = P $\cup$ Mutacja(DoborDoMutacji(P))
@@ -306,7 +306,7 @@ Uzyskanie właściwego balansu między tymi dwoma aspektami działania algorytm�
 }
 
 %%%%% Podstawowy DE
-\subsection{Podstawowy algorytm ewolucji różnicowej}
+\subsection{Klasyczny algorytm ewolucji różnicowej}
 \label{DEvol_section}
 \par{
 Szczególnym przypadkiem algorytmu należącego do grupy algorytmów ewolucyjnych są algorytmy ewolucji różnicowej (ang.\emph{ differential evolution}, DE). Algorytmy te, zbudowane są w sposób zakładający ich wykorzystanie do przeszukiwania przestrzeni ciągłej co jest zgodne z przyjętą we wstępie definicją problemu. Ich specyfika zakłada wykorzystanie do operatora mutacji odpowiednio przeskalowanych wektorów przesunięć wygenerowanych z bieżącej populacji punktów (Rysunek \ref{DEvolMutationBasic}) \cite{SpringerIntroToEvol}.
@@ -347,7 +347,7 @@ nie jest to jednak warunek wymagany dla każdego algorytmu tej klasy.
 
 
 	  \item[Krzyżowanie]:\\
-  W tym kroku każdy z osobników w populacji $\mathbf{X^{t}}$ jest krzyżowany z odpowiadającym mu osobnikiem z populacji mutantów $\mathbf{V^{t}}$ w celu wyłonienia osobnika dziecka $\mathbf{u_i^{t}}$ dla każdego osobnika $\mathbf{x_i^{t}}$. Choć do krzyżowania można stosować wiele różnych operatorów, najczęściej wybierane jest krzyżowanie wymieniające z różnym rozkładem prawdopodobieństwa. W najprostszym wypadku dwumianowy operator krzyżujący (ang. \emph{binominal crossover}) może być zdefiniowany następująco:
+  W tym kroku każdy z osobników w populacji $\mathbf{X^{t}}$ jest krzyżowany z odpowiadającym mu osobnikiem z populacji mutantów $\mathbf{V^{t}}$ w celu wyłonienia osobnika dziecka $\mathbf{u_i^{t}}$ dla każdego osobnika $\mathbf{x_i^{t}}$. Choć do krzyżowania można stosować wiele różnych operatorów, najczęściej wybierane jest krzyżowanie wymieniające z różnym rozkładem prawdopodobieństwa. W najprostszym wypadku dwumianowy wymieniający operator krzyżujący (ang. \emph{binominal crossover}) może być zdefiniowany następująco:
   
 %% Krzyzowanie BIN
 \begin{equation}
@@ -362,7 +362,7 @@ Gdzie:
 \item $r$ -- zmienna losowa o rozkładzie jednostajnym na przedziale [0, 1]
 \item $Cr$ -- współczynnik krzyżowania, parametr algorytmu z dziedziny [0, 1]
 \end{itemize}
-Wartym odnotowania jest konieczność zapewnienia by do każdego osobnika dziecka $\mathbf{u_i^{t}}$ trafiła co najmniej jedna wartość z osobnika mutanta, a więc by zachodziło $\mathbf{u_i^{t}} \neq \mathbf{x_i^{t}}$ \cite{SpringerIntroToEvol}. Ze względu na prostotę zapisu element ten zaniedbano jednak w powyższej definicji.
+Wartym odnotowania jest konieczność zapewnienia by do każdego osobnika dziecka $\mathbf{u_i^{t}}$ trafiła co najmniej jedna wartość z osobnika mutanta, a więc by zachodziło $\mathbf{u_i^{t}}~\neq~\mathbf{x_i^{t}}$ \cite{SpringerIntroToEvol}. Ze względu na prostotę zapisu element ten zaniedbano jednak w powyższej definicji.
 
 
 		\item[Selekcja]:\\
@@ -375,6 +375,31 @@ $$
 $$
 Tego rodzaju podejście stanowi o elitarności wyboru osobników do kolejnych pokoleń, co powoduje zwiększenie możliwości eksploatacyjnych algorytmu kosztem jego możliwości eksploracyjnych.
 \end{description}
+}
+
+\par{
+Działanie algorytmu ewolucji różnicowej zdeterminowane jest przez zestaw operatorów (opisane niżej) jak również podstawowe parametry:
+\begin{itemize}
+\item $\mu$ - liczebność populacji - określa ile osobników zostanie stworzonych we wstępnej fazie algorytmu i ile z nich przetrwa na końcu każdego pokolenia.
+\item $Cr$ - współczynnik krzyżowania określający (w przypadku wariantu \emph{bin}) prawdopodobieństwo wybrania każdego z elementów osobnika mutanta do osobnika dziecka, jak w równaniu \ref{eq:BasicCrossover}.
+\item $F$ - współczynnik skalujący wektor przesunięcia punktu w populacji.
+\end{itemize}
+}
+
+\par{
+Podsumowując działanie klasycznego algorytmu ewolucji różnicowej można można posłużyć się poniższym pseudokodem, operującym na wprowadzonych w rozdziałach \ref{Model} i \ref{DEvol_section} symbolach:
+\lstset{language=C}
+\begin{lstlisting}[frame=single,mathescape]
+DifferentialEvolution($S$, $U$, $f$, $\mu$, $Cr$, $F$)
+{
+	X = $S$
+	while (!stop) {
+		V = Mutacja(X, U, $F$)
+		Z = Krzyzowanie(X, V, $U$, $Cr$)
+		X = Selekcja(Z, X, $f$)
+	}
+}
+\end{lstlisting}
 }
 
 \par{TODO: Osadzenie DE w modelu \ref{Model}.}
@@ -404,7 +429,7 @@ gdzie jako $D$ oznaczono ilość elementów poddawanych mutacji różnicowej.
 W praktyce, najczęściej stosuje się $D = 1$ lub $D = 2 i F_1 = F_2$, ponieważ nie znaleziono przesłanek by dalsze zwiększenie wartości $D$ powodowało poprawę jakości otrzymywanych przy użyciu algorytmu wyników \cite{PracticalInsights}.
 \subsubsection{Schemat mutacji}
 \par{
-Najistotniejszą z punktu widzenia charakterystyki DE możliwością zmodyfikowania zachowania algorytmu jest możliwość, zamiany schematu mutacji. Podstawowy schemat mutacji (\emph{rand}) zakłada losowanie osobników $\mathbf{r_1}, \mathbf{r_2}, \mathbf{r_3}$ i postępowanie wg. schematu \ref{eq:DiffMutation}. W ramach licznych badań powstała jednak ogromna ilość wariantów bardziej wysublimowanych, takich jak:
+Najistotniejszą z punktu widzenia charakterystyki DE możliwością zmodyfikowania zachowania algorytmu jest możliwość, zamiany schematu mutacji. Podstawowy schemat mutacji (\emph{rand}) zakłada losowanie osobników $\mathbf{r_1}, \mathbf{r_2}, \mathbf{r_3}$ i postępowanie wg schematu \ref{eq:DiffMutation}. W ramach licznych badań powstała jednak znaczna ilość wariantów bardziej wysublimowanych. Najpopularniejsze w literaturze i najistotniejsze ze względu na zawartość pracy schematy mutacji to:
 \begin{description}
 
 \item[rand] \cite{RainerStorn,SpringerIntroToEvol} -- wariant podstawowy
@@ -441,14 +466,14 @@ W tym schemacie do standardowego schematu \emph{rand} dołącza się element wi�
 \begin{center}
  $\mathbf{v_i^{t}} = K \cdot \mathbf{x_i^t} + (1 - K) \cdot \mathbf{x_{best}^t} + F \cdot (\mathbf{r_{1}} - \mathbf{r_{2}})$
 \end{center}
-Schemat ten jest analogiczny do schematu \emph{current-to-rand}, jednak oparty o przesłankę związaną z najlepszym punktem populacji. Procedura ta, zakłada przesuwanie wygenerowanym wektorem punktu leżącego między odpowiadającemu danemu mutantowi osobnikiem z populacji podstawowej a punktem o najlepszej dotąd wartości funkcji optymalizowanej.
+Schemat ten jest analogiczny do schematu \emph{current-to-rand}, jednak oparty o przesłankę związaną z najlepszym punktem populacji. Procedura ta zakłada przesuwanie wygenerowanym wektorem punktu leżącego między odpowiadającemu danemu mutantowi osobnikiem z populacji podstawowej a punktem o najlepszej dotąd wartości funkcji optymalizowanej.
 
 
 \item[rand-to-best] \cite{PracticalInsights} -- ten schemat zakłada zmianę schematu \ref{eq:DiffMutation} na:
 \begin{center}
  $\mathbf{v_i^{t}} = K \cdot \mathbf{x_{best}^t} + (1 - K) \cdot \mathbf{r_1} + F \cdot (\mathbf{r_{2}} - \mathbf{r_{3}})$
 \end{center}
-Schemat ten, podobnie jak dwa poprzednie opiera się o przypuszczenie, że istnieje możliwość poprawienia skuteczności algorytmu przez zwiększenie rozrzutu punktów początkowych w przestrzeni przeszukiwań. W tym jednak wypadku, mamy do czynienia z połączeniem koncepcji znanych ze schematów \emph{rand} i \emph{best} w celu (w miarę możliwości) uzyskania najlepszych cech obu z nich. Warunki eksploracyjne tego schematu są poprawione względem schematu \emph{best}, ze względu na możliwość odciągania punktów od lokalnego optimum przez osobniki znajdujące się w okolicy innego optimum. Zarazem, w przypadku dotarcia przez algorytm do fazy czysto eksploatacyjnej (skupienie wokół jednego minimum całej populacji), możliwości eksploatacyjne schematu \emph{best} zostają zachowane.
+Schemat ten, podobnie jak dwa poprzednie, opiera się o przypuszczenie, że istnieje możliwość poprawienia skuteczności algorytmu przez zwiększenie rozrzutu punktów początkowych w przestrzeni przeszukiwań. W tym jednak wypadku, mamy do czynienia z połączeniem koncepcji znanych ze schematów \emph{rand} i \emph{best} w celu (w miarę możliwości) uzyskania najlepszych cech obu z nich. Warunki eksploracyjne tego schematu są poprawione względem schematu \emph{best}, ze względu na możliwość odciągania punktów od lokalnego optimum przez osobniki znajdujące się w okolicy innego optimum. Zarazem, w przypadku dotarcia przez algorytm do fazy czysto eksploatacyjnej (skupienie wokół jednego minimum całej populacji), możliwości eksploatacyjne schematu \emph{best} zostają zachowane.
 
 \item[current-to-pbest] \cite{JADE} -- ten schemat zakłada zmianę schematu \ref{eq:DiffMutation} na:
 
@@ -472,12 +497,12 @@ Krzyżowanie w klasycznym algorytmie ewolucji różnicowej, pełni kluczową rol
 \par{
 Typowo w literaturze spotyka się następujące schematy krzyżowania:
 \begin{description}
-\item[bin] -- podstawowy schemat krzyżowania zgody z równością \ref{eq:BasicCrossover}.
+\item[bin] -- podstawowy schemat krzyżowania zgodny z równością \ref{eq:BasicCrossover}.
 \item[exp] -- schemat krzyżowania zamieniający równość \ref{eq:BasicCrossover}, na procedurę:
 \lstset{language=C}
 \begin{lstlisting}[frame=single,mathescape]
 j = 1
-while (a < cr $\land$ j $\le$ D) {
+while (r < $Cr$ $\land$ j $\le$ D) {
 	$u_{i,j}^t$ = $v_{i,j}^t$
 	j = j + 1
 }
@@ -500,14 +525,14 @@ gdzie:
 \item \textbf{D} - ilość par różnicowanych (zwykle \emph{1} lub \emph{2}).
 \item \textbf{C} - schemat krzyżowania (np. \emph{bin}, \emph{exp}).
 \end{itemize}
-I tak na przykład klasyczny algorytm ewolucji różnicowej (\ref{DEvol_section}) wg. tej notacji byłby opisany jako: DE/\emph{rand}/\emph{1}/\emph{bin}. Notacja ta będzie wykorzystywana w dalszej części pracy.
+I tak na przykład klasyczny algorytm ewolucji różnicowej (\ref{DEvol_section}) wg tej notacji byłby opisany jako: DE/\emph{rand}/\emph{1}/\emph{bin}. Notacja ta będzie wykorzystywana w dalszej części pracy.
 }
 
 
 \subsection{Strategie adaptacji}
 \par{
 TODO:
-Dla każdego z opisanych schematów istnieją prace opisujące proces adaptacji parametrów na podstawie dotychczas uzyskiwanych rezultatów -- czyli wykorzystanie informacji historycznych, nie rzadko z okna historii $H$ o szerokości przekraczającej wielkość pojedynczego pokolenia \cite{zhang2009adaptive,JADE,SHADE}. Warto jednak zauważyć, że schemat \emph{p-to-best} został opracowany od razu wraz z mechanizmem adaptacji w ramach artykułu \cite{JADE}, stąd też schemat ten można traktować jaką integralną część tej strategii mutacji.
+Dla każdego z opisanych schematów istnieją prace opisujące proces adaptacji parametrów na podstawie dotychczas uzyskiwanych rezultatów -- czyli wykorzystanie informacji historycznych, nierzadko z okna historii $H$ o szerokości przekraczającej wielkość pojedynczego pokolenia \cite{zhang2009adaptive,JADE,SHADE}. Warto jednak zauważyć, że schemat \emph{p-to-best} został opracowany od razu wraz z mechanizmem adaptacji w ramach artykułu \cite{JADE}, stąd też schemat ten można traktować jaką integralną część tej strategii mutacji.
 }
 \subsection{Punkt środkowy populacji}
 \label{MidPoint}
