@@ -105,6 +105,7 @@ Stale zwiększający się poziom trudności problemów optymalizacyjnych jak i c
 }
 
 \section{Definicja problemu}
+\label{ProblemDefinition}
 \par{
 Praca ta, umiejscowiona została w kontekście rozwiązywania problemów optymalizacji gdzie analityczne wyznaczenie ekstremum funkcji jest niemożliwe bądź w ogóle nie jest znana jej analityczna forma. Zakłada się bowiem, że zadanie jest zdefiniowane następująco \cite{StrojnowskiOptymalizacja2}:
 }
@@ -185,6 +186,7 @@ Wszelkie badania jakościowe w ramach pracy będą opracowane przy użyciu testo
 %%%%% Model heurystyczny
 \chapter{Problematyka ewolucji różnicowej}
 \section{Podejscie heurystyczne do problemu optymalizacji}
+\label{OptHeur}
 \par{
 Do rozwiązywania problemów optymalizacji ze względu na ich złożoność i (w wielu przypadkach) brak możliwości odnalezienia precyzyjnego rozwiązania stosuje się algorytmy o charakterze heurystycznym. Algorytmy te mają za zadanie rozwiązywać problemy w sposób przybliżony tj. z założenia nie muszą podać rozwiązania dokładnego. Są one stosowane zamiast algorytmów dokładnych tam, gdzie: 
 \begin{itemize}
@@ -197,7 +199,7 @@ Do rozwiązywania problemów optymalizacji ze względu na ich złożoność i (w
 Algorytmy tej klasy bywają stosowane jako rozwiązanie kompromisowe pomiędzy jakością rozwiązania a czasem jego poszukiwania.
 }
 \par{
-Podejście tego rodzaju niosą za sobą ciekawe konsekwencje. Warto zauważyć, że ponieważ z definicji prowadzą one do rozwiązania nie koniecznie najlepszego, to jeśli istnieje metoda porównywania jakości wyników, można także mówić o porównywaniu jakości działania różnych algorytmów w kontekście danego zadania. Mimo, iż wiele z algorytmów heurystycznych ma charakter niedeterministyczny (tj. dla tego samego wejścia mogą wygenerować dwa różne wyjścia) posługując się narzędziami statystyki i probabilistyki można wysnuwać wnioski dt. jakości algorytmów w kontekście problemu. /Note: A w sekcji o benchmarkach - funkcje są skonstruowane tak, by dawać możliwy obraz jakości algorytmu jako takiego pozwalając go oceniać w oderwaniu od problemu!/
+Podejście tego rodzaju niosą za sobą ciekawe konsekwencje. Warto zauważyć, że ponieważ z definicji prowadzą one do rozwiązania nie koniecznie najlepszego, to jeśli istnieje metoda porównywania jakości wyników, można także mówić o porównywaniu jakości działania różnych algorytmów w kontekście danego zadania. Mimo, iż wiele z algorytmów heurystycznych ma charakter niedeterministyczny (tj. dla tego samego wejścia mogą wygenerować dwa różne wyjścia) posługując się narzędziami statystyki i probabilistyki można wysnuwać wnioski dt. jakości algorytmów w kontekście problemu.
 }
 \par{
 Wartym wspomnienia w kontekście algorytmów heurystycznych jest sposób ich konstruowania. Często dyktowany jest on intuicją, a podstawy teoretyczne działania tego rodzaju algorytmów bywają badane dużo później \cite{Opara}. Tego rodzaju podejście pozwoliło na stworzenie wielu dobrze sprawujących się algorytmów, lecz zarazem ich analityczne badanie pozwala na dokładniejsze zrozumienie problematyki, uogólnienie lub uproszczenie reguł ich działania \cite{Opara}. /Note: I co z tą myślą? W pracy postaramy się chociaż trochę zwrócić uwagę na teorię?/
@@ -647,6 +649,9 @@ Mechanizm adaptacji współczynników $Cr_i$ w algorytmie \emph{JADE} zbudowany 
 }
 \section{Testy statystyczne}
 \par{
+Wymagane dla niedeterministycznych algorytmów
+}
+\par{
 (Ogólna koncepcja, p-value)
 }
 \subsection{Testy parametryczne}
@@ -666,31 +671,115 @@ Mechanizm adaptacji współczynników $Cr_i$ w algorytmie \emph{JADE} zbudowany 
 (Co to jest i kiedy się stosuje)
 }
 \subsection{Test Wilcoxona}
+\label{Wilcoxon}
 \par{
 (Opis, działanie, ZAŁOŻENIA)
 }
 \par{
 (Wady zalety)
 }
-\section{Testy optymalizacyjne typu \emph{black-box}}
+\section{Testy sprawności typu \emph{black-box} MS: ŹRÓDŁA :(}
+\subsection{Testy sprawności (ang. \emph{benchmark})}
 \par{
-(Czemu służą)
+W rozdziale \ref{Wilcoxon} wskazano metodę sprawdzenia jakości heurystycznego algorytmu rozwiązującego problem optymalizacji w kontekście konkretnego problemu. Ze względu na charakter optymalzowanej funkcji $f$ i kształty przeszukiwanej podprzestrzeni wyznaczanej przez funkcje $g_1,g_2, \ldots g_n$ różne algorytmy zachowują się różnie dla różnych instancji problemu optymalizacyjnego. Z tego powodu ocena algorytmu w konteście konkretnego problemu nie może być traktowana jako rzetelna algorytmu.
 }
 \par{
-(Dlaczego są dobrym odniesieniem)
+Naturalną konsekwencją powyższego twierdzenia, jest próba skonstruowania mechanizmu umożlwiającego ocenę algorytmów niezależnie od konkretnego algorytmu. Testy sprawności (\emph{benchmark}) stanowią pod wieloma względami odpowiedź na to zapotrzebowanie. Ich podstawowym założeniem, jest teza, że właściwą oceną dla algorytmu średnia jakość jego działania dla wszystkich możliwych problemów danej klasy.
+}
+\par{
+Przyjmując to założenie, autorzy testów tego typu starają się dostarczyć reprezentatywnej próbki problemów. Dzięki temu, oceniając średnią jakość algorytmu w kontekście tych problemów, oczekujemy podobnej średniej jakości co w przypadku wszystkich dopuszczalnych problemów. Oznacza to, że średnia jakość algorytmu w kontekście algorytmów z testu, jest estymatorem średniej jakości algorytmu we wszystkich rozważanych problemach. Zgodnie z pierwotnym założeniem, można więc stwierdzić, że jakość algorytmu w kontekście problemów testów sprawnościowych, stanowi estymator jakości algorytmu.
+}
+\par{
+Dodatkowo, należy zauważyć, że ze względu na reprezentatywny charakter problemów zebranych w ramach testów tego typu, można traktować poszczególne funkcje za reprezentantów pewnych klas problemów. Pozwala to wysnuwać wnioski dotyczące zachowania się algorytmów optymalizacyjnych w kontekście problemów posiadających określoną charakterystykę. Taka możliwość bywa bardzo cenna w procesie modyfikacji i strojenia algorytmów.
+}
+\subsection{Testy typu \emph{black-box}}
+\par{
+Określenie \emph{black-box} odnosi się do charakteru realizacji problemów i dostępu do nich. Założeniem, towarzyszącym testom określanym jako \emph{black-box} jest zgodność problemu z punktu widzenia użytkownia z definicją z rozdziału \ref{ProblemDefinition}. Oznacza to, że użytkownik testów nie możliwości skorzystnia przy implementowania algorytmów z innych informacji dt. problemu niż:
+\begin{description}
+\item[definicji funkcji ograniczeń $g_1, g_2, \ldots g_m$]
+\item[wartości funkcji $f$ w zadanym przez użytkownika zbiorze $X_B$] -- gdzie $X_B$ stanowi skończony zbiór zadanych przez algorytm punktów w przestrzeni $X_D$.
+\end{description}
+Tego rodzaju konstrukcja testu pozwala na zakwalifikowanie rozwiązanego przez użytkownika problemu do zdefiniowanego w sekcji \ref{ProblemDefinition} problemu.
+}
+\par{
+W praktyce, ilość informacji udostępnianych przez twórców testów sprawności typu \emph{black-box} prawie zawsze jest większa niż opisana wyżej. Ideą tych testów i warunkiem koniecznym dla uzyskania pewności oferowanych przez nie wyników jest jednak takie wykorzystanie dodatkowych danych, by nie wpłynęły one na przebieg algorytmu. Dodatkowe dane mają stawnowić cenną wskazówkę przy analizie konkretnych rozwiązań lub uproszczenie przy implementacj (np. raportowania).
+\par{
+Klasycznym przykładem tego rodzaju dodatkowej informacji jest podanie przez twórców testu wartości $f_{min}$ czyli wartosci funkcji $f$ w punkcie zgodnym z najlepszym możliwym rozwiązaniem. Wartość ta pomaga skonstruować wykresy oparte o błąd zdefiniowany jako $e(x) = f_{min} - f(x)$. Przewagą tej funkcji nad funkcją $f(x)$ jest przeciwdziedzina $D^{-1} \in [0, \infty]$ która pozwala np. na skonstruowanie wykresu w skali logarytmicznej.
 }
 
-\subsection{CEC-2013}
+\subsection{Warunki dodatkowe testów}
+\par
+{
+Wiele testów sprawności oprócz podstawowych elementów dostarcza pewnych wskazówek sugerujących sposób testowania algorytmów przy ich użyciu. Wskazówki te nie mają wiążącego charakteru i zwykle nie zastosowanie się do nich nie powoduje spadku jakości badań, jednak ich stosowanie niesie ze sobą następujące korzyści:
+\begin{itemize}
+\item Użytkownik zestawu testów zwolniony jest z obowiązku dostrajania, definiowania warunków i analizowania ich wpływu na otrzymywane wyniki.
+\item Użytkownik zestawu testów ma możliwość skonfrontowania swoich wyników z wynikami innych badań wykorzystujących dany zestaw testów -- można oczekiwać, że większość opublikowanych wyników eksperymentów prowadzonych przy użyciu danego testu sprawności będzie przeprowadzona z zastosowaniem warunków dodatkowych.
+\item Użytkownik zwolniony jest z konieczności obsługi części sytuacji trudnych lub atypowych.
+\end{itemize}
+}
+\par{
+Popularnymi warunkami dodaktowymi są \textbf{budżet} i \textbf{ilość wykonań}.
+\begin{description}
+\item[budżet] -- definiuje $X_{B}^{max}$ jako liczbę naturalną taką, że $|X_B| \le X_{B}^{max}$. Wyznaczenie przez zestaw testowy budżetu zwalnia użytkownika z konieczności definiowania deterministycznego warunku stopu algorytmu -- stanowi w tym kontekście warunek awaryjny.
+
+Ponadto zastosowanie budżetu pozwala na nakierowanie badań przy użyciu danego zestawu testów na odwzorowanie realiów konkrentych problemów. Przykładem mogą być testy przy bardzo ograniczonym budżecie, które testują jakość algorytmów przy założeniu braku możliwości dokładnego zbadania przeszukiwanej przestrzeni.
+\item[ilość wykonań] -- dotyczy algorytmów niedeterministycznych i określa jaka ilość prób jaką należy wykonać na danym problemie by statystyki wyznaczane na otrzymanych wynikach były reprezentatywne.
+\end{description}
+}
+ 
+\subsection{\emph{CEC 2013 benchmark}}
 \label{CEC2013chapter}
 \par{
-(Opis benchmarka, funkcje testowe)
+Przykładem testu sprawności typu \emph{black-box} jest zestaw testów opracowany w ramach konferencji \emph{CEC 2013 - IEEE Congress on Evolutionary Computation} -- \emph{CEC2013 bechmark}. Pełen opis benchmarka, funkcji, zakresów przeszukiwania jak i warunków dodatkowych został zawarty w \cite{Li13benchmarkfunctions}.
 }
 \par{
-(Implementacja w R)
-}
-\subsubsection{Ewolucja różnicowa -- pozycja w CEC}
+Zestaw testów \emph{CEC 2013 benchmark} składa się z 28 funkcji podzielonych na 3 grupy:
+\begin{description}
+\item[funkcje jednomodalne] -- funkcje zawierające w przeszukiwanej przestrzeni $X_D$ dokładnie jedno minimum lokalne.
+\item[funkcje wielomodalne] -- funkcje zawierające w przeszukiwanej przestrzeni $X_D$ wiele minimów lokalnych.
+\item[funkcje złożone] -- funkcje utworzone przez złożenie funkcji z dwóch poprzednich grup. Mają one najbardziej złożony charakter i jedno albo wiele minimum lokalne w przestrzeni $X_D$.
+\end{description}
 
-\chapter{Algorytm DEArch}
+Wszystkie funkcje mają publiczną definicję matematyczną, jednak analityczna analiza ich formuły nie jest zgodna z opisem problemu ani z założeniami samego zestawu testów w związku z tym ta ewentualność zostanie zaniedbana.
+}
+\par{
+Wszystkie funkcje dostarczone w ramach testu są dostępne dla wymiarowości przestrzeni: 2, 10, 30, 50. Wymiarowości 10, 30 i 50 są zalecane jako zestaw testowy. Przestrzeń dwuwymiarowa przeznaczona jest do celów testowych i wizualizacyjnych.
+}
+\par{
+Dla wszystkich funkcji zdefiniowano wartość minimum globalnego. Ponadto zdefiniowano, że wartości błędu poniżej $10^{-8}$ nie powinny być rozróżniane i powinny być traktowane jako optimum globalne $\mathbf{x_{best}}$ takie, że $e(\mathbf{x_{best}}) = 0$.
+}
+\par{
+Cechą charakterystyczną tego zestawu testów jest zastosowanie pewnych funkcji w wariantach standardowych jak i odwróconych. Pozwala to na wykrycie na etapie testów preferencji algorytmu dla funkcji, które mają wyróżnioną charakterystykę wzdłuż osi. Wyniki eksperymentów wielu algorytmów sugerują znaczący wpływ takiej preferencji \cite{JADE,SHADE}, która zdaje się nie mieć silnego poparcia w realnych problemach.
+}
+\par{
+W ramach opisu testu \emph{CEC 2013 benchmark} dostarczono szeregu wskazań opisujących sposób zebrania danych. Wyszczególniono:
+\begin{itemize}
+\item budżet -- $X_B^{max} = D \cdot 10'000$
+\item ilość wykonań -- $R = 51$
+\item Punkty charakterystyczne na przestrzeni budżetu dla których należy zbierać informacje o najlepszym dotąd odnalezionym punkcie. Pozwala to na sprawdzenie jak zachowuje się dany algorytm dla zadanego budżetu, ale także dla zdefiniownych mniejszych budżetów -- dla wszysktich badań podąrzających za wytycznymi.
+\end {itemize}
+}
+
+\subsubsection{Ewolucja różnicowa -- pozycja w \emph{CEC 2013 benchmark}}
+\par{
+Wartym odnotowania jest fakt, że w ramach badań w oparciu o testy \emph{CEC 2013 benchmark} opisano wiele algorytmów z klasy algorytmów ewolucji różnicowej. Najlepsze rezultaty opisane w końcowym raporcie z konferencji \cite{CEC2013Comp} uzyskały algorytmy z rodziny \emph{CMAES}, jednak czołowe pozycje uzyskały także algorytmy ewolucji różnicowej. I tak w pierwszej dziesiątce znalazły się:
+\begin{itemize}
+\item \emph{SHADE} \cite{SHADE} -- pozycja 4.
+\item \emph{SMADE} \cite{SMADE} -- pozycja 7.
+\item \emph{TLBSaDE} \cite{TLBSaDE} -- pozycja 8.
+\item \emph{DEcfbLS} \cite{DEcfbLS} -- pozycja 9.
+\end{itemize}
+}
+\par{
+Ponieważ algorytm \emph{SHADE} uzyskał najlepszy wynik pośród algorytmów ewolucji różnicowej, został on wybrany jako baza do zaawansownego algorytmu \emph{aDEArch}.
+}
+
+\subsubsection{Motywacja wyboru zestawu testów}
+\par{
+Zróżnicowane funkcje testowe, precyzyjne wytyczne co do zbierania danych, liczne badania algorytmów ewolucji różnicowej oraz dostępność implementacji w języku wykorzystanym do implementacji sprawiły, że właśnie test \emph{CEC 2013 benchmark} został wybrany jako właściwy do pokazania właściwości badanych w ramach pracy algorytmów.
+}
+
+\chapter{Algorytm \emph{DEArch}}
 \par{
 
 }
@@ -700,6 +789,18 @@ Mechanizm adaptacji współczynników $Cr_i$ w algorytmie \emph{JADE} zbudowany 
 
 Podstawowym celem modyfikacji algorytmu ewolucji różnicowej, było ograniczenie ilości osobników w pokoleniu bez utraty ilości możliwych do wygenerowania wektorów różnicowych. Mając to założenie na względzie rozpatrzono kilka wariantów archiwum punktów.
 \section{Kompletna definicja algorytmu}
+
+\chapter{Algorytm \emph{aDEArch}}
+\par{
+
+}
+\section{Podejścia do wykorzystania archiwum}
+\subsection{Wybór punktów do archiwum}
+\subsection{Podejście do normalizacji}
+
+Podstawowym celem modyfikacji algorytmu ewolucji różnicowej, było ograniczenie ilości osobników w pokoleniu bez utraty ilości możliwych do wygenerowania wektorów różnicowych. Mając to założenie na względzie rozpatrzono kilka wariantów archiwum punktów.
+\section{Kompletna definicja algorytmu}
+
 
 \chapter{Badania}
 \section{Cel}
