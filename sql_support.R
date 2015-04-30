@@ -6,6 +6,7 @@ Connect = function(host_, db, login, pass) {
 }
 
 Disconnect = function(conn) {
+  dbClearResult(dbListResults(conn)[[1]])
   dbDisconnect(conn)
 }
 
@@ -22,6 +23,9 @@ CreateSuite = function(conn, name, description) {
 }
 
 AddSuiteParameter = function(conn, suite_id, key, value_numeric, value_text) {
+  if (is.na(value_numeric))
+    value_numeric = "NULL"
+
   Query = paste0(
     "INSERT INTO `SuiteParameter` (`suite_id`, `name`, `value_numeric`, `value_text`) VALUES ",
     "(", suite_id, ", \"",key,"\", ",value_numeric,", \"", value_text, "\");"
@@ -85,9 +89,9 @@ AddSeries = function(conn, run_id, name, data_string, data_double) {
     data_string = MatrixToString(data_string)
   }
   l = max(length(data_string), length(data_double))
-  if (is.na(data_double))
+  if (length(data_double) > 1 || is.na(data_double))
     data_double = rep(NA, l)
-  if (is.na(data_string))
+  if (length(data_string) > 1 || is.na(data_string))
     data_string = rep("", l)
   if (length(data_string) != length(data_double))
     stop("It shouldn't happen")
@@ -110,7 +114,7 @@ MatrixToString = function(matrix)
   apply(matrix, 1, function(x) { paste(x, collapse=", ") })
 }
 
-test = function() {
+test_sql_support = function() {
   conn = Connect("localhost", "DEvol", "DEvol", "devol")
   id_suite = CreateSuite(conn, name = "TestSuite", description = "Ciekawy suite testowy")
   AddSuiteParameter(conn, id_suite, "dane suita", 17.17, "test_value");

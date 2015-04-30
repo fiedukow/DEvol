@@ -1,5 +1,4 @@
-source("multidim.r")
-library(cec2005benchmark)
+source("operators.R")
 library(cec2013)
 
 C_EXP       = c(crossover_exp,      "exp",      "Standard exponential crossover function."                             )
