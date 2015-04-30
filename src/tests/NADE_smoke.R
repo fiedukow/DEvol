@@ -1,5 +1,5 @@
-source("NADE.R")
-source("named_functions.r")
+source("src/NADE.R")
+source("src/named_functions.r")
 
 smoketest_runExperiment = function()
 {

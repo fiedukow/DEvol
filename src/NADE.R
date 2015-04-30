@@ -1,6 +1,6 @@
 library(parallel)
-source("sql_support.R")
-source("CONST.R")
+source("src/sql_support.R")
+source("src/CONST.R")
 
 de = function(dims, range, pop_size, diff_factor, init, select, crossover,
               cr, qual, generations, diff_size, range_fit = range_fit_mirror,
