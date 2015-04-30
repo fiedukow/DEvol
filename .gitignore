@@ -1,9 +1,6 @@
 experiments.r
 .RData
 .Rhistory
-EXPERIMENTS/*/single_results/*.txt
-EXPERIMENTS/*/single_results/*.png
-EXPERIMENTS/*/single_results/*.html
-EXPERIMENTS/*/single_results/*.r
 Thesis/bibliography
+knowledge/*
 *.dmp
