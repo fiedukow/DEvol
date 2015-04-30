@@ -98,7 +98,7 @@ This thesis also refers to a possiblity and effectiveness of using middle point 
 
 \chapter{Wstęp}
 \par{
-Problem optymalizacji jest jednym z najczęściej pojawiających się w praktycznych zastosowaniach problemów numerycznych. Sama powszechność podstawowego problemu, ale także możliwość sprowadzenia do problemu optymalizacji problemów klasyfikacji, regresji, grupowania czy też określając szerzej -- uczenia maszynowego \cite{SearchingInteligent,SpringerIntroToEvol}, sprawia, że przed algorytmami optymalizacji stawiane są coraz bardziej złożone i wymagające zadania.
+Problem optymalizacji jest jednym z najczęściej pojawiających się w praktycznych zastosowaniach problemów numerycznych. Sama powszechność podstawowego problemu, ale także możliwość sprowadzenia do problemu optymalizacji problemów klasyfikacji, regresji, grupowania czy też określając szerzej -- uczenia maszynowego \cite{SpringerIntroToEvol,SearchingInteligent,ArchivedDE}, sprawia, że przed algorytmami optymalizacji stawiane są coraz bardziej złożone i wymagające zadania.
 }
 \par{
 Stale zwiększający się poziom trudności problemów optymalizacyjnych jak i ciągła niedoskonałość dotychczas wytworzonych metod ich rozwiązywania powoduje duże zainteresowanie badaniami dotyczącymi tworzenia coraz doskonalszych, szybszych i dających lepsze rezultaty algorytmów owe problemy rozwiązujących \cite{StateOfArt}.
@@ -165,10 +165,10 @@ Typową procedurą przy heurystycznych algorytmach optymalizacyjnych jest wykorz
 Celem pracy jest zbadanie zmodyfikowanego klasycznego algorytmu ewolucji różnicowej tak by wektory mutacji różnicowej były budowane w oparciu o osobniki z parametryzowanej liczby ostatnich pokoleń.
 }
 \par{
-Przebadane zostaną możliwe podejścia do wykorzystania tych osobników i wynikające z nich zmiany jakości działania algorytmu. W wyniku tych działań zdefiniowany zostanie możliwie najskuteczniejszy algorytm parametryzowany ilością pokoleń uwzględnianych w oknie historii (zwany dalej \emph{DEArch}).
+Przebadane zostaną możliwe podejścia do wykorzystania tych osobników i wynikające z nich zmiany jakości działania algorytmu. W wyniku tych działań zdefiniowany zostanie możliwie najskuteczniejszy algorytm parametryzowany ilością pokoleń uwzględnianych w oknie historii (zwany dalej \emph{NADE}).
 }
 \par{
-Cel pracy stanowi także zbadanie gotowego algorytmu \emph{DEArch} przy różnych wartościach nowego parametru i ustalenie jak zmiana parametru wpływa na jakość wyników. Otrzymane rezultaty zostaną następnie zestawione z klasycznym algorytmem ewolucji różnicowej a także przedstawione w kontekście zmodyfikowanych wariantów ewolucji różnicowej przebadanych w ramach konferencji CEC2013 (\emph{IEEE Congress on Evolutionary Computation}).
+Cel pracy stanowi także zbadanie gotowego algorytmu \emph{NADE} przy różnych wartościach nowego parametru i ustalenie jak zmiana parametru wpływa na jakość wyników. Otrzymane rezultaty zostaną następnie zestawione z klasycznym algorytmem ewolucji różnicowej a także przedstawione w kontekście zmodyfikowanych wariantów ewolucji różnicowej przebadanych w ramach konferencji CEC2013 (\emph{IEEE Congress on Evolutionary Computation}).
 }
 \par{
 W ramach pracy zostanie także zbadana teza o możliwości poprawy jakości otrzymywanych przez ewolucję różnicą wyników przy ograniczonym budżecie zapytań przy wykorzystaniu punktu środkowego populacji.
@@ -543,6 +543,7 @@ while (j < D) {
 	$z_{i,j}^t$ = $x_{i,j}^t$
 }
 \end{lstlisting}
+Tego rodzaju krzyżowanie powoduje dąrzący (gdy $D \rightarrow \infty$) do wykładniczego rozkład położenia pierwszego elementu wektora pochodzącego z osobnika $\mathbf{x_i^t}$. Rozkład ten nie traktuje wszystkich pozycji w wektorze osobników identycznie, ponieważ dalsze pozycje w wektorze będą rzadziej zastępowane przez wartości z osobników mutantów. W związku z tym stosuje się także wariant, który wybiera ilość elementów ($n_x$) pochodzących z osobnika rodzica zgodnie z opisanym rozkładem a następnie wybiera z równym prawdopodobieństwem $n_x$ elementów wektora, które będą pochodziły z osobnika $\mathbf{x_i^t}$.
 \end{description}
 }
 \subsubsection{Notacja}
@@ -571,7 +572,7 @@ Dla każdego z opisanych schematów istnieją prace opisujące proces adaptacji 
 Opublikowane prace jednoznacznie wskazują, że proces adaptacji znacząco poprawia uzyskiwane w ramach ewolucji różnicowej wyniki. Stanowi to kolejną przesłankę pozwalającą oczekiwać poprawy rezultatów przez wykorzystanie szerszego okna historii.
 }
 \par{
-Dodatkowo należy odnotować, że adaptacyjne algorytmy ewolucyjne otrzymują najlepsze rezultaty w testach typu \emph{black-box} (spośród algorytmów klasy DE) \cite{CEC2013Comp}. Fakt ten staje się przyczynkiem do tego by sprawdzić, czy proponowany algorytm \emph{DEArch} będzie utrzymywał swoją charakterystykę jakości także względem tych modyfikacji.
+Dodatkowo należy odnotować, że adaptacyjne algorytmy ewolucyjne otrzymują najlepsze rezultaty w testach typu \emph{black-box} (spośród algorytmów klasy DE) \cite{CEC2013Comp}. Fakt ten staje się przyczynkiem do tego by sprawdzić, czy proponowany algorytm \emph{NADE} będzie utrzymywał swoją charakterystykę jakości także względem tych modyfikacji.
 }
 
 \subsection{Punkt środkowy populacji}
@@ -601,7 +602,27 @@ Wyniki otrzymane w ramach \cite{Boundary} sugerują, że najlepiej sprawdzają s
 \subsection{Archiwum}
 \label{ArchiveLiterature}
 \par{
-TODO
+W literaturze spotyka się niezliczone próby jawnego lub niejawnego wykorzystania dodatkowego archiwum w algorytmach ewolucji różnicowej. Poniżej opisano podejście do archiwum w kilku pracach, które w jawny sposób powołują się na poprawę jakości działania algorytmu ewolucji różnicowej dzięki zastosowaniu archiwum. Niestety żadna z tych prac nie bada skuteczności archiwum w oderwaniu od innych metod usprawniania algorytmów.
+}
+\subsubsection{Archiwum w ADE}
+\par{
+W pracy \cite{ArchivedDE} opracowano algorytm \emph{ADE} wykorzystujący archiwum mające przechowywać informacje o najlepszych osobnikach we wszystkich następujących po sobie pokoleniach. Archiwum tego rodzaju pełniło w algorytmie dwie funkcje:
+\begin{description}
+\item[Wskaźnika wysycenia konkretnej populacji] -- przyjęto tu założenie, że jeśli najlepszy punkt w populacji nie zmienił się od pewnej definiowalnej ilości pokoleń, należy przyjąć, że obecna populacja nie ma perspektyw na odnalezienie znacząco lepszych punktów. W algorytmie \emph{ADE} był to jeden z warunków wyzwalających adaptację populacji.
+\item[Punktu odniesienia dla adaptacji populacji] -- w algorytmie w wyniku kilku warunków następowała adaptacja popualacji mająca na celu poprawę właściowści eksporacyjnych algorytmu. Adaptacja odbywała się wg. formuły zmieniającej osobniki w populacji \cite{ArchivedDE}:
+\begin{center}
+$x_{i,j,G} = \lambda \times x_{i,Best,A} + (1 - \lambda) \times (x_{i,Best,A} - x_{i,j,G-1})$
+\end{center}
+gdzie $\lambda \sim U[0,1]$ natomiast $x_{i,j,G}$ oznacza wartość $i$ elementu wektora osobnika $j$ w populacji $G$, a $x_{i,Best,A}$ oznacza wartość $i$ elementu wektora najlepszego osobnika w archiwum.
+\end{description}
+}
+\par{
+Poważną wadą samego algorytmu jest wykorzystywanie informacji wykraczających poza te pozyskiwalne z definicji (rozdział \ref{ProblemDefinition}). W szczególności algorytm wykorzystuje trudności opisane w rozdziale \ref{WadyBB} wykorzystując parametr $\epsilon$ a nawet sugerując jego uniwersalną arbitralną wartość $10^{-3}$ -- tego rodzaju podejście przeczy założeniom opisywanego problemu.
+}
+\par{
+Algorytm \emph{ADE} został przez autorów oceniony pozytywnie w kontekście badanych problemów. Wykorzystuje on jednak archiwum w niewielkim stopniu a ponadto nie bada tego zastosowania w odcięciu od pozostałych technik poprawy jakości działania algorytmu. Sama metoda reinicjalizacji oparta o brak poprawy w kolejnych pokoleniach stanowi przykład przeniesienia znanych z innych algorytmów technik na grunt ewolucji różnicowej.
+}
+\par{
 (Odniesienia w literaturze)
 \cite{JADE,SHADE,ClusterArchiveDE,RobustArchiveDE,ArchivedDE}
 }
@@ -678,6 +699,7 @@ Wymagane dla niedeterministycznych algorytmów
 \par{
 (Wady zalety)
 }
+\subsection{Dystrybuanta empiryczna}
 \section{Testy sprawności typu \emph{black-box} MS: ŹRÓDŁA :(}
 \subsection{Testy sprawności (ang. \emph{benchmark})}
 \par{
@@ -726,7 +748,30 @@ Ponadto zastosowanie budżetu pozwala na nakierowanie badań przy użyciu danego
 \item[ilość wykonań] -- dotyczy algorytmów niedeterministycznych i określa jaka ilość prób jaką należy wykonać na danym problemie by statystyki wyznaczane na otrzymanych wynikach były reprezentatywne.
 \end{description}
 }
- 
+
+\subsection{Wady}
+\label{WadyBB}
+\par{
+Podstawowym problemem związanym z testami sprawności typu \emph{black-box} jest niska weryfikowalność wyników otrzymywanych w ramach poszczególnych badań. W szczególności możliwe są następujące uchybienia przy prowadzeniu badań przy użyciu większości testów tego rodzaju:
+\begin{itemize}
+\item Wielokrotne powtarzanie eksperymentów przy użyciu niedeterministycznych algorytmów w celu uzyskania możliwie najlepszego wyniku dla poszczególnych zdań.
+\item Wykorzystanie dodatkowych informacji udostępnionych przez twórców zestawu w konstrukcji algorytmu.
+\item Przekraczanie budżetu.
+\end{itemize}
+Cześć z tych problemów zostało rozwiązanych np. w testach \emph{BBComp} \cite{BBComp}. W ramach konkursu przed konferencją \emph{CEC 2015}, mającego stanowić bazę dla oceny poszczególnych rozwiązań, użytkownicy mają dostęp jedynie do interfejsów umożliwiających wykonywanie operacji zgodnych z założeniami testu \emph{black-box}. Dopuszczalne jest więc tylko zapytanie o wartość funkcji w punkcie. Ponadto do skorzystania z interfejsu wymagane jest indywidualne konto, do którego przypisany jest budżet. Przekroczenie budżetu nie powinno być więc możliwe.
+}
+\par{
+Niestety rozwiązanie zastosowane w \emph{BBComp} ma pewne wady. Po pierwsze wartości uzyskiwane w pojedynczych wykonaniach dla konkretnych problemów są nieodporne na przypadkowe niepowodzenia (lub sukcesy) wynikające ze stochastycznego charakteru badanych algorytmów.
+Po drugie, nadal udostępniana jest informacja pomocnicza w postaci wartości optymalnej dla każdej z dostępnych w benchmarku funkcji. Pondato z punktu widzenia bezpieczeństwa systemu, problemem jest metoda weryfikacji nowych użytkowników (brak weryfikacji) a także sama technologiczna konstrukcja testu pozostawiająca możliwości przekraczania budżetu jak i analizy poszczególnych funkcji.
+}
+\par{
+Poza problemami związanymi z weryfikowalnością, występują jeszcze inne problemy charakterystyczne dla testów sprawności typu \emph{black-box}:
+\begin{description}
+\item[precyzja cyfrowa] -- problem wynikający z binarnego charaketeru reprezentacji i skończoności pamięci maszyn cyfrowych obsługujących testy. Zbiór liczb rzeczywistych w reprezentacji cyfrowej jest skończony a zgodnie z modelem matematycznym powinien mieć liczność $\mathfrak{c}$. Konsekwencją tego faktu jak również typowo stosowanego standardu reprezentacji liczb zmienno przecinkowych IEEE-754 \cite{IEEE754}, jest pewnien spodziewany przedział wartości $\epsilon$ na przeszukiwanej przestrzeni $X_D$, dla którego zmienność badanej funkcji jest pomijalna. Tego rodzaju wnioskowanie nie jest możliwe w oparciu o matematyczny model \ref{Model} a zarazem jest powszechnie wykorzystywane np. w algorytmie \emph{ADE} opisanym w rozdziale \ref{ArchiveLiterature}.
+\item[znany charakter problemów] -- problemy tworzone w ramach testów sprawności, są często sztucznymi funkcjami skonstruowanymi wg. najprostszych dla danych właściwości matematycznych formuł. Pewne elementarne własności charakterystyczne dla tych problemów (dla których nie ma naturalnego wytłumaczenia w modelu matematycznym) mogą być wykorzystane przez algorytmy w celu poprawy jakości ich działania. Walka z tym zjawiskiem powinna być możliwa, ale znacząco utrudnia konstruowanie testów. Pewne próby w tym kierunku poczyniono w ramach testów \emph{CEC 2013 benchmark} opisanychw rozdziale \ref{CEC2013chapter}. Jak pokazują wyniki tych testów, zjawisko to ma wpływ na jakość wyników -- problem ten jest więc rzeczywiście obecny w badaniach.
+\item[przeuczenie] -- TODO + TODO:przed listą jest złe zdanie. Problemy z uniknięciem.
+\end{description}
+}
 \subsection{\emph{CEC 2013 benchmark}}
 \label{CEC2013chapter}
 \par{
@@ -771,7 +816,7 @@ Wartym odnotowania jest fakt, że w ramach badań w oparciu o testy \emph{CEC 20
 \end{itemize}
 }
 \par{
-Ponieważ algorytm \emph{SHADE} uzyskał najlepszy wynik pośród algorytmów ewolucji różnicowej, został on wybrany jako baza do zaawansownego algorytmu \emph{aDEArch}.
+Ponieważ algorytm \emph{SHADE} uzyskał najlepszy wynik pośród algorytmów ewolucji różnicowej, został on wybrany jako baza do zaawansownego algorytmu \emph{aNADE}.
 }
 
 \subsubsection{Motywacja wyboru zestawu testów}
@@ -779,18 +824,46 @@ Ponieważ algorytm \emph{SHADE} uzyskał najlepszy wynik pośród algorytmów ew
 Zróżnicowane funkcje testowe, precyzyjne wytyczne co do zbierania danych, liczne badania algorytmów ewolucji różnicowej oraz dostępność implementacji w języku wykorzystanym do implementacji sprawiły, że właśnie test \emph{CEC 2013 benchmark} został wybrany jako właściwy do pokazania właściwości badanych w ramach pracy algorytmów.
 }
 
-\chapter{Algorytm \emph{DEArch}}
+\chapter{Algorytmy \emph{NADE} i \emph{ANADE}}
+\section{Cele i założenia}
 \par{
-
+Główną ideą stojącą za projektowaniem algorytmu \emph{NADE} (ang. \emph{Normalized Archive Differential Evolution}), było skonstruowanie algorytmu wykorzystującego archiwum punktów odbiegającego w możliwie niewielkim stopniu od typowych wariantów ewolucji różnicowej. Skupiono się tu przedewszystkim na próbie dołączenia archiwum do klasycznego algorytmu \emph{DE}/\emph{rand}/\emph{1}/\emph{bin}.
 }
+\par{
+Tego rodzaju podejście pozwala zbadać użyteczność archiwum w oderwaniu od innych metod poprawy jakości działania algorytmu. Istnieje możliwość, że uzyskane rezultaty będą przynosiły korzyści zanikające w przypadku bardziej wysublimowanych wariantów algorytmu. W związku z tym, w rozdziale \ref{ANADE} zaproponowano algorytm \emph{ANADE} (ang. \emph{Adaptive Normalized Archive Differential Evolution}), czerpiący rozwiąznia dt. adaptacji z algorymtów \emph{SHADE} i \emph{JADE}. W rozdziale \ref{badania}, każdy z zaprojektowanych algorytmów zostnie porównany ze swoim niewykorzystującym archiwum opowiednikiem.
+}
+\section{Uproszczony schemat badań}
+\par{
+W czasie projektowania algorytmu sprawdzenia wymagały pewne tezy dotyczące możliwych dróg rozwoju algorytmu. Ponieważ przeprowadzenie kompletnego schematu badań zestawu testów sprawności \emph{CEC 2013 benchmark} jest czasochłonne, zdecydowano się do celów wstępnych badań zastosować procedurę ustaloną w oparciu o następujące założenia:
+\begin{itemize}
+\item Wykorzystanie wszystkich funkcji testowych $f_1$ do $f_{28}$.
+\item Wykonywanie badań tylko na jednej wymiarowości przestrzeni $D = 30$.
+\item Wykonywanie 25 powtórzeń dla każdej z funkcji testowych (zamiast 51).
+\item Bazowe wartości parametrów DE wg \cite{StateOfArt},
+\begin{itemize}
+\item $F = 0.9$
+\item $Cr = 0.9$
+\item $\mu = 10 \cdot D$
+\end{itemize}
+\item Wykorzystanie testu Wilcoxona na zebranych danych w celu weryfikacji określonych tez. Przyjęto standardowy poziom istotności $0.05$.
+\end{itemize}
+}
+\par{
+W dalszym ciągu tego rozdziału będą prezentowane całościowe lub częściowe wyniki badań uproszczonych w celu uzasadnienia podejmowanych w czasie projektowania algorytmu decyzji. Istniejące ryzyko przeuczenia wynikające z projektowania algorytmu w oparciu o zestaw testów go oceniających. Testy \emph{CEC 2013 benchmark} są jednak traktowane jako reprezentatywne dla wszystkich możliwych problemów. Zarazem decyzje w czasie projektowania algorytmów będą podejmowane wyłącznie w oparciu o jasne przesłanki (tzn. wyraźna przewaga konkretnego wariantu). W związkut z tym, wydaje się, że problem przeuczenia nie powinien mieć wpływu na wynik badań lub też zgodnie z tezą postawioną w rozdziale \ref{WadyBB} uniknięcie tego problemu nie było by możliwe przez użycie innego zestawu testów.
+}
+\section{Algorytm \emph{NADE}}
 \section{Podejścia do wykorzystania archiwum}
+\par{
+Podstawowym celem wykorzystania archiwum w procesie ewolucji różnicowej, było ograniczenie ilości osobników w pokoleniu bez utraty ilości możliwych do wygenerowania wektorów różnicowych.
+}
 \subsection{Wybór punktów do archiwum}
 \subsection{Podejście do normalizacji}
 
-Podstawowym celem modyfikacji algorytmu ewolucji różnicowej, było ograniczenie ilości osobników w pokoleniu bez utraty ilości możliwych do wygenerowania wektorów różnicowych. Mając to założenie na względzie rozpatrzono kilka wariantów archiwum punktów.
+
 \section{Kompletna definicja algorytmu}
 
-\chapter{Algorytm \emph{aDEArch}}
+\section{Algorytm \emph{ANADE}}
+\label{ANADE}
 \par{
 
 }
@@ -803,6 +876,7 @@ Podstawowym celem modyfikacji algorytmu ewolucji różnicowej, było ograniczeni
 
 
 \chapter{Badania}
+\label{badania}
 \section{Cel}
 \section{Plan eksperymentów}
 \section{Dobór parametrów}
@@ -816,7 +890,7 @@ Podstawowym celem modyfikacji algorytmu ewolucji różnicowej, było ograniczeni
 \chapter{Podsumowanie}
 
 
-\bibliographystyle{plplain}
+\bibliographystyle{unsrt}
 \nocite{*}
 \bibliography{bibliography}
 
