@@ -55,6 +55,9 @@ CloseExperiment = function(conn, experiment_id) {
 }
 
 AddExperimentParameter = function(conn, experiment_id, key, value_numeric, value_text) {
+  if (is.na(value_numeric))
+    value_numeric = "NULL"
+
   Query = paste0(
     "INSERT INTO `ExperimentParameter` (`experiment_id`, `name`, `value_numeric`, `value_text`) VALUES ",
     "(", experiment_id, ", \"",key,"\", ",value_numeric,", \"", value_text, "\");"
@@ -89,9 +92,9 @@ AddSeries = function(conn, run_id, name, data_string, data_double) {
     data_string = MatrixToString(data_string)
   }
   l = max(length(data_string), length(data_double))
-  if (length(data_double) > 1 || is.na(data_double))
+  if (length(data_double) <= 1 && is.na(data_double))
     data_double = rep(NA, l)
-  if (length(data_string) > 1 || is.na(data_string))
+  if (length(data_string) <= 1 && is.na(data_string))
     data_string = rep("", l)
   if (length(data_string) != length(data_double))
     stop("It shouldn't happen")

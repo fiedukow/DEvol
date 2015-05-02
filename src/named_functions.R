@@ -1,4 +1,4 @@
-source("operators.R")
+source("src/operators.R")
 library(cec2013)
 
 C_EXP       = c(crossover_exp,      "exp",      "Standard exponential crossover function."                             )
@@ -10,6 +10,7 @@ S_RAND      = c(select_rand,        "rand",     "Standard rand selection functio
 RF_MIRROR   = c(range_fit_mirror,   "mirror",   "Standard function mirroring outranged point back into it."            )
 RF_ROLL     = c(range_fit_roll,     "roll"  ,   "Standard function rolling outranged point to the other side of range.")
 RF_TRUNCATE = c(range_fit_truncate, "truncate", "Standard function putting outrange point to the end of the range."    )
+RF_REINIT   = c(range_fit_reinitialize, "reinit", "")
 
 CEC_2013_1  = c(function(p) { cec2013(1,  p) }, "CEC 2013 #1",  "Sphere function.", -1400 )
 CEC_2013_2  = c(function(p) { cec2013(2,  p) }, "CEC 2013 #2",  "Rotated High Conditioned Elliptic Function.", -1300 )

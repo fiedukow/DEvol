@@ -11,7 +11,7 @@ CREATE TABLE `Experiment` (
     `suite_id` INTEGER NOT NULL,
 	`start_timestamp`	INTEGER NOT NULL,
 	`end_timestamp`	INTEGER NOT NULL,
-    FOREIGN KEY(suite_id) REFERENCES Suite(id)
+    FOREIGN KEY(suite_id) REFERENCES Suite(id) ON DELETE CASCADE
 );
 
 CREATE TABLE `Run` (
@@ -19,7 +19,7 @@ CREATE TABLE `Run` (
 	`experiment_id`	INTEGER NOT NULL,
 	`start_timestamp` 	INTEGER NOT NULL,
 	`end_timestamp`	INTEGER NOT NULL,
-	FOREIGN KEY(experiment_id) REFERENCES Experiment(id)
+	FOREIGN KEY(experiment_id) REFERENCES Experiment(id) ON DELETE CASCADE
 );
 
 CREATE TABLE `Series` (
@@ -30,7 +30,7 @@ CREATE TABLE `Series` (
 	`value_numeric`	DOUBLE,
     `value_text` TEXT,
 	`order`	INTEGER NOT NULL,
-	FOREIGN KEY(run_id) REFERENCES Run(id)
+	FOREIGN KEY(run_id) REFERENCES Run(id) ON DELETE CASCADE
 );
 
 CREATE TABLE `ExperimentParameter` (
@@ -39,7 +39,7 @@ CREATE TABLE `ExperimentParameter` (
 	`value_numeric`	DOUBLE,
 	`value_text`	TEXT NOT NULL,
 	PRIMARY KEY(experiment_id,name),
-	FOREIGN KEY(experiment_id) REFERENCES Experiment(id)
+	FOREIGN KEY(experiment_id) REFERENCES Experiment(id) ON DELETE CASCADE
 );
 
 CREATE TABLE `SuiteParameter` (
@@ -48,7 +48,7 @@ CREATE TABLE `SuiteParameter` (
 	`value_numeric`	DOUBLE,
 	`value_text`	TEXT NOT NULL,
 	PRIMARY KEY(suite_id,name),
-	FOREIGN KEY(suite_id) REFERENCES Suite(id)
+	FOREIGN KEY(suite_id) REFERENCES Suite(id) ON DELETE CASCADE
 );
 
 COMMIT;

@@ -38,12 +38,12 @@ de = function(dims, range, pop_size, diff_factor, init, select, crossover,
 
     ##### DETERMINE GENERATION WIDE VALUES
     mid_point = matrix(colMeans(pop_prev[[1]]), ncol=dims)
-    H_unnorm = t(t(H_norm[[1]]*mean_pop_prev) + as.vector(mid_point))
+    H_unnorm = pop_prev[[1]]#t(t(H_norm[[1]]*mean_pop_prev) + as.vector(mid_point))
 
     ##### SAVING GENERATION DETAILS
-    result$best_values[i] = pop_prev[[2]][1]
+    result$best_values[i] = pop_prev[[2]][1] - best_possible
     result$best_elements = rbind(result$best_elements, pop_prev[[1]][1,])
-    result$mid_values[i] = qual(mid_point)
+    result$mid_values[i] = qual(mid_point) - best_possible
     result$mid_elements = rbind(result$mid_elements, mid_point)
     result$adaptive_diff_factor[i] = diff_factor
 
@@ -58,8 +58,11 @@ de = function(dims, range, pop_size, diff_factor, init, select, crossover,
     }
 
     ##### GENERATING NEW POPULATION
-    pop_next[[1]] = select(pop_prev, pop_size) +
-                    diff_factor * diff_vector(H_unnorm, pop_size) +
+    selected = select(pop_prev, pop_size)
+    vectors = diff_vector(H_unnorm, pop_size, selected)
+
+    pop_next[[1]] = pop_prev[[1]][selected,] +
+                    diff_factor * vectors +
                     rnorm(N_runif, mean = 0, sd = noise_sd)
     pop_next[[1]] = crossover(pop_prev[[1]], pop_next[[1]], cr)
     pop_next_fit = range_fit(pop_next[[1]], range)
@@ -71,9 +74,9 @@ de = function(dims, range, pop_size, diff_factor, init, select, crossover,
     pop_next_fit = pop_prev[[1]]*mod + pop_next_fit*(1-mod)
     pop_next[[2]] = pop_prev[[2]]*mod + pop_next[[2]]*(1-mod)
 
-    improved = which(mod ==0)
-    any_improvement = (sum(1-mod) != 0)
     new_mid_point = matrix(colMeans(pop_next[[1]]), ncol=dims)
+    improved = which(mod == 0)
+    any_improvement = (sum(1-mod) != 0)
 
     ###### UPDATING NORMALIZED ARCHIVE
     mean_pop_next = mean(dist(pop_next[[1]]))
@@ -95,21 +98,6 @@ de = function(dims, range, pop_size, diff_factor, init, select, crossover,
 
     ####### ITS HEAVY SO WE ARE AVOIDING CALCULATING IT AGAIN AT THE BEGINING OF THE LOOP
     mean_pop_prev = mean_pop_next
-
-    ###### DECIDE IF WE WANT TO REINITIALIZE
-    if (FALSE) {
-      last_candidats = matrix()
-      pop_prev = list()
-      pop_next = list()
-      H_norm = list()
-      pop_prev[[1]] = init(pop_size, dims, range)
-      pop_prev[[2]] = qual(pop_prev[[1]])
-      mean_pop_prev = mean(dist(pop_prev[[1]]))
-      col_means = colMeans(pop_prev[[1]])
-      col_means_matrix = matrix(col_means, nrow=pop_size, ncol=dims, byrow=TRUE)
-      H_norm[[1]] = (pop_prev[[1]] - col_means_matrix) / mean_pop_prev
-      N_runif = pop_size*dims
-    }
   }
 
   return(result)
@@ -135,7 +123,7 @@ runRun = function(experiment_id, dims, range, pop_size, diff_factor, init, selec
               range_fit[[1]],
               N_history,
               noise_sd,
-              qual[[4]],
+              best_possible,
               near_enough);
 
   CloseRun(conn, run_id)
@@ -151,10 +139,16 @@ runRun = function(experiment_id, dims, range, pop_size, diff_factor, init, selec
 
 runExperiment = function(suite_id, dims, range, pop_size, diff_factor, init, select,
                          crossover, cr, qual, generations, diff_size, range_fit, N_history = pop_size,
-                         noise_sd = 1, best_possible = NA, near_enough = NA, times = 1) {
+                         noise_sd = 1, near_enough = NA, times = 1) {
   conn = Connect(sql_host, sql_db, sql_user, sql_password)
   experiment_id = OpenExperiment(conn, suite_id)
   AddExperimentParameter(conn, experiment_id, "fitness function", value_numeric = "NULL", value_text = qual[[2]])
+  AddExperimentParameter(conn, experiment_id, "dim",                  dims,        ""                           )
+  AddExperimentParameter(conn, experiment_id, "population size",      pop_size,    ""                           )
+  AddExperimentParameter(conn, experiment_id, "max generations",      generations, ""                           )
+  AddExperimentParameter(conn, experiment_id, "range",                NA,          paste(range, collapse = ", "))
+  AddExperimentParameter(conn, experiment_id, "history size",         N_history,   ""                           )
+
   Disconnect(conn)
 
   runCode = function(id)
@@ -174,7 +168,7 @@ runExperiment = function(suite_id, dims, range, pop_size, diff_factor, init, sel
            range_fit,
            N_history,
            noise_sd,
-           best_possible,
+           qual[[4]],
            near_enough)
   }
   mclapply(1:times, runCode, mc.cores=9)
