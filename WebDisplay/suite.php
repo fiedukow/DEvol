@@ -50,7 +50,7 @@ $query = "SELECT `id` FROM `Experiment` WHERE `suite_id`=".$_GET['id'];
 $res = mysql_query($query);
 ?>
 <table>
-<tr><th>id</th><th>time</th><th>fitness function</th><th>AVG BEST</th><th>SD BEST</th>
+<tr><th>id</th><th>time</th><th>fitness function</th><th>DIM</th><th>AVG BEST</th><th>SD BEST</th>
     <th>AVG MID</th><th>SD MID</th></tr></tr>
 <?php
 while ($exp = mysql_fetch_row($res))
@@ -63,12 +63,13 @@ $info = mysql_fetch_row($rin);
 ?>
 <tr>
 <td><a href="experiment.php?id=<?php echo $info[0]; ?>"><?php echo $info[0]; ?></a></td>
-<td><cite><?php echo date('m/d/Y H:s', $info[3]); ?></cite></td>
+<td><cite><?php echo date('m/d/Y H:s', $info[4]); ?></cite></td>
 <td><?php echo $info[2]; ?></td>
-<td><?php echo $info[5]; ?></td>
-<td><?php echo $info[6]; ?></td>
-<td><?php echo $info[7]; ?></td>
-<td><?php echo $info[8]; ?></td>
+<td><?php echo $info[3]; ?></td>
+<td><?php echo sprintf("%.3E", $info[6]); ?></td>
+<td><?php echo sprintf("%.3E", $info[7]); ?></td>
+<td><?php echo sprintf("%.3E", $info[8]); ?></td>
+<td><?php echo sprintf("%.3E", $info[9]); ?></td>
 </li>
 <?php
 }

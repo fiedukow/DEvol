@@ -71,13 +71,13 @@ while ($params = mysql_fetch_row($res))
 <?php
 }
 ?>
-<tr><td>Start data</td><td><?php echo date('m/d/Y H:i:s', $details[3]); ?></td></tr>
-<tr><td>End data</td><td><?php echo date('m/d/Y H:i:s', $details[4]); ?></td></tr>
-<tr><td>Time taken (s.)</td><td><?php echo ($details[4]-$details[3]); ?></td></tr>
-<tr><td>AVG BEST</td><td><strong><?php echo $details[5]; ?></strong></td></tr>
-<tr><td>SD BEST</td><td><strong><?php echo $details[6]; ?></strong></td></tr>
-<tr><td>AVG MID</td><td><strong><?php echo $details[7]; ?></strong></td></tr>
-<tr><td>SD MID</td><td><strong><?php echo $details[8]; ?></strong></td></tr>
+<tr><td>Start data</td><td><?php echo date('m/d/Y H:i:s', $details[4]); ?></td></tr>
+<tr><td>End data</td><td><?php echo date('m/d/Y H:i:s', $details[5]); ?></td></tr>
+<tr><td>Time taken (s.)</td><td><?php echo ($details[5]-$details[4]); ?></td></tr>
+<tr><td>AVG BEST</td><td><strong><?php echo sprintf("%.3E", $details[6]); ?></strong></td></tr>
+<tr><td>SD BEST</td><td><strong><?php echo sprintf("%.3E", $details[7]); ?></strong></td></tr>
+<tr><td>AVG MID</td><td><strong><?php echo sprintf("%.3E", $details[8]); ?></strong></td></tr>
+<tr><td>SD MID</td><td><strong><?php echo sprintf("%.3E", $details[9]); ?></strong></td></tr>
 </table>
 <?php
 $query =  "SELECT `id` FROM `Run` WHERE `experiment_id`=".$_GET['id'];

@@ -1,5 +1,6 @@
-SELECT ex.`id`, ex.`suite_id`, ep.`value_text`, ex.`start_timestamp`, ex.`end_timestamp`, `avg_best`, `sd_best`, `avg_mid`, `sd_mid` FROM `Experiment` ex
+SELECT ex.`id`, ex.`suite_id`, ep.`value_text`, ep2.`value_numeric`, ex.`start_timestamp`, ex.`end_timestamp`, `avg_best`, `sd_best`, `avg_mid`, `sd_mid` FROM `Experiment` ex
 JOIN `ExperimentParameter` ep ON ep.`experiment_id`=ex.`id`
+JOIN `ExperimentParameter` ep2 ON ep2.`experiment_id`=ex.`id`
 JOIN (
 	SELECT
     ex.`id` as eid, AVG(min_best.`min_best`) as avg_best, STDDEV(min_best.`min_best`) as sd_best
@@ -33,4 +34,4 @@ JOIN
 	WHERE ex.`id`={EX_ID}
 	GROUP BY ex.`id`
 ) bm ON ex.`id` = bm.`eid`
-WHERE ex.`id`={EX_ID} and ep.`name`="fitness function"
+WHERE ex.`id`={EX_ID} and ep.`name`="fitness function" and ep2.`name`="dim"

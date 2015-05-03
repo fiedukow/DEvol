@@ -93,23 +93,18 @@ AddSeries = function(conn, run_id, name, data_string, data_double) {
   }
   l = max(length(data_string), length(data_double))
   if (length(data_double) <= 1 && is.na(data_double))
-    data_double = rep(NA, l)
+    data_double = rep("NULL", l)
   if (length(data_string) <= 1 && is.na(data_string))
     data_string = rep("", l)
   if (length(data_string) != length(data_double))
     stop("It shouldn't happen")
+  i = 1:length(data_double)
 
-  for (i in 1:l)
-  {
-    double = data_double[i]
-    if (is.na(double))
-      double ="NULL"
-    Query = paste0(
-      "INSERT INTO `Series` (`run_id`, `name`, `value_numeric`, `value_text`, `order`) VALUES ",
-      "(", run_id, ", \"", name, "\", ", double, ", \"", data_string[i],"\", ", i, ");"
-    )
-    dbSendQuery(conn, Query)
-  }
+  Query = paste0(
+    "INSERT INTO `Series` (`run_id`, `name`, `value_numeric`, `value_text`, `order`) VALUES ",
+    paste0("(", run_id, ", \"", name, "\", ", data_double, ", \"", data_string,"\", ", i, ")", collapse=",")
+  )
+  dbSendQuery(conn, Query)
 }
 
 MatrixToString = function(matrix)

@@ -129,8 +129,10 @@ runRun = function(experiment_id, dims, range, pop_size, diff_factor, init, selec
   CloseRun(conn, run_id)
 
   #AddSeries(conn, run_id, "adaptive F", NA, result$adaptive_diff_factor)
-  AddSeries(conn, run_id, "best values", result$best_elements, result$best_values)
-  AddSeries(conn, run_id, "mid values", result$mid_elements, result$mid_values)
+  AddSeries(conn, run_id, "best values", NA, result$best_values)
+  AddSeries(conn, run_id, "mid values", NA, result$mid_values)
+  AddSeries(conn, run_id, "final best point", result$best_elements[length(result$best_elements)], NA)
+  AddSeries(conn, run_id, "final mid point", result$mid_elements[length(result$mid_elements)], NA)
 
   Disconnect(conn)
   return(result)
@@ -171,7 +173,7 @@ runExperiment = function(suite_id, dims, range, pop_size, diff_factor, init, sel
            qual[[4]],
            near_enough)
   }
-  mclapply(1:times, runCode, mc.cores=9)
+  mclapply(1:times, runCode, mc.cores=13)
 
   conn = Connect(sql_host, sql_db, sql_user, sql_password)
   CloseExperiment(conn, experiment_id)
