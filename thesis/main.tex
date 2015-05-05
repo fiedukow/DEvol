@@ -454,12 +454,16 @@ Dla uproszczenia zapisu jako $U_\mu$ oznaczono liczbę losową wygenerowaną z p
 \subsection{DE a klasyczne strategie ewolucyjne}
 \par{
 Podstawową różnicą w stosunku do klasycznych strategii ewolucyjnych jest nietypowy schemat mutacji i ścisły dobór par poddawanych krzyżowaniu tak, by zawsze stanowiły one kombinację mutanta i osobnika z populacji  podstawowej.
-Wykorzystuje informacje zawartą populacji.
-Jest zbieżny.
-Eksploracja < Eksploatacja.
-TODO
 }
-
+\par{
+Ponadto, ważnym elementem tego algorytmu jest także fakt, że wykorzystuje on zawartą w populacji informację o uzyskanych dotąd przesłankach na temat kształtu badanej funkcji. W klasycznych algorytmach ewolucyjnych, sposób rozłożenia populacji w przestrzeni determinuje typowo jedynie punkty bazowe dla nowej populacji. W przypadku ewolucji różnicowej, nowe punkty generowane z populacji podlegają wyciągnięciu w kierunkach, w których przeszukiwanie przyniosło lepsze rezultaty. Pozwala to na szybsze poruszanie się populacji w adaptującym się do bieżącego krajobrazu kierunku i prędkości.
+}
+\par{
+Warto także zwrócić uwagę, że algorytmy ewolucji różnicowej mają zwykle bardziej elitarny charakter selekcji niż klasyczne algorytmy ewolucyjne, powoduje to częstszą zbieżność populacji do pojedynczych punktów w przestrzeni a także przyspiesza przejście algorytmu w fazę ekspoatacji. Fakt ten dodatkowo potęguje typowy wybór wartości $F \in [0, 1]$, który powoduje geometryczne zmniejszanie się średniej długości wektora różnicowego wraz z upływem pokoleń, w przypadku przejścia algorytmu w fazę eksploatacji pojedynczego punktu.
+}
+\par{
+Co do zasady algorytmy ewolucji różnicowej stanowią cenny punkt wyjścia dla dalszych rozważań, ponieważ już przy bardzo prostych operatorach pozwalają na uzyskiwanie bardzo dobrych właściwości eksporacyjnych i eksploatacyjnych.
+}
 
 \subsection{Podstawowe warianty ewolucji różnicowej}
 \subsubsection{Ilość par różnicowanych}
@@ -620,11 +624,25 @@ Wyniki otrzymane w ramach \cite{Boundary} sugerują, że najlepiej sprawdzają s
 \par{
 W literaturze spotyka się niezliczone próby jawnego lub niejawnego wykorzystania dodatkowego archiwum w algorytmach ewolucji różnicowej. Poniżej opisano podejście do archiwum w kilku pracach, które w jawny sposób powołują się na poprawę jakości działania algorytmu ewolucji różnicowej dzięki zastosowaniu archiwum. Niestety żadna z tych prac nie bada skuteczności archiwum w oderwaniu od innych metod usprawniania algorytmów.
 }
-\subsubsection{Archiwum w ADE}
+\subsubsection{Archiwum w ADE \cite{ArchivedDE,RobustArchiveDE}}
 \par{
-W pracy \cite{ArchivedDE} opracowano algorytm \emph{ADE} wykorzystujący archiwum mające przechowywać informacje o najlepszych osobnikach we wszystkich następujących po sobie pokoleniach. Archiwum tego rodzaju pełniło w algorytmie dwie funkcje:
+W pracy \cite{ArchivedDE} opracowano algorytm \emph{ADE} (ang. \emph{Archived Differential Evolution}) wykorzystujący archiwum mające przechowywać informacje o najlepszych osobnikach we wszystkich następujących po sobie pokoleniach. Archiwum tego rodzaju pełniło w algorytmie trzy funkcje:
 \begin{description}
 \item[Wskaźnika wysycenia konkretnej populacji] -- przyjęto tu założenie, że jeśli najlepszy punkt w populacji nie zmienił się od pewnej definiowalnej ilości pokoleń, należy przyjąć, że obecna populacja nie ma perspektyw na odnalezienie znacząco lepszych punktów. W algorytmie \emph{ADE} był to jeden z warunków wyzwalających adaptację populacji.
+\item[Wskaźnika zbliżenia się populacji do lokalnego optimum] -- w algorytmie podjęto próbę wykorzystania informacji zawartych w punkcie środkowym populacji. Jednym z warunków wyzwalających adaptację populacji, było bowiem zmniejszenie odległości euklidesowej:
+\begin{equation}
+d = \sqrt{\sum_{i = 1}^{D}(x_{best,i} - x_{mean,i})^2}
+\end{equation}
+gdzie $\mathbf{x_{mean}}$ stanowi punkt środkowy populacji definiowany jako:
+\begin{equation}
+x_{mean,i} = \frac{1}{\mu} \cdot \sum_{j = 1}^{\mu}x_{j,i}
+\end{equation}
+Wspomniany warunek wyrażony jest jako:
+\begin{equation}
+d \le \epsilon
+\end{equation}
+gdzie $\epsilon$ to parametr algorytmu określający graniczną odległość między wspomnianymi punktami.
+Jeśli warunek jest spełniony, następuje adaptacja populacji.
 \item[Punktu odniesienia dla adaptacji populacji] -- w algorytmie w wyniku kilku warunków następowała adaptacja popualacji mająca na celu poprawę właściowści eksporacyjnych algorytmu. Adaptacja odbywała się wg. formuły zmieniającej osobniki w populacji \cite{ArchivedDE}:
 \begin{equation}
 x_{i,j,G} = \lambda \cdot x_{i,Best,A} + (1 - \lambda) \cdot (x_{i,Best,A} - x_{i,j,G-1})
@@ -633,18 +651,33 @@ gdzie $\lambda \sim U[0,1]$ natomiast $x_{i,j,G}$ oznacza wartość $i$ elementu
 \end{description}
 }
 \par{
-Poważną wadą samego algorytmu jest wykorzystywanie informacji wykraczających poza te pozyskiwalne z definicji (rozdział \ref{ProblemDefinition}). W szczególności algorytm wykorzystuje trudności opisane w rozdziale \ref{WadyBB} wykorzystując parametr $\epsilon$ a nawet sugerując jego uniwersalną arbitralną wartość $10^{-3}$ -- tego rodzaju podejście przeczy założeniom opisywanego problemu.
+Poważną wadą samego algorytmu jest wykorzystywanie informacji wykraczających poza te pozyskiwalne z definicji (rozdział \ref{ProblemDefinition}). W szczególności algorytm wykorzystuje trudności opisane w rozdziale \ref{WadyBB} wykorzystując parametr $\epsilon$ a nawet sugerując jego uniwersalną arbitralną wartość $10^{-3}$. Tego rodzaju podejście przeczy założeniom opisywanego problemu.
 }
 \par{
 Algorytm \emph{ADE} został przez autorów oceniony pozytywnie w kontekście badanych problemów. Wykorzystuje on jednak archiwum w niewielkim stopniu a ponadto nie bada tego zastosowania w odcięciu od pozostałych technik poprawy jakości działania algorytmu. Sama metoda reinicjalizacji oparta o brak poprawy w kolejnych pokoleniach stanowi przykład przeniesienia znanych z innych algorytmów technik na grunt ewolucji różnicowej.
 }
+
+\subsubsection{Archiwum w CDDE{\_}Ar \cite{ClusterArchiveDE}}
 \par{
-(Odniesienia w literaturze)
-\cite{JADE,SHADE,ClusterArchiveDE,RobustArchiveDE,ArchivedDE,JADE2}
+Algorytm \emph{CDDE{\_}Ar} operaty jest o idee podzielenia populacji na mniejsze grupy (klastrowanie) przy użyciu algorytmu \emph{k-średnich} \cite{KMeans}. Tego rodzaju grupy, traktowane są oddzielnie i podlegają złożonym procesom adaptacji, usuwania i kreacji opisanych szczegółowo w \cite{ClusterArchiveDE}.
 }
-\par{(Dotychczasowe wnioski)}
+\par{
+Choć modyfikacja ta znacząco odbiega od podstawowego wariantu ewolucji różnicowej \emph{DE}/\emph{rand}/\emph{1}/\emph{bin}, to jednak istotnym z punktu jej widzenie jest wykorzystanie archiwum, w celu selektywnego przechowywania informacji o dobrych jakościowo punktach odnalezionych przez nieistniejące już klastry. W tym podejściu wykorzystuje się znane i dobre jakościowo punkty do wzbogacania nowo tworzonych lub adaptowanych klastrów.
+}
+\par{
+Algorytm \emph{CDDE{\_}Ar}, nie stanowi podstawy dla tej pracy, jednak pokazuje potencjał, drzemiący w historycznych osobnikach, który w podstawowym wariancie ewolucji różnicowej jest zaniedbywany.
+}
+
+\subsubsection{Archiwum w innych algorytmach}
+Wiele innych algorytmów ewolucji różnicowej wdraża lub jest modyfikowana o elementy związane z zarządzanym archiwum. W szczególności klasyczne archiwum rozszerzające ilość elementów, z których generowane są wektory różnicowe, było przedmiotem badań przy algorytmach z rodziny \emph{JADE} \cite{JADE, SHADE, JADE2} opisanych szczegółowo w rozdziale \ref{AdvancedDE}.
+
+\subsubsection{Wnioski z dotychczasowych prac}
+\par{
+Liczność algorytmów ewolucji różnicowej wykorzystujących koncepcję archiwum do różnych celów (w szczególności do generowania wektorów różnicowych), sugeruje, że wykorzystanie archiwum pozytywnie wpływa na działanie algorytmów. Można także zauważyć, że archiwum w algorytmie ewolucji różnicowej, jest cennym źródłem dodatkowych informacji, wspierających adaptację i inne zaawansowne procesy w ich obrębie. Warto zwrócić uwagę, że wspomniane prace traktują archiwum łącznie z innymi koncepcjami poprawy działana algorytmów ewolucji różnicowej. Nie można w związku z tym wysnuwać wniosków na temat niezależności wpływu wykorzystania archiwum od innych technik usprawniania algorytmów. Tego rodzaju badania są jednym z przedmiotów tej pracy.
+}
 
 \subsection{Zaawansowne modyfikacje}
+\label{AdvancedDE}
 \par{
 Do celów pracy wybrano dwie modyfikacje stosujące adaptację paramterów (rozdział \ref{Adaptation}), jak również powiększone okno historii (rozdział \ref{ArchiveLiterature}). Algorytm \emph{SHADE} \cite{SHADE} został wybrany, jako najlepiej sprawdzająca się modyfikacja ewolucji różnicowej \cite{CEC2013Comp}. Algorytm \emph{JADE} \cite{JADE} został wybrany jako pierwowzór \emph{SHADE}, który opiera się o prostsze acz ideologicznie podobne koncepcje. Specyfikę obu algorytmów opisano poniżej:
 }
@@ -825,7 +858,11 @@ Poza problemami związanymi z weryfikowalnością, występują jeszcze inne prob
 \begin{description}
 \item[precyzja cyfrowa] -- problem wynikający z binarnego charaketeru reprezentacji i skończoności pamięci maszyn cyfrowych obsługujących testy. Zbiór liczb rzeczywistych w reprezentacji cyfrowej jest skończony a zgodnie z modelem matematycznym powinien mieć liczność $\mathfrak{c}$. Konsekwencją tego faktu jak również typowo stosowanego standardu reprezentacji liczb zmienno przecinkowych IEEE-754 \cite{IEEE754}, jest pewnien spodziewany przedział wartości $\epsilon$ na przeszukiwanej przestrzeni $X_D$, dla którego zmienność badanej funkcji jest pomijalna. Tego rodzaju wnioskowanie nie jest możliwe w oparciu o matematyczny model \ref{Model} a zarazem jest powszechnie wykorzystywane np. w algorytmie \emph{ADE} opisanym w rozdziale \ref{ArchiveLiterature}.
 \item[znany charakter problemów] -- problemy tworzone w ramach testów sprawności, są często sztucznymi funkcjami skonstruowanymi wg. najprostszych dla danych właściwości matematycznych formuł. Pewne elementarne własności charakterystyczne dla tych problemów (dla których nie ma naturalnego wytłumaczenia w modelu matematycznym) mogą być wykorzystane przez algorytmy w celu poprawy jakości ich działania. Walka z tym zjawiskiem powinna być możliwa, ale znacząco utrudnia konstruowanie testów. Pewne próby w tym kierunku poczyniono w ramach testów \emph{CEC 2013 benchmark} opisanychw rozdziale \ref{CEC2013chapter}. Jak pokazują wyniki tych testów, zjawisko to ma wpływ na jakość wyników -- problem ten jest więc rzeczywiście obecny w badaniach.
-\item[przeuczenie] -- TODO + TODO:przed listą jest złe zdanie. Problemy z uniknięciem.
+\item[przeuczenie] -- Proces tworzenia i modyfikowania algorytmów oparty jest o badanie jak zmiany w algorytmie wpływają na wyniki testów sprawności uzyskiwane przez algorytm. W związku z tym, przy próbie oceny jakości algorytmu przy użyciu tego samego lub podobnego zestawu testów, może występować znany z uczenia maszynowego problem przeuczenia. Choć podejście twórców algorytmów, oparte jest o założenie o reprezentatywności zestawu testów w kontekście wszystkich problemów, to praktyczna nieprawdziwość tego założenia odbija się w błędzie wyników testów sprawności, rozumianych jako estymator jakości algorytmu. Ponieważ w czasie tworzenia algorytmu staramy się maksymalizować jakość algorytmu oceniając ją przez pryzmat obarczonego błędem estymatora, po pierwsze pomijamy błąd estymatora w badaniach, ale co gorsza generujemy algorytm, który najprawdopodobniej będzie w praktyce jakościowo słabszy.
+
+\par{
+Niestety uniknięcie tego problemu jest problematyczne, głównie ze względu na fakt, że większość testów sprawności zbudowana jest w oparciu o podobne funkcje, a zatem wykorzystnie innego zestawu testów do tworzenia i badania algorytmu, prawdopodobnie tylko w niewielkim stopniu zredukuje zaistniały problem. Tezę tę należało by jednak poddać weryfikacji w toku dalszych badań.
+} 
 \end{description}
 }
 \subsection{\emph{CEC 2013 benchmark}}

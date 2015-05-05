@@ -18,7 +18,6 @@ smoketest_runExperiment = function()
   SUITE_NAME = "DE/rand/1/bin"
   SUITE_DESCRIPTION = "Quick DE/rand/1/bin test on CEC 2013 #13."
 
-
   DIFF_FACTOR = 0.5
   INIT = I_UNIF
   SELECT = S_RAND
