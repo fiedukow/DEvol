@@ -12,6 +12,7 @@
 \usepackage{algpseudocode}
 \usepackage{listings}
 \headsep = 30pt
+\usepackage[nottoc,numbib]{tocbibind}
 %\linespread{2}
 
 
@@ -417,9 +418,9 @@ Podsumowując działanie klasycznego algorytmu ewolucji różnicowej można moż
     \ForAll{i $\in$ 1:$\mu$}
         \ForAll{j $\in$ 1:D}
             \If{$Cr < U_u$}
-                \State Z[i][j] = V[i][j]
+                \State Z[i][j] $\gets$ V[i][j]
             \Else
-                \State Z[i][j] = X[i][j]
+                \State Z[i][j] $\gets$ X[i][j]
             \EndIf
         \EndFor
     \EndFor
@@ -429,9 +430,9 @@ Podsumowując działanie klasycznego algorytmu ewolucji różnicowej można moż
 \Function{Selekcja}{Z, X, $\mu$, $f$}
     \ForAll{i $\in$ 1:$\mu$}
         \If{$f($Z$) \le f($X$)$}
-            \State $X_{new}$[i] = Z[i]
+            \State $X_{new}$[i] $\gets$ Z[i]
         \Else
-            \State $X_{new}$[i] = X[i]
+            \State $X_{new}$[i] $\gets$ X[i]
         \EndIf
     \EndFor
     \State \Return $X_{new}$
@@ -535,17 +536,21 @@ Typowo w literaturze spotyka się następujące schematy krzyżowania:
 \begin{description}
 \item[bin] -- podstawowy schemat krzyżowania zgodny z równością \ref{eq:BasicCrossover}.
 \item[exp] -- schemat krzyżowania zamieniający równość \ref{eq:BasicCrossover}, na procedurę:
-\lstset{language=C}
-\begin{lstlisting}[frame=single,mathescape]
-j = 1
-while (r < $Cr$ $\land$ j $\le$ D) {
-	$z_{i,j}^t$ = $v_{i,j}^t$
-	j = j + 1
-}
-while (j < D) {
-	$z_{i,j}^t$ = $x_{i,j}^t$
-}
-\end{lstlisting}
+\begin{algorithm}[H]
+\caption{Schemat krzyżowania \textbf{exp}}
+\label{algorithm:ea}
+\begin{algorithmic}[1]
+\State j $\gets$ 1
+\While{r < $Cr$ $\land$ j $\le$ D}
+	\State $z_{i,j}^t$ $\gets$ $v_{i,j}^t$
+	\State j $\gets$ j + 1
+\EndWhile
+\While{j < D}
+	\State $z_{i,j}^t$ $\gets$ $x_{i,j}^t$
+\EndWhile
+\end{algorithmic}
+\end{algorithm}
+
 Tego rodzaju krzyżowanie powoduje dąrzący (gdy $D \rightarrow \infty$) do wykładniczego rozkład położenia pierwszego elementu wektora pochodzącego z osobnika $\mathbf{x_i^t}$. Rozkład ten nie traktuje wszystkich pozycji w wektorze osobników identycznie, ponieważ dalsze pozycje w wektorze będą rzadziej zastępowane przez wartości z osobników mutantów. W związku z tym stosuje się także wariant, który wybiera ilość elementów ($n_x$) pochodzących z osobnika rodzica zgodnie z opisanym rozkładem a następnie wybiera z równym prawdopodobieństwem $n_x$ elementów wektora, które będą pochodziły z osobnika $\mathbf{x_i^t}$.
 \end{description}
 }
