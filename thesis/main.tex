@@ -285,15 +285,23 @@ W związku z powyższą analogią w ramach algorytmów ewolucyjnych wyróżnia s
 }
 \par{
 Ogólny schemat działania algorytmu ewolucyjnego opiera się o iteracyjną adaptację populacji aż do ustalonego warunku stopu, według następujących kroków:
-\lstset{language=C}
-\begin{lstlisting}[frame=single,mathescape]
-P = Inicjalizacja()
-while (!stop) {
-	P = P $\cup$ Krzyzowanie(DoborDoKrzyzowania(P))
-	P = P $\cup$ Mutacja(DoborDoMutacji(P))
-	P = Selekcja(P)
-}
-\end{lstlisting}
+\begin{algorithm}[H]
+\caption{Podstawowy schemat algorytmów ewolucyjnych}
+\label{algorithm:ea}
+\begin{algorithmic}[1]
+\Function{Ewolucja}{$S$, $U$, $f$}
+\State P $\gets$ $S$
+	\While{!stop}
+		\State C $\gets$ \Call{DoborDoKrzyzowania}{P, $U$, $f$}
+		\State P $\gets$ P $\cup$ \Call{Krzyzowanie}{C, $U$}
+		\State M $\gets$ \Call{DoborDoMutacji}{P, $U$, $f$}
+		\State P $\gets$ P $\cup$ \Call{Mutacja}{M}
+		\State P $\gets$ \Call{Selekcja}{P, $U$, $f$}
+	\EndWhile
+    \State \Return $argmin_{x \in X} f(x)$
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
 }
 \par{
 W tym miejscu warto nadmienić, że choć w powyższym opisie algorytmów ewolucyjnych jest wprost mowa o podziale na genotyp i fenotyp, to na potrzeby zdefiniowanego problemu pojęcie fenotypu będzie wystarczające. Algorytmy opierające się o operacje na zakodowanym genotypie oderwanym od jego semantyki stanowią odrębną gałąź algorytmów ewolucyjnych i są nazywane algorytmami genetycznymi. Algorytmy te, ze względu na specyfikę swojego działania wymagają odpowiedniej reprezentacji danych i odpowiednio dobranych do reprezentacji operatorów. W przypadku rozważanego w pracy problemu optymalizacji, operowanie bezpośrednio na fenotypie ocenianym przez środowisko (a więc wektorach liczb rzeczywistych dla których wyznaczane są wartości funkcji optymalizowanej) ze względu na właściwości i możliwości samych liczb rzeczywistych wydaje się być w zupełności wystarczające. Zagadnienie podziału na genotyp i fenotyp będzie w dalszej części pracy zaniedbane.
@@ -394,17 +402,17 @@ Działanie algorytmu ewolucji różnicowej zdeterminowane jest przez zestaw oper
 \par{
 Podsumowując działanie klasycznego algorytmu ewolucji różnicowej można można posłużyć się poniższym pseudokodem, operującym na wprowadzonych w rozdziałach \ref{Model} i \ref{DEvol_section} symbolach:
 \begin{algorithm}[H]
-\caption{Klasyczny algorytm ewolucji różnicowej - \emph{DE}/\emph{rand}/\emph{1}/\emph{bin}}
-\label{algorithm:ea}
+\caption{Klasyczny algorytm ewolucji różnicowej -- \emph{DE}/\emph{rand}/\emph{1}/\emph{bin}}
+\label{algorithm:de}
 \begin{algorithmic}[1]
 \Function{EwolucjaRoznicowa}{$S$, $U$, $f$, $\mu$, $Cr$, $F$, $\mu$}
-    X = $S$
+    \State X = $S$
     \While{!stop}
 	    \State V $\gets$ \Call{Mutacja}{X, $\mu$, $U$, $F$}
         \State Z $\gets$ \Call{Krzyzowanie}{X, V, $\mu$, $U$, $Cr$}
         \State X $\gets$ \Call{Selekcja}{Z, X, $\mu$, $f$}
     \EndWhile
-    \State \Return $argmax_{x \in X} f(x)$
+    \State \Return $argmin_{x \in X} f(x)$
 \EndFunction
 \State
 \Function{Mutacja}{X, $\mu$, $U$, $F$}
