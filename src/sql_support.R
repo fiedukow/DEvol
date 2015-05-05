@@ -43,7 +43,23 @@ OpenExperiment = function(conn, suite_id) {
 
   Query = "SELECT LAST_INSERT_ID();"
   res = dbSendQuery(conn, Query)
-  dbFetch(res)[1,1]
+  id = dbFetch(res)[1,1]
+
+  ## MANUAL PARTITIONING IS REQUIRED :-(
+  Query = paste0(
+  "CREATE TABLE `", id ,"_Series` (
+    `id`	INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `run_id`	INTEGER NOT NULL,
+    `name`	TEXT NOT NULL,
+    `point`	TEXT,
+    `value_numeric`	DOUBLE,
+    `value_text` TEXT,
+    `order`	INTEGER NOT NULL,
+    FOREIGN KEY(run_id) REFERENCES Run(id) ON DELETE CASCADE
+  );");
+  dbSendQuery(conn, Query)
+
+  return(id)
 }
 
 # end time is set
@@ -86,8 +102,17 @@ CloseRun = function(conn, run_id) {
   dbSendQuery(conn, Query)
 }
 
+ExperimentIdByRunId = function(conn, run_id)
+{
+  Query = paste0("SELECT `experiment_id` FROM `Run` WHERE `id`=",run_id,";")
+  res = dbSendQuery(conn, Query)
+  dbFetch(res)[1,1]
+}
+
 #data_string may be matrix - each row will be stringified
 AddSeries = function(conn, run_id, name, data_string, data_double) {
+  experiment_id = ExperimentIdByRunId(conn, run_id)
+
   if (is.matrix(data_string)) {
     data_string = MatrixToString(data_string)
   }
@@ -101,7 +126,7 @@ AddSeries = function(conn, run_id, name, data_string, data_double) {
   i = 1:length(data_double)
 
   Query = paste0(
-    "INSERT INTO `Series` (`run_id`, `name`, `value_numeric`, `value_text`, `order`) VALUES ",
+    "INSERT INTO `", experiment_id, "_Series` (`run_id`, `name`, `value_numeric`, `value_text`, `order`) VALUES ",
     paste0("(", run_id, ", \"", name, "\", ", data_double, ", \"", data_string,"\", ", i, ")", collapse=",")
   )
   dbSendQuery(conn, Query)

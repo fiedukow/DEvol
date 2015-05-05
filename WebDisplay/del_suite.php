@@ -16,14 +16,27 @@ else if ($_POST['potwierdz']=="tak")
 {
 ?>
 <h1>Usuwam...</h1>
+<pre>
 <?php
 $conn = mysql_connect('localhost', 'DEvol', 'devol');
 mysql_select_db("DEvol");
+
+$query = "SELECT `id` FROM `Experiment` WHERE `suite_id`=".$_GET["id"];
+$res = mysql_query($query);
+while($row = mysql_fetch_row($res))
+{
+  $query = "DROP TABLE `".$row[0]."_Series`;";
+  echo $query."\n";
+  mysql_query($query);
+}
+
+
 $query = "DELETE FROM `Suite` WHERE `id`=".$_GET["id"].";";
-echo $query;
+echo $query."\n";
 mysql_query($query);
 mysql_close($conn);
 ?>
+</pre>
 <h1>Już!</h1>
 <?php
 }

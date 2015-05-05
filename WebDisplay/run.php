@@ -5,15 +5,19 @@ if (!isset($_GET['id']))
 $conn = mysql_connect('localhost', 'DEvol', 'devol');
 mysql_select_db("DEvol");
 
+$query = "SELECT `experiment_id` FROM `Run` WHERE `id`=".$_GET['id'];
+$res = mysql_query($query);
+$id_ex = mysql_fetch_row($res)[0];
+
 $query = "SELECT `id`, `start_timestamp`, `end_timestamp` FROM `Run` WHERE `id`=".$_GET['id'];
 $res = mysql_query($query);
 $details = mysql_fetch_row($res);
 
-$query =  "SELECT MIN(`value_numeric`) FROM `Series` WHERE `run_id`=".$_GET["id"]." AND `name`=\"best values\"";
+$query =  "SELECT MIN(`value_numeric`) FROM `".$id_ex."_Series` WHERE `run_id`=".$_GET["id"]." AND `name`=\"best values\"";
 $res = mysql_query($query);
 $best_val = mysql_fetch_row($res);
 
-$query =  "SELECT MIN(`value_numeric`) FROM `Series` WHERE `run_id`=".$_GET["id"]." AND `name`=\"mid values\"";
+$query =  "SELECT MIN(`value_numeric`) FROM `".$id_ex."_Series` WHERE `run_id`=".$_GET["id"]." AND `name`=\"mid values\"";
 $res = mysql_query($query);
 $best_mid_val = mysql_fetch_row($res);
 ?>
