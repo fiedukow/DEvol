@@ -9,6 +9,7 @@
 \usepackage{amsthm}
 \usepackage{amsfonts}
 \usepackage{algorithm}
+\usepackage{algpseudocode}
 \usepackage{listings}
 \headsep = 30pt
 %\linespread{2}
@@ -343,9 +344,9 @@ Zgodnie z tą zasadą schemat ewolucyjny w populacji o indeksie ${t}$ -- $\mathb
 \end{equation}
 
 Gdzie $F$ to rzeczywistoliczbowy współczynnik skalujący najczęściej należący do przedziału $[0, 1]$. Literatura \cite{SpringerIntroToEvol} podaje również że w podstawowym wariancie ewolucji różnicowej zachodzi:
-\begin{center}
- $\mathbf{x_1^{t}} \neq \mathbf{r_1} \neq \mathbf{r_3} \neq \mathbf{r_3}$
-\end{center}
+\begin{equation}
+\mathbf{x_1^{t}} \neq \mathbf{r_1} \neq \mathbf{r_3} \neq \mathbf{r_3}
+\end{equation}
 nie jest to jednak warunek wymagany dla każdego algorytmu tej klasy.
 
 
@@ -370,12 +371,12 @@ Wartym odnotowania jest konieczność zapewnienia by do każdego osobnika dzieck
 
 		\item[Selekcja]:\\
 Ostatnim elementem podstawowej strategii ewolucyjnej dla algorytmów ewolucji różnicowej jest wybór osobników spośród par $(\mathbf{x_i^{t}}, \mathbf{z_i^{t}})$. Wybór ten w typowym przypadku dokonywany jest wg. następującej formuły:
-$$
+\begin{equation}
 \mathbf{x_{i}^{t+1}} = \left\{ \begin{array}{ll}
 \mathbf{v_{i}^{t}} & \textrm{gdy $f(v_i^t) \le f(x_i^t)$}\\
 \mathbf{x_{i}^{t}} & \textrm{w przeciwnym wypadku}\\
 \end{array} \right.
-$$
+\end{equation}
 Tego rodzaju podejście stanowi o elitarności wyboru osobników do kolejnych pokoleń, co powoduje zwiększenie możliwości eksploatacyjnych algorytmu kosztem jego możliwości eksploracyjnych.
 \end{description}
 }
@@ -391,50 +392,52 @@ Działanie algorytmu ewolucji różnicowej zdeterminowane jest przez zestaw oper
 
 \par{
 Podsumowując działanie klasycznego algorytmu ewolucji różnicowej można można posłużyć się poniższym pseudokodem, operującym na wprowadzonych w rozdziałach \ref{Model} i \ref{DEvol_section} symbolach:
-\lstset{language=C}
-\begin{lstlisting}[frame=single,mathescape]
-EwolucjaRoznicowa($S$, $U$, $f$, $\mu$, $Cr$, $F$, $\mu$)
-{
+\begin{algorithm}[H]
+\caption{Klasyczny algorytm ewolucji różnicowej - \emph{DE}/\emph{rand}/\emph{1}/\emph{bin}}
+\label{algorithm:ea}
+\begin{algorithmic}[1]
+\Function{EwolucjaRoznicowa}{$S$, $U$, $f$, $\mu$, $Cr$, $F$, $\mu$}
     X = $S$
-    while (!stop) {
-        V = Mutacja(X, $\mu$, $U$, $F$)
-        Z = Krzyzowanie(X, V, $\mu$, $U$, $Cr$)
-        X = Selekcja(Z, X, $\mu$, $f$)
-    }
-    return $argmax_{x \in X} f(x)$
-}
-
-Mutacja(X, $\mu$, $U$, $F$)
-{
-    for (i $\in$ 1:$\mu$) {
-        V[i] = X[$U_\mu$] + $F \cdot $(X[$U_\mu$] - X[$U_\mu$])
-    }
-    return V
-}
-
-Krzyzowanie(X, V, $\mu$, $U$, $Cr$)
-{
-    for (i $\in$ 1:$\mu$) {
-        for (j $\in$ 1:D) {
-            if ($Cr < U_u$)
-                Z[i][j] = V[i][j]
-            else
-                Z[i][j] = X[i][j]
-        }
-    }
-    return Z
-}
-
-Selekcja(Z, X, $\mu$, $f$) {
-    for (i $\in$ 1:$\mu$) {
-        if ($f($Z$) \le f($X$)$)
-            $X_{new}$[i] = Z[i]
-        else
-            $X_{new}$[i] = X[i]
-    }
-    return $X_{new}$
-}
-\end{lstlisting}
+    \While{!stop}
+	    \State V $\gets$ \Call{Mutacja}{X, $\mu$, $U$, $F$}
+        \State Z $\gets$ \Call{Krzyzowanie}{X, V, $\mu$, $U$, $Cr$}
+        \State X $\gets$ \Call{Selekcja}{Z, X, $\mu$, $f$}
+    \EndWhile
+    \State \Return $argmax_{x \in X} f(x)$
+\EndFunction
+\State
+\Function{Mutacja}{X, $\mu$, $U$, $F$}
+    \ForAll{i $\in$ 1:$\mu$}
+    	\State V[i] $\gets$ X[$U_\mu$] + $F \cdot $(X[$U_\mu$] - X[$U_\mu$])
+    \EndFor
+    \State \Return V
+\EndFunction
+\State
+\Function{Krzyzowanie}{X, V, $\mu$, $U$, $Cr$}
+    \ForAll{i $\in$ 1:$\mu$}
+        \ForAll{j $\in$ 1:D}
+            \If{$Cr < U_u$}
+                \State Z[i][j] = V[i][j]
+            \Else
+                \State Z[i][j] = X[i][j]
+            \EndIf
+        \EndFor
+    \EndFor
+    \State \Return return Z
+\EndFunction
+\State
+\Function{Selekcja}{Z, X, $\mu$, $f$}
+    \ForAll{i $\in$ 1:$\mu$}
+        \If{$f($Z$) \le f($X$)$}
+            \State $X_{new}$[i] = Z[i]
+        \Else
+            \State $X_{new}$[i] = X[i]
+        \EndIf
+    \EndFor
+    \State \Return $X_{new}$
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
 
 Dla uproszczenia zapisu jako $U_\mu$ oznaczono liczbę losową wygenerowaną z przestrzeni $U$, z równym prawdopodobieństwem ze zbioru $[1, \mu] \cap \mathbb{N}$. Symbolem $U_u$ oznaczono natomiast liczbę losową wygenerowaną z przestrzeni $U$ z rozkładem $U(0,1)$.
 }
@@ -453,13 +456,13 @@ TODO
 \subsubsection{Ilość par różnicowanych}
 \par{
 Opisany wyżej standardowy schemat ewolucji różnicowej, jest wersją podstawową, której zachowanie można na wiele sposobów zmodyfikować, pozostając nadal w tej klasie algorytmów. Podstawowa różnica jaką mogą charakteryzować się poszczególne instancje DE, to ilość par wykorzystywanych do mutacji różnicowej. W ewolucji różnicowej uogólnionej ze względu na ilość różnicowanych par, krok mutacji różnicowej (\ref{eq:DiffMutation}) zostaje zamieniony na \cite{PracticalInsights}:
-\begin{center}
- $\mathbf{v_i^{t}} = \mathbf{r_1} + \sum_{d = 1}^D F_d \cdot (\mathbf{r_{j,1}} - \mathbf{r_{j,2}})$
-\end{center}
+\begin{equation}
+\mathbf{v_i^{t}} = \mathbf{r_1} + \sum_{d = 1}^D F_d \cdot (\mathbf{r_{j,1}} - \mathbf{r_{j,2}})
+\end{equation}
 gdzie jako $D$ oznaczono ilość elementów poddawanych mutacji różnicowej.
 }
 \par{
-W praktyce, najczęściej stosuje się $D = 1$ lub $D = 2 i F_1 = F_2$, ponieważ nie znaleziono przesłanek by dalsze zwiększenie wartości $D$ powodowało poprawę jakości otrzymywanych przy użyciu algorytmu wyników \cite{PracticalInsights}.
+W praktyce, najczęściej stosuje się $D = 1$ lub $D = 2$ i $F_1 = F_2$, ponieważ nie znaleziono przesłanek by dalsze zwiększenie wartości $D$ powodowało poprawę jakości otrzymywanych przy użyciu algorytmu wyników \cite{PracticalInsights}.
 \subsubsection{Schemat mutacji}
 \par{
 Najistotniejszą z punktu widzenia charakterystyki DE możliwością zmodyfikowania zachowania algorytmu jest możliwość, zamiany schematu mutacji. Podstawowy schemat mutacji (\emph{rand}) zakłada losowanie osobników $\mathbf{r_1}, \mathbf{r_2}, \mathbf{r_3}$ i postępowanie wg schematu \ref{eq:DiffMutation}. W ramach licznych badań powstała jednak znaczna ilość wariantów bardziej wysublimowanych. Najpopularniejsze w literaturze i najistotniejsze ze względu na zawartość pracy schematy mutacji to:
@@ -467,24 +470,24 @@ Najistotniejszą z punktu widzenia charakterystyki DE możliwością zmodyfikowa
 
 \item[rand] \cite{RainerStorn,SpringerIntroToEvol} -- wariant podstawowy
 \item[best] \cite{PracticalInsights} -- ten schemat zakłada zmianę schematu \ref{eq:DiffMutation} na:
-\begin{center}
- $\mathbf{v_i^{t}} = \mathbf{x_{best}^t} + F \cdot (\mathbf{r_{1}} - \mathbf{r_{2}})$
-\end{center}
+\begin{equation}
+\mathbf{v_i^{t}} = \mathbf{x_{best}^t} + F \cdot (\mathbf{r_{1}} - \mathbf{r_{2}})
+\end{equation}
 gdzie $\mathbf{x_{best}^t}$ to osobnik z populacji $t$, który uzyskał najlepszy wynik oceny funkcją $f$. Schemat ten, promuje poszukiwanie rozwiązania wokół najlepszego dotychczas znalezionego osobnika, wedle rozrzutu bieżącej populacji. Pozwala to na adaptacyjne skupienie się populacji wokół lokalnego optimum i eksploatowanie jego możliwości, kosztem możliwości eksploracyjnych algorytmu.
 \item[mid] \cite{DEmid} -- ten schemat zakłada zmianę schematu \ref{eq:DiffMutation} na:
-\begin{center}
- $\mathbf{v_i^{t}} = \mathbf{x_{mid}^t} + F \cdot (\mathbf{r_{1}} - \mathbf{r_{2}})$
-\end{center}
+\begin{equation}
+\mathbf{v_i^{t}} = \mathbf{x_{mid}^t} + F \cdot (\mathbf{r_{1}} - \mathbf{r_{2}})
+\end{equation}
 gdzie $\mathbf{x_{mid}^t}$ to punkt środkowy populacji $t$ zdefiniowany jako:
-\begin{center}
-$x_{mid,j}^t = \frac{1}{n}\sum_{i=1}^n{x_{i,j}}$
-\end{center}
+\begin{equation}
+x_{mid,j}^t = \frac{1}{n}\sum_{i=1}^n{x_{i,j}}
+\end{equation}
 gdzie $n$ to wielkość populacji. Schemat ten został opracowany niedawno i czerpie on swoją inspirację z podejrzenia o informacji niesionej przez środek populacji. Koncepcja ta zostanie rozwinięta w rozdziale \ref{MidPoint}.
 
 \item[current-to-rand] \cite{PracticalInsights} -- ten schemat zakłada zmianę schematu \ref{eq:DiffMutation} na:
-\begin{center}
- $\mathbf{v_i^{t}} = K \cdot \mathbf{x_i^t} + (1 - K) \cdot \mathbf{r_{1}} + F \cdot (\mathbf{r_{2}} - \mathbf{r_{3}})$ \
-\end{center}
+\begin{equation}
+ \mathbf{v_i^{t}} = K \cdot \mathbf{x_i^t} + (1 - K) \cdot \mathbf{r_{1}} + F \cdot (\mathbf{r_{2}} - \mathbf{r_{3}})
+\end{equation}
 W tym schemacie do standardowego schematu \emph{rand} dołącza się element wiążący mutanta ze sparowanym z nim osobnikiem z populacji podstawowej $\mathbf{X}$. Wykorzystuje się w tym celu zmienną $K \in [0, 1]$, która stanowi wagę dla osobnika z populacji podstawowej $\mathbf{x_i^t}$. W praktyce oznacza to, że mutant $\mathbf{v_i^t}$ powstaje przez przesunięcie punktu leżącego między $\mathbf{x_i^t}$ a losowo wybranym punktem z populacji $\mathbf{r_1}$ o przeskalowany współczynnikiem $F$ wektor między dwoma losowymi osobnikami z populacji (Rysunek \ref{current-to-rand-img}).
 
 %%%%% Rysunek: current-to-rand
@@ -496,24 +499,24 @@ W tym schemacie do standardowego schematu \emph{rand} dołącza się element wi�
 
 
 \item[current-to-best] \cite{PracticalInsights} -- ten schemat zakłada zmianę schematu \ref{eq:DiffMutation} na:
-\begin{center}
- $\mathbf{v_i^{t}} = K \cdot \mathbf{x_i^t} + (1 - K) \cdot \mathbf{x_{best}^t} + F \cdot (\mathbf{r_{1}} - \mathbf{r_{2}})$
-\end{center}
+\begin{equation}
+\mathbf{v_i^{t}} = K \cdot \mathbf{x_i^t} + (1 - K) \cdot \mathbf{x_{best}^t} + F \cdot (\mathbf{r_{1}} - \mathbf{r_{2}})
+\end{equation}
 Schemat ten jest analogiczny do schematu \emph{current-to-rand}, jednak oparty o przesłankę związaną z najlepszym punktem populacji. Procedura ta zakłada przesuwanie wygenerowanym wektorem punktu leżącego między odpowiadającemu danemu mutantowi osobnikiem z populacji podstawowej a punktem o najlepszej dotąd wartości funkcji optymalizowanej.
 
 
 \item[rand-to-best] \cite{PracticalInsights} -- ten schemat zakłada zmianę schematu \ref{eq:DiffMutation} na:
-\begin{center}
- $\mathbf{v_i^{t}} = K \cdot \mathbf{x_{best}^t} + (1 - K) \cdot \mathbf{r_1} + F \cdot (\mathbf{r_{2}} - \mathbf{r_{3}})$
-\end{center}
+\begin{equation}
+\mathbf{v_i^{t}} = K \cdot \mathbf{x_{best}^t} + (1 - K) \cdot \mathbf{r_1} + F \cdot (\mathbf{r_{2}} - \mathbf{r_{3}})
+\end{equation}
 Schemat ten, podobnie jak dwa poprzednie, opiera się o przypuszczenie, że istnieje możliwość poprawienia skuteczności algorytmu przez zwiększenie rozrzutu punktów początkowych w przestrzeni przeszukiwań. W tym jednak wypadku, mamy do czynienia z połączeniem koncepcji znanych ze schematów \emph{rand} i \emph{best} w celu (w miarę możliwości) uzyskania najlepszych cech obu z nich. Warunki eksploracyjne tego schematu są poprawione względem schematu \emph{best}, ze względu na możliwość odciągania punktów od lokalnego optimum przez osobniki znajdujące się w okolicy innego optimum. Zarazem, w przypadku dotarcia przez algorytm do fazy czysto eksploatacyjnej (skupienie wokół jednego minimum całej populacji), możliwości eksploatacyjne schematu \emph{best} zostają zachowane.
 
 \item[current-to-pbest] \cite{JADE} -- ten schemat zakłada zmianę schematu \ref{eq:DiffMutation} na:
 
-\begin{center}
- $\mathbf{v_i^{t}} = \mathbf{x_i^t} + F \cdot (\mathbf{x_{r_{pbest}}^t} - x_i^t) + F \cdot (\mathbf{r_1} - \mathbf{r_{2}})$
-\end{center}
-gdzie $\mathbf{x_{r_{pbest}}^t}$ to osobnik wybrany losowo spośród $p \cdot n$ osobników o najniższej wartości funkcji optymalizowanej, $p \in (0,1]$. W niektórych pracach \cite{SHADE} proponowane jest dolne ograniczenie wartości $p$ jako $p_{min} = \frac{2}{n}$, co oznacza, że osobnik $\mathbf{x_{r_{pbest}}^t}$ jest zawsze losowany spośród co najmniej dwóch najlepszych osobników.
+\begin{equation}
+\mathbf{v_i^{t}} = \mathbf{x_i^t} + F \cdot (\mathbf{x_{r_{pbest}}^t} - x_i^t) + F \cdot (\mathbf{r_1} - \mathbf{r_{2}})
+\end{equation}
+gdzie $\mathbf{x_{r_{pbest}}^t}$ to osobnik wybrany losowo spośród $p \cdot n$ osobników o najniższej wartości funkcji optymalizowanej, $p \in (0,1]$. W niektórych pracach \cite{SHADE} proponowane jest dolne ograniczenie wartości $p$ jako $p_{min} = \frac{2}{\mu}$, co oznacza, że osobnik $\mathbf{x_{r_{pbest}}^t}$ jest zawsze losowany spośród co najmniej dwóch najlepszych osobników.
 
 Rozwiązanie to ma za zadanie dołączyć do zalet schematu \emph{current-to-best} dodatkowe rozrzucenie osobników w przeszukiwanej przestrzeni i osłabienie siły przyciągania jednego najmocniejszego osobnika, a więc zmniejszenie elitaryzmu całego algorytmu.
 
@@ -610,9 +613,9 @@ W pracy \cite{ArchivedDE} opracowano algorytm \emph{ADE} wykorzystujący archiwu
 \begin{description}
 \item[Wskaźnika wysycenia konkretnej populacji] -- przyjęto tu założenie, że jeśli najlepszy punkt w populacji nie zmienił się od pewnej definiowalnej ilości pokoleń, należy przyjąć, że obecna populacja nie ma perspektyw na odnalezienie znacząco lepszych punktów. W algorytmie \emph{ADE} był to jeden z warunków wyzwalających adaptację populacji.
 \item[Punktu odniesienia dla adaptacji populacji] -- w algorytmie w wyniku kilku warunków następowała adaptacja popualacji mająca na celu poprawę właściowści eksporacyjnych algorytmu. Adaptacja odbywała się wg. formuły zmieniającej osobniki w populacji \cite{ArchivedDE}:
-\begin{center}
-$x_{i,j,G} = \lambda \times x_{i,Best,A} + (1 - \lambda) \times (x_{i,Best,A} - x_{i,j,G-1})$
-\end{center}
+\begin{equation}
+x_{i,j,G} = \lambda \cdot x_{i,Best,A} + (1 - \lambda) \cdot (x_{i,Best,A} - x_{i,j,G-1})
+\end{equation}
 gdzie $\lambda \sim U[0,1]$ natomiast $x_{i,j,G}$ oznacza wartość $i$ elementu wektora osobnika $j$ w populacji $G$, a $x_{i,Best,A}$ oznacza wartość $i$ elementu wektora najlepszego osobnika w archiwum.
 \end{description}
 }
@@ -624,7 +627,7 @@ Algorytm \emph{ADE} został przez autorów oceniony pozytywnie w kontekście bad
 }
 \par{
 (Odniesienia w literaturze)
-\cite{JADE,SHADE,ClusterArchiveDE,RobustArchiveDE,ArchivedDE}
+\cite{JADE,SHADE,ClusterArchiveDE,RobustArchiveDE,ArchivedDE,JADE2}
 }
 \par{(Dotychczasowe wnioski)}
 
@@ -633,14 +636,14 @@ Algorytm \emph{ADE} został przez autorów oceniony pozytywnie w kontekście bad
 Do celów pracy wybrano dwie modyfikacje stosujące adaptację paramterów (rozdział \ref{Adaptation}), jak również powiększone okno historii (rozdział \ref{ArchiveLiterature}). Algorytm \emph{SHADE} \cite{SHADE} został wybrany, jako najlepiej sprawdzająca się modyfikacja ewolucji różnicowej \cite{CEC2013Comp}. Algorytm \emph{JADE} \cite{JADE} został wybrany jako pierwowzór \emph{SHADE}, który opiera się o prostsze acz ideologicznie podobne koncepcje. Specyfikę obu algorytmów opisano poniżej:
 }
 \begin{description}
-\item[JADE] \cite{JADE} -- algorytm \emph{JADE} jest algorytmem ewolucji różnicowej, wykorzystującym schemat mutacji \emph{current-to-pbest} (zalecane $p \in [0.05, 0.2]$). Algorytm cechuje także indywidualna wartość współczynnika $F$ oraz $Cr$ dla każdego mutowanego i krzyżowanego osobnika w każdej kolejnej iteracji (oznaczenie $F_i^t$, $Cr_i^t$ lub po prostu $F_i$, $Cr_i$). Taka mnogość prób wykorzystywana jest, do adaptacji tych współczynników. Wartości tych współczynników zmieniane są na podstawie sukcesów bądź porażek przy stosowaniu ich konkretnych wartości. Ponadto, algorytm ten wykorzystuje archiwum punktów do generowania wektorów różnicowych. Stanowi więc on dalekie rozszerzenie podstawowej idei ewolucji różnicowej. Poniżej opisano kluczowe modyfikacje względem \emph{DE/rand/1/bin} występujące w algorytmie.
+\item[JADE] \cite{JADE} -- algorytm \emph{JADE} jest algorytmem ewolucji różnicowej, wykorzystującym schemat mutacji \emph{current-to-pbest} (zalecane $p \in [0.05, 0.2]$). Algorytm cechuje także indywidualna wartość współczynnika $F$ oraz $Cr$ dla każdego mutowanego i krzyżowanego osobnika w każdej kolejnej iteracji (oznaczenie $F_i^t$, $Cr_i^t$ lub po prostu $F_i$, $Cr_i$). Taka mnogość prób wykorzystywana jest, do adaptacji tych współczynników. Wartości współczynników zmieniane są na podstawie sukcesów bądź porażek przy stosowaniu ich konkretnych wartości. Ponadto, algorytm ten wykorzystuje archiwum punktów do generowania wektorów różnicowych. Stanowi więc on dalekie rozszerzenie podstawowej idei ewolucji różnicowej. Poniżej opisano kluczowe modyfikacje względem \emph{DE/rand/1/bin} występujące w algorytmie.
 \subsubsection{Archiwum}
 \par{
 W algorytmie \emph{JADE} zastosowano archiwum o wielkości dwóch populacji -- w postaci populacji bieżącej $\mathbf{X}$ i archiwum $\mathbf{A}$. Do archiwum trafiają punkty z populacji $\mathbf{X}$ zastąpione przez osobniki dzieci z populacji $\mathbf{Z}$. Ograniczenie wielkości archiwum $|A| \le \mu$ jest wymuszane na końcu każdej iteracji algorytmu, przez losowe usuwanie osobników z archiwum -- aż do uzyskania jego porządanej wielkości. Archiwum wykorzystywane jest w połączeniu z bieżącą populacją $\mathbf{X}$ wyłącznie do generowania wektorów różnicowych.
 }
 \subsubsection{Adaptacja $F_i$}
 \par{
-Mechanizm adaptacji współczynników $F_i$ opiera się o generowanie losowych wartości wokół zadoptowanej wartości $F_{mid}$ z rozkładem $cauchy(F_{mid}, 0.1)$ z ograniczeniem wartości $F_i \in [0, 1]$. Dla wartości poniżej tego zakresu wartość $F_i$ jest ponownie generowana. Dla wartości powyżej tego zakresu przyjmowane jest $F_i = 1$.
+Mechanizm adaptacji współczynników $F_i$ opiera się o generowanie losowych wartości wokół zadoptowanej wartości $F_{mid}$ z rozkładem $F \sim Cauchy(F_{mid}, 0.1)$ z ograniczeniem wartości $F_i \in [0, 1]$. Dla wartości poniżej tego zakresu wartość $F_i$ jest ponownie generowana. Dla wartości powyżej tego zakresu przyjmowane jest $F_i = 1$.
 }
 \par{
 Model adaptacji wymaga wprowadzenia pojęcia sukcesu.
@@ -652,15 +655,55 @@ Sukcesem próby $i$ w iteracji $t$ nazywamy sytuację, gdy $\mathbf{x_i^{t+1} = 
 Oznaczmy także jako $S^t$ zbiór prób z iteracji $t$, które zakończyły się sukcesem.
 }
 \par{
-TODO: TO NIE JEST ŚREDNIA ARYTMETYCZNA TYLKO LEHMERA!
-Wartość $F_{mid}$ inicjalizowna jest przez wartość $0.5$. W kolejnych pokoleniach jest ona zmieniana na średnią ważoną $F_{mid}$ i wartości $F_{S^t}$ zdefiniowanej jako $F_{S^t}~=~\frac{1}{|S^t|}\sum_{s \in S^t} F_s$. Jako wagi przyjmuje się odpowiednio $c$ i $1 - c$, gdzie $c \in [0,1]$ jest dodatkowym parametrem algorytmu. Autorzy \cite{JADE} sugerują wykorzystanie wartości $c \in [0.05, 0.2]$.
+Wartość $F_{mid}$ inicjalizowna jest przez wartość $0.5$. W kolejnych pokoleniach jest ona zmieniana na średnią ważoną $F_{mid}$ i wartości $F_{S^t}$ zdefiniowanej jako średnia Lehmera z wartości $F_{i}^{t}$ prób zakończonych sukcesem:
+}
+\begin{equation}
+F_{S^t}~=~\frac{\sum_{s \in S^t} {F_s}^2}{\sum_{s \in S^t} {F_s}}
+\end{equation}
+
+\par{
+Jako wagi przyjmuje się odpowiednio $c$ i $1 - c$, gdzie $c \in [0,1]$ jest dodatkowym parametrem algorytmu. Zachodzi więc:
+\begin{equation}
+\label{eq:AdaptationJADEFormula}
+F_{mid}^{t+1} = c \cdot F_{mid}^t + (1 - c) \cdot F_{S^t}
+\end{equation}
+Autorzy \cite{JADE} sugerują wykorzystanie wartości $c \in [0.05, 0.2]$.
 }
 
 \subsubsection{Adaptacja $Cr_i$}
 \par{
-Mechanizm adaptacji współczynników $Cr_i$ w algorytmie \emph{JADE} zbudowany jest na podobnej zasadzie jak mechanizm adaptacji współczynników $F_i$. Podobnie jak w przypadku $F_{mid}$, $Cr_{mid}$ jest generowany na podstawie średniej z wartości $Cr_i$ dla sukcesów. Tym razem jednak wykorzystana jest średnia arytmetyczna zamiast średniej Lehmera. Ponadto do generowania wartości $Cr_i$ dla poszczególnych wartości $i$ wykorzystywany jest rozkład normalny zamiast rozkładu cauchiego -- $N(Cr_{mid}, 0.1)$. Do adaptacji wartości $Cr_{mid}$ wykorzystywana jest ta sama stała $c$ co w przypadku adaptacji $F_{mid}$.
+Mechanizm adaptacji współczynników $Cr_i$ w algorytmie \emph{JADE} zbudowany jest na podobnej zasadzie jak mechanizm adaptacji współczynników $F_i$. Podobnie jak w przypadku $F_{mid}$, $Cr_{mid}$ jest generowany na podstawie średniej z wartości $Cr_i$ dla sukcesów. Tym razem jednak wykorzystana jest średnia arytmetyczna zamiast średniej Lehmera. Ponadto do generowania wartości $Cr_i$ dla poszczególnych wartości $i$ wykorzystywany jest rozkład normalny zamiast rozkładu cauchiego -- \\ $Cr_i~\sim~N(Cr_{mid}, 0.1)$. Do adaptacji wartości $Cr_{mid}$ wykorzystywana jest ta sama stała $c$ co w przypadku adaptacji $F_{mid}$.
 }
-\item[SHADE] -- TODO
+\item[SHADE]\cite{SHADE} -- algorytm \emph{JADE} doczekał się wielu modyfikacji i rozwinięć \cite{SHADE, JADEexMultiStart, zhang2009adaptive, JADEexOverviewNumerical, JADEexLargeScale, JADEDiscrette, JADE2}. Spośród nich, wyjątkowo obiecujące rezultaty w ramach testu sprawności \emph{CEC 2013 benchmark} (rozdział \ref{CEC2013chapter}) uzyskał algorytm \emph{SHADE}. Autorzy tego algorytmu zauważyli, że ze względu na niedeterministyczny charakter badanych algorytmów pewne wartości adaptowanych parametrów mimo, iż lokalnie przyniosły korzyść, w perspektywie globalnego krajobrazu badanej funkcji nie przynoszą oczekiwanej poprawy. Autorzy wysuwają tezę, iż w związku z tym algorytm jest podatny na tego typu lokalne zaburzenia wartości adaptowanych i nie posiada skutecznego mechanizmu ochrony przed tym zjawiskiem.
+
+\subsubsection{Modyfikacja adaptacji względem JADE}
+\par{
+Idea stojąca za algorytmem \emph{SHADE} opiera się o silniejsze (niż w przypadku formuły \ref{eq:AdaptationJADEFormula}) wygładzanie lokalnych zaburzeń adaptowanych wartości $F_i^t$ oraz $Cr_i^t$. By uzyskać ten efekt, autorzy zaproponowali archiwum wartości adaptowanych $M_F$ oraz $M_{Cr}$ o parametryzowalnej wielkości $H \in \mathbb{N}$ (zalecane $H \in [30, 100] \cap \mathbb{N}$). Oba archiwa wypełniane są początkowo stałą wartością podstawową ($F_{init} = Cr_{init} = 0.5$), a następnie w każdej iteracji najstarsza wartość w archiwum zastępowana jest wartością uzyskaną na podstawie sukcesów w danej iteracji. W przypadku tego algorytmu  wartości te ($F_{S^t}$ oraz $Cr_{S^t}$) zdefiniowane zostały zgodnie z formułami z \cite{JADEexMultiStart}:
+\begin{equation}
+F_{S^t} = \frac{\sum_{k = 1}^{|S^t|} w_k \cdot {F_{S^t,k}}^2}{\sum_{k = 1}^{|S^t|} w_k \cdot F_{S^t,k}}
+\end{equation}
+oraz
+\begin{equation}
+Cr_{S^t} = \sum_{k = 1}^{|S^t|} w_k \cdot Cr_{S^t,k}
+\end{equation}
+gdzie
+\begin{equation}
+w_k = \frac{\Delta{f_k}}{\sum_{j = 1}^{|S^t|} \Delta{f_j}}
+\end{equation}
+oraz
+\begin{equation}
+\Delta{f_k} = |f(z_k) - f(x_k)|
+\end{equation}
+Jak widać mechanizm ten posługuje się podobnymi konstrukcjami matematycznymi jak w przypadku \emph{JADE} jednak dodatkowo bierze pod uwagę wagę, wynikającą ze stopnia w jakim dana wartość adaptowanego parametru poprawiła wartość funkcji optymalizowanej.
+}
+\par{
+Na początku każdej iteracji podobnie jak w \emph{JADE} wybierana jest indywidualna wartość parametrów dla każdego osobnika. Analogicznie do \emph{JADE} wykorzystywane są rozkłady $Cr_i \sim N(M_{Cr,r_i}, 0.1)$ oraz $F_i \sim Cauchy(M_{F,r_i}, 0.1)$, gdzie $r_i \in [1, H] \cap \mathbb{N}$, to losowo wygenerowany dla każdego osobnika w każdym pokoleniu indeks archiwum. W przypadku gdy wygenerowana wartość $Cr_i \notin [0,1]$ lub $F_i \notin [0,1]$, stosowane są procedury naprawcze jak w przypadku algorytmu \emph{JADE}.
+}
+
+\subsubsection{Zmienna wartość p w schemacie current-to-pbest}
+\par{
+Dodatkową modyfikacją wprowadzoną w ramach algorytmu \emph{SHADE} jest uzmiennienie wartości $p$ wykorzystywanej w schemacie \emph{p-to-best}. Mechanizm ten polega na wygenerowaniu w każdym pokoleniu dla każdego osobnika losowej wartości $p_i~\sim~U(p_{min}, 0.2)$. Pewną wadą tego rozwiązania jest brak mechanizmu weryfikującego w czasie działania algorytmu, czy sukces danego osobnika nie jest spowodowany wygenerowaną wartością $p_i$ a nie parą $Cr_i$, $F_i$. Warto jednak zauważyć, że u podstaw idei tego algorytmu leży jego odporność na tego rodzaju lokalne zaburzenia, w związku z czym można oczekiwać, że tego rodzaju sytuacje będą miały marginalny wpływ na ostateczny rezultat adaptacji. Prawidłowość ta nie została jednak zbadana.
+}
 \end{description}
 
 \chapter{Metodologia badań}
@@ -816,7 +859,7 @@ Wartym odnotowania jest fakt, że w ramach badań w oparciu o testy \emph{CEC 20
 \end{itemize}
 }
 \par{
-Ponieważ algorytm \emph{SHADE} uzyskał najlepszy wynik pośród algorytmów ewolucji różnicowej, został on wybrany jako baza do zaawansownego algorytmu \emph{aNADE}.
+Ponieważ algorytm \emph{SHADE} uzyskał najlepszy wynik pośród algorytmów ewolucji różnicowej, został on wybrany jako baza do zaawansownego algorytmu \emph{ANADE}.
 }
 
 \subsubsection{Motywacja wyboru zestawu testów}
@@ -839,11 +882,11 @@ W czasie projektowania algorytmu sprawdzenia wymagały pewne tezy dotyczące mo�
 \item Wykorzystanie wszystkich funkcji testowych $f_1$ do $f_{28}$.
 \item Wykonywanie badań tylko na jednej wymiarowości przestrzeni $D = 30$.
 \item Wykonywanie 25 powtórzeń dla każdej z funkcji testowych (zamiast 51).
-\item Bazowe wartości parametrów DE wg \cite{StateOfArt},
+\item Bazowe wartości parametrów DE wg \cite{CEC2013DEbasic},
 \begin{itemize}
-\item $F = 0.9$
+\item $F = 0.5$
 \item $Cr = 0.9$
-\item $\mu = 10 \cdot D$
+\item $\mu = Max(50, 2 \cdot D)$
 \end{itemize}
 \item Wykorzystanie testu Wilcoxona na zebranych danych w celu weryfikacji określonych tez. Przyjęto standardowy poziom istotności $0.05$.
 \end{itemize}
