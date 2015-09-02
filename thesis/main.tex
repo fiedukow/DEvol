@@ -36,7 +36,6 @@
 \renewcommand{\headrulewidth}{0.4pt}
 
 \fancyheadoffset[]{0pt}
-
 \fancypagestyle{plain}{
 \fancyhf{}
 \fancyfoot[C]{\bfseries \thepage}
@@ -57,18 +56,23 @@
 \subsubsection{Streszczenie}
 \par{
 \emph{
-Algorytmy ewolucji różnicowej (DE) występują w wielu wariantach i odmianach, których właściwości są cały czas badane. Jedną z proponowanych modyfikacji tego algorytmu stanowi wykorzystanie przy operatorze mutacji różnicowej osobników pochodzących z szerszego niż jednopokoleniowego okna historii [MS:PrzydaloBySięŹródło, jeśli nie -- zmiana sformułowania].
+Algorytmy ewolucji różnicowej (DE) występują w wielu wariantach i odmianach, których właściwości są cały czas badane. Jedną z proponowanych modyfikacji tego algorytmu stanowi wykorzystanie przy operatorze mutacji różnicowej osobników pochodzących z szerszego niż jednopokoleniowego okna historii.
 }
 }
 \par{
 \emph{
-Niniejsza praca opisuje proces opracowywania metody zastosowania archiwum osobników w celu poprawy jakości wyników uzyskiwanych w ewolucji różnicowej. W dalszej części praca skupia się na sprawdzeniu hipotezy o możliwości poprawy klasycznego schematu ewolucji różnicowej DE/rand/1/bin przez wykorzystanie archiwum.
-Badania skuteczności poszczególnych metod opracowane są w oparciu o zestaw funkcji testowych opracowanych w ramach konferencji IEEE Congress on Evolutionary Computation 2013 (CEC2013) [MS:Potrzebne Źródło].
+Niniejsza praca opisuje proces opracowywania metody zastosowania archiwum osobników w celu poprawy jakości wyników uzyskiwanych w ewolucji różnicowej. W dalszej części praca skupia się na sprawdzeniu hipotezy o możliwości poprawy klasycznego schematu ewolucji różnicowej \emph{DE/rand/1/bin} przez wykorzystanie archiwum, proponując algorytm \emph{NADE}.
+Ponadto, praca odnosi także zaproponowaną modyfikację do zaawansowanego algorytmu ewolucji różnicowej \emph{SHADE} \cite{SHADE}, proponując algorytm \emph{ANADE} wprowadzający ową modyfikację do algorytmu \emph{SHADE}.
 }
 }
 \par{
 \emph{
-Niniejsza praca odnosi się także do możliwości i skuteczności wykorzystania w procesie ewolucji różnicowej punktu środkowego populacji, badając jego wartość w czasie działania wszystkich testowanych wariantów algorymtów.
+W ramach pracy porównano proponowane algorytmy i wyciągnięto wnioski na temat możliwości poprawy uzyskiwanych przez algorytmy wyników przez zastosowanie archiwum. Badania skuteczności poszczególnych metod przeprowadzone zostały w oparciu o zestaw funkcji testowych opracowanych w ramach konferencji \emph{IEEE Congress on Evolutionary Computation 2013 (CEC2013)}.
+}
+}
+\par{
+\emph{
+Dodatkowo w ramach pracy poruszono problematykę metodyki badań nad stochastycznymi algorytmami optymalizacyjnymi, wskazując na potencjalne drogi jej rozwoju.
 }
 }
 \subsubsection{Słowa kluczowe}
@@ -77,16 +81,22 @@ Niniejsza praca odnosi się także do możliwości i skuteczności wykorzystania
 }
 \subsubsection{Abstract}
 \par{
-\emph{There are many forms of differential evolution algorithms (DE), which properties are yet to be discovered. One of possible modifications of those algorithms is using historical points to perform differential mutation. [MS:PrzydałoBySięŹródło]}.
+\emph{There are many forms of differential evolution algorithms (DE), which properties are yet to be discovered. One of possible modifications of those algorithms is using historical points to perform differential mutation.}.
 }
 \par{
 \emph{
-This thesis describes development process of method of using such archive to increase DE results quality. Hereafter this thesis is checking hipotesis about possibility of improving classic DE/rand/1/bin by using archive. All experiments performed during this reasearch are based on benchmark functions set developed during the IEEE Congress of Evolutionary Computation 2013 conference (CEC2013) [MS:Potrzebne Źródło].
+This thesis describes development process of method of using such archive to increase DE results quality. Hereafter this thesis is checking hipotesis about possibility of improving classic \emph{DE/rand/1/bin} by using archive, proposing the \emph{NADE} algorithm. This thesis also propose \emph{ANADE} algorithm that applies proposed archive technique to advanced differencial evolution algorithm -- \emph{SHADE}.
 }
 }
 \par{
 \emph{
-This thesis also refers to a possiblity and effectiveness of using middle point of population to improve quality of DE results by checking its value in all tested variants of DE. 
+This thesis compares proposed algorithms and puts a proposal about possibility of improving algorithm performance by applying archive to their basic design.
+All experiments performed during this reasearch are based on benchmark functions set developed during the \emph{IEEE Congress of Evolutionary Computation 2013 conference (CEC2013)}.
+}
+}
+\par{
+\emph{
+Additionally this thesis describes issues of methodology used in this research, pointing possible ways of its improvements.
 }
 }
 \subsubsection{Keywords}
@@ -151,7 +161,7 @@ Mając to na względzie by problem można było uznać za rozwiązany, należy g
 Niniejsza praca będzie skupiała się na rozwiązywaniu tak przeformułowanego problemu optymalizacji globalnej funkcji w przestrzeni ciągłej z ograniczeniami nierównościowymi. Ze względu na zwięzłość zapisu w dalszej części pracy problem ten nazywany będzie \textbf{problemem optymalizacji} lub po prostu \textbf{problemem}. 
 }
 \par{
-Warto zwrócić uwagę, że pomimo iż między różnymi rozwiązaniami problemu istnieje relacja częściowego porządku generowana przez wartość funkcji $f$, to jednak przy przyjętych założeniach wartość (rozumiana jako liczba rzeczywista) tej funkcji nie niesie żadnej dodatkowej informacji. Z tego też powodu, wszelkie badania porównawcze przeprowadzane na poszczególnych metodologiach rozwiązywania problemu muszą być oparte na tej właśnie relacji porządku.
+Warto zwrócić uwagę, że pomimo iż między różnymi rozwiązaniami problemu istnieje relacja częściowego porządku generowana przez wartość funkcji $f$, to jednak przy przyjętych założeniach wartość (rozumiana jako liczba rzeczywista) tej funkcji nie niesie żadnej dodatkowej informacji. Z tego też powodu, wszelkie badania porównawcze przeprowadzane według poszczególnych metodyk rozwiązywania problemu muszą być oparte na tej właśnie relacji porządku.
 }
 
 \section{Motywacje}
@@ -159,21 +169,21 @@ Warto zwrócić uwagę, że pomimo iż między różnymi rozwiązaniami problemu
 Jednym z podejść do zdefiniowanego powyżej problemu optymalizacji jest wykorzystanie algorytmów ewolucji różnicowej (DE) \cite{RainerStorn}. Algorytm ten zaproponowany w 1995r. od wielu lat rozwijany w ramach licznych prac naukowych \cite{Opara,SpringerIntroToEvol} cieszy się zwykle bardzo dobrymi rezultatami w testach jakościowych \cite{CEC2013Comp}. 
 }
 \par{
-Typową procedurą przy heurystycznych algorytmach optymalizacyjnych jest wykorzystywanie do generowania kolejnych punktów w przestrzeni przeszukiwań punktów z okna historii o zmiennej szerokości [MS:MożeJakieśŹródło?]. W przypadku klasycznego algorytmu ewolucji różnicowej, okno historii ma rozmiar równy liczności populacji -- starsze punkty nie są wykorzystywane w kolejnych pokoleniach. Choć w przeszłości podejmowano próby wykorzystywania szerszego okna historii w tym algorytmie \cite{JADE,SHADE}, temat ten zwykle występował przy okazji innych badań i nie był osobno zbadany /Note:AleCzyNaPewno?/. Praca ta będzie starała się dokładnie zbadać możliwości wykorzystania tego rodzaju strategii i określić w jaki sposób wykorzystanie tej strategii wpłynie na jakość uzyskiwanych przy pomocy ewolucji różnicowej wyników.
+Typową procedurą przy heurystycznych algorytmach optymalizacyjnych jest wykorzystywanie do generowania kolejnych punktów w przestrzeni przeszukiwań punktów z okna historii o zmiennej szerokości. W przypadku klasycznego algorytmu ewolucji różnicowej, okno historii ma rozmiar równy liczności populacji -- starsze punkty nie są wykorzystywane w kolejnych pokoleniach. Choć w przeszłości podejmowano próby wykorzystywania szerszego okna historii w tym algorytmie \cite{JADE,SHADE}, temat ten zwykle występował przy okazji innych badań i nie był osobno zbadany. Praca ta będzie starała się dokładnie zbadać możliwości wykorzystania tego rodzaju strategii i określić w jaki sposób wykorzystanie tej strategii wpłynie na jakość uzyskiwanych przy pomocy ewolucji różnicowej wyników.
 }
 
 \section{Cel}
 \par{
-Celem pracy jest zbadanie zmodyfikowanego klasycznego algorytmu ewolucji różnicowej tak by wektory mutacji różnicowej były budowane w oparciu o osobniki z parametryzowanej liczby ostatnich pokoleń.
+Celem pracy jest zbadanie zmodyfikowanego klasycznego algorytmu ewolucji różnicowej tak by wektory mutacji różnicowej były budowane w oparciu o osobniki z archiwum o parametryzowalnym rozmiarze.
 }
 \par{
-Przebadane zostaną możliwe podejścia do wykorzystania tych osobników i wynikające z nich zmiany jakości działania algorytmu. W wyniku tych działań zdefiniowany zostanie możliwie najskuteczniejszy algorytm parametryzowany ilością pokoleń uwzględnianych w oknie historii (zwany dalej \emph{NADE}).
+Przebadane zostaną możliwe podejścia do wykorzystania tych osobników i wynikające z nich zmiany jakości działania algorytmu. W wyniku tych działań zdefiniowany zostanie możliwie najskuteczniejszy algorytm parametryzowany wielkością archiwum ($H$) (zwany dalej \emph{NADE}).
 }
 \par{
-Cel pracy stanowi także zbadanie gotowego algorytmu \emph{NADE} przy różnych wartościach nowego parametru i ustalenie jak zmiana parametru wpływa na jakość wyników. Otrzymane rezultaty zostaną następnie zestawione z klasycznym algorytmem ewolucji różnicowej a także przedstawione w kontekście zmodyfikowanych wariantów ewolucji różnicowej przebadanych w ramach konferencji CEC2013 (\emph{IEEE Congress on Evolutionary Computation}).
+Cel pracy stanowi także zbadanie gotowego algorytmu \emph{NADE} przy różnych wartościach nowego parametru i ustalenie jak zmiana parametru wpływa na jakość wyników. Otrzymane rezultaty zostaną następnie zestawione z klasycznym algorytmem ewolucji różnicowej, a także przedstawione w kontekście zmodyfikowanych wariantów ewolucji różnicowej przebadanych w ramach konferencji CEC2013 (\emph{IEEE Congress on Evolutionary Computation}).
 }
 \par{
-W ramach pracy zostanie także zbadana teza o możliwości poprawy jakości otrzymywanych przez ewolucję różnicą wyników przy ograniczonym budżecie zapytań przy wykorzystaniu punktu środkowego populacji.
+W szczególności utworzony zostanie algorytm \emph{ANADE} oparty o algorytm \emph{SHADE} \cite{SHADE} w celu sprawdzenia, jak proponowane podejście do archiwum będzie sprawdzało się w przypadku zaawansowanych wariantów ewolucji różnicowej.
 }
 \par{
 Wszelkie badania jakościowe w ramach pracy będą opracowane przy użyciu testowych funkcji wyspecyfikowanych w ramach konferencji CEC2013 i porównania rezultatów otrzymanych w określonym w ramach konferencji budżecie zapytań o wartości funkcji \cite{Li13benchmarkfunctions}.
@@ -204,7 +214,7 @@ Algorytmy tej klasy bywają stosowane jako rozwiązanie kompromisowe pomiędzy j
 Podejście tego rodzaju niosą za sobą ciekawe konsekwencje. Warto zauważyć, że ponieważ z definicji prowadzą one do rozwiązania nie koniecznie najlepszego, to jeśli istnieje metoda porównywania jakości wyników, można także mówić o porównywaniu jakości działania różnych algorytmów w kontekście danego zadania. Mimo, iż wiele z algorytmów heurystycznych ma charakter niedeterministyczny (tj. dla tego samego wejścia mogą wygenerować dwa różne wyjścia) posługując się narzędziami statystyki i probabilistyki można wysnuwać wnioski dt. jakości algorytmów w kontekście problemu.
 }
 \par{
-Wartym wspomnienia w kontekście algorytmów heurystycznych jest sposób ich konstruowania. Często dyktowany jest on intuicją, a podstawy teoretyczne działania tego rodzaju algorytmów bywają badane dużo później \cite{Opara}. Tego rodzaju podejście pozwoliło na stworzenie wielu dobrze sprawujących się algorytmów, lecz zarazem ich analityczne badanie pozwala na dokładniejsze zrozumienie problematyki, uogólnienie lub uproszczenie reguł ich działania \cite{Opara}. /Note: I co z tą myślą? W pracy postaramy się chociaż trochę zwrócić uwagę na teorię?/
+Wartym wspomnienia w kontekście algorytmów heurystycznych jest sposób ich konstruowania. Często dyktowany jest on intuicją, a podstawy teoretyczne działania tego rodzaju algorytmów bywają badane dużo później \cite{Opara}. Tego rodzaju podejście pozwoliło na stworzenie wielu dobrze sprawujących się algorytmów, lecz zarazem ich analityczne badanie pozwala na dokładniejsze zrozumienie problematyki, uogólnienie lub uproszczenie reguł ich działania \cite{Opara}.
 }
 \newpage
 \subsection{Model heurystycznego algorytmu optymalizacyjnego}
@@ -228,6 +238,7 @@ Jako $U$ oznaczono przestrzeń sekwencji losowych, natomiast jako $H$ -- dotychc
 
 %%%%% Archiwum
 \subsection{Archiwum}
+\label{ArchiveTheoryBase}
 \par{
 W kontekście przedstawionego powyżej modelu, można zauważyć, że istotą konkretnego algorytmu optymalizacyjnego jest operator zagregowany $O$, na którego działanie wpływ ma wyłącznie sam problem ($\Pi$), ewentualne wyniki pseudolosowych operacji ($U$) oraz wyniki otrzymane dotychczas przez algorytm przy badaniu optymalizowanej funkcji ($H$). Ten ostatni element nazywany jest \textbf{archiwum} i stanowi centralny punkt proponowanej modyfikacji algorytmu ewolucji różnicowej -- stąd zostanie on bardziej dokładnie opisany.
 }
@@ -266,10 +277,7 @@ Tego rodzaju ograniczenia w wykorzystywaniu archiwum $H$ skłaniają do rozważa
 Przykładem algorytmów heurystycznych stosowanych do rozwiązywania problemu optymalizacyjnego są algorytmy należące do grupy algorytmów ewolucyjnych (ang. \emph{Evolutionary Algorithms} -- AE) \cite{WykladyEvol,SpringerIntroToEvol}. Algorytmy te, wzorowane na ewolucji naturalnej operują pojęciami takimi jak osobnik, środowisko czy przystosowanie w celu adaptacyjnego przeszukiwania przestrzeni optymalizacyjnej.
 }
 \par{
-Ogólna idea stojąca za algorytmami ewolucyjnymi, polega na opisaniu genotypu osobników, z których następnie można odczytać fenotyp (stanowiący punkt przestrzeni przeszukiwań) oceniany przez środowisko (funkcję optymalizowaną). Osobniki -- podobnie jak osobniki w naturze -- podlegają krzyżowaniu oraz niewielkim mutacjom, walcząc między sobą o zasoby naturalne. Zgodnie z teorią doboru naturalnego, osobniki gorzej dostosowane do środowiska są -- w szerokiej perspektywie czasowej i przy odpowiednio dużej populacji -- wypierane przez te dostosowane lepiej [MS: MożeJakieśŹródłoNaDobórNaturalny? Darwin?].
-}
-\par{
-/Note:Obrazek ze schematem EA?/
+Ogólna idea stojąca za algorytmami ewolucyjnymi, polega na opisaniu genotypu osobników, z których następnie można odczytać fenotyp (stanowiący punkt przestrzeni przeszukiwań) oceniany przez środowisko (funkcję optymalizowaną). Osobniki -- podobnie jak osobniki w naturze -- podlegają krzyżowaniu oraz niewielkim mutacjom, walcząc między sobą o zasoby naturalne. Zgodnie z teorią doboru naturalnego, osobniki gorzej dostosowane do środowiska są -- w szerokiej perspektywie czasowej i przy odpowiednio dużej populacji -- wypierane przez te dostosowane lepiej.
 }
 \par{
 W związku z powyższą analogią w ramach algorytmów ewolucyjnych wyróżnia się następujące operatory:
@@ -563,7 +571,7 @@ Typowo w literaturze spotyka się następujące schematy krzyżowania:
 \end{algorithmic}
 \end{algorithm}
 
-Tego rodzaju krzyżowanie powoduje dąrzący (gdy $D \rightarrow \infty$) do wykładniczego rozkład położenia pierwszego elementu wektora pochodzącego z osobnika $\mathbf{x_i^t}$. Rozkład ten nie traktuje wszystkich pozycji w wektorze osobników identycznie, ponieważ dalsze pozycje w wektorze będą rzadziej zastępowane przez wartości z osobników mutantów. W związku z tym stosuje się także wariant, który wybiera ilość elementów ($n_x$) pochodzących z osobnika rodzica zgodnie z opisanym rozkładem a następnie wybiera z równym prawdopodobieństwem $n_x$ elementów wektora, które będą pochodziły z osobnika $\mathbf{x_i^t}$.
+Tego rodzaju krzyżowanie powoduje dążący (gdy $D \rightarrow \infty$) do wykładniczego rozkład położenia pierwszego elementu wektora pochodzącego z osobnika $\mathbf{x_i^t}$. Rozkład ten nie traktuje wszystkich pozycji w wektorze osobników identycznie, ponieważ dalsze pozycje w wektorze będą rzadziej zastępowane przez wartości z osobników mutantów. W związku z tym stosuje się także wariant, który wybiera ilość elementów ($n_x$) pochodzących z osobnika rodzica zgodnie z opisanym rozkładem a następnie wybiera z równym prawdopodobieństwem $n_x$ elementów wektora, które będą pochodziły z osobnika $\mathbf{x_i^t}$.
 \end{description}
 }
 \subsubsection{Notacja}
@@ -598,10 +606,10 @@ Dodatkowo należy odnotować, że adaptacyjne algorytmy ewolucyjne otrzymują na
 \subsection{Punkt środkowy populacji}
 \label{MidPoint}
 \par{
-Niedawno w badaniach nad algorytmami ewolucji różnicowej \cite{DEmid} pojawiła się koncepcja wykorzystania inforamcji niesionej przez punkt środkowy populacji do poprawy sposobu działania algorytmu. W pracy \cite{DEmid} podjęto próbę zbudowania nowego schematu mutacji, w którym punktem bazowym jest punkt środkowy populacji (DE/\emph{mid}/\emph{k}). Wnioskiem z tej pracy było stwierdzenie, iż dla większości funkcji zwłaszcza w wielowymiarowych przestrzeniach, wybór strategii \emph{mid} poprawia w sposób statystycznie istotny działanie algorytmu ewolucji różnicowej. W pracy zwrócono także uwagę, że punkt środkowy nie przynosi znaczącej poprawy lub wręcz jest mylący dla zadania, w przypadku funkcji o znacznej lokalnej zmienności (Note: W zasadzie to nie do końca jest prawda, to tylko moje domniemanie, nie wniosek z tej pracy). Jako przykład takiej funkcji wymieniono funkcję Weierstrassa wchodzącą w skład zestawu testowego CEC2013 (\ref{CEC2013chapter}).
+Niedawno w badaniach nad algorytmami ewolucji różnicowej \cite{DEmid} pojawiła się koncepcja wykorzystania inforamcji niesionej przez punkt środkowy populacji do poprawy sposobu działania algorytmu. W pracy \cite{DEmid} podjęto próbę zbudowania nowego schematu mutacji, w którym punktem bazowym jest punkt środkowy populacji (DE/\emph{mid}/\emph{k}). Wnioskiem z tej pracy było stwierdzenie, iż dla większości funkcji zwłaszcza w wielowymiarowych przestrzeniach, wybór strategii \emph{mid} poprawia w sposób statystycznie istotny działanie algorytmu ewolucji różnicowej. W pracy zwrócono także uwagę, że punkt środkowy nie przynosi znaczącej poprawy lub wręcz jest mylący dla zadania, w przypadku pewnych funkcji. Jako przykład takiej funkcji wymieniono funkcję Weierstrassa wchodzącą w skład zestawu testowego CEC2013 (\ref{CEC2013chapter}).
 }
 \par{
-Praca ta jednoznacznie wskazała, że informacja zawarta w punkcie środkowym dla wielu problemów może być użyteczna. Intuicja podpowiada, że w szczególności w fazie eksploatacji okolic loklanego optimum punkt środkowy może być o wartości wyższej niż najlepsza. Taka własność punktu środkowego stanowiła by wytłumaczenie przewagi algorytmu DE/\emph{mid}/\emph{1} nad DE/\emph{best}/\emph{1}. W dalszej części pracy zbadano czy ta teoria ma odbicie w rzeczywistości oraz czy zamortyzowany zysk z wyliczania wartości funkcji optymalizowanej w punkcie środkowym pokryje związane z tym wyliczeniem koszta.
+Praca ta jednoznacznie wskazała, że informacja zawarta w punkcie środkowym dla wielu problemów może być użyteczna. Intuicja podpowiada, że w szczególności w fazie eksploatacji okolic lokalnego optimum punkt środkowy może być o wartości wyższej niż najlepsza. Taka własność punktu środkowego stanowiła by wytłumaczenie przewagi algorytmu DE/\emph{mid}/\emph{1} nad DE/\emph{best}/\emph{1}. Choć początkowo zamierzano włączyć w skład pracy badanie dotyczące tej tezy, to ze względu na dużą ilość innych tez wymagających sprawdzenia w ostatecznej wersji rezygnowano z badania tej tezy.
 }
 \subsection{Metoda uwzględniania ograniczeń}
 \par{
@@ -643,7 +651,7 @@ d \le \epsilon
 \end{equation}
 gdzie $\epsilon$ to parametr algorytmu określający graniczną odległość między wspomnianymi punktami.
 Jeśli warunek jest spełniony, następuje adaptacja populacji.
-\item[Punktu odniesienia dla adaptacji populacji] -- w algorytmie w wyniku kilku warunków następowała adaptacja popualacji mająca na celu poprawę właściowści eksporacyjnych algorytmu. Adaptacja odbywała się wg. formuły zmieniającej osobniki w populacji \cite{ArchivedDE}:
+\item[Punktu odniesienia dla adaptacji populacji] -- w algorytmie w wyniku kilku warunków następowała adaptacja popualacji mająca na celu poprawę właściwości eksporacyjnych algorytmu. Adaptacja odbywała się wg. formuły zmieniającej osobniki w populacji \cite{ArchivedDE}:
 \begin{equation}
 x_{i,j,G} = \lambda \cdot x_{i,Best,A} + (1 - \lambda) \cdot (x_{i,Best,A} - x_{i,j,G-1})
 \end{equation}
@@ -673,13 +681,13 @@ Wiele innych algorytmów ewolucji różnicowej wdraża lub jest modyfikowana o e
 
 \subsubsection{Wnioski z dotychczasowych prac}
 \par{
-Liczność algorytmów ewolucji różnicowej wykorzystujących koncepcję archiwum do różnych celów (w szczególności do generowania wektorów różnicowych), sugeruje, że wykorzystanie archiwum pozytywnie wpływa na działanie algorytmów. Można także zauważyć, że archiwum w algorytmie ewolucji różnicowej, jest cennym źródłem dodatkowych informacji, wspierających adaptację i inne zaawansowne procesy w ich obrębie. Warto zwrócić uwagę, że wspomniane prace traktują archiwum łącznie z innymi koncepcjami poprawy działana algorytmów ewolucji różnicowej. Nie można w związku z tym wysnuwać wniosków na temat niezależności wpływu wykorzystania archiwum od innych technik usprawniania algorytmów. Tego rodzaju badania są jednym z przedmiotów tej pracy.
+Liczność algorytmów ewolucji różnicowej wykorzystujących koncepcję archiwum do różnych celów (w szczególności do generowania wektorów różnicowych), sugeruje, że wykorzystanie archiwum pozytywnie wpływa na działanie algorytmów. Można także zauważyć, że archiwum w algorytmie ewolucji różnicowej, jest cennym źródłem dodatkowych informacji, wspierających adaptację i inne zaawansowane procesy w ich obrębie. Warto zwrócić uwagę, że wspomniane prace traktują archiwum łącznie z innymi koncepcjami poprawy działania algorytmów ewolucji różnicowej. Nie można w związku z tym wysnuwać wniosków na temat niezależności wpływu wykorzystania archiwum od innych technik usprawniania algorytmów. Tego rodzaju badania są jednym z przedmiotów tej pracy.
 }
 
 \subsection{Zaawansowne modyfikacje}
 \label{AdvancedDE}
 \par{
-Do celów pracy wybrano dwie modyfikacje stosujące adaptację paramterów (rozdział \ref{Adaptation}), jak również powiększone okno historii (rozdział \ref{ArchiveLiterature}). Algorytm \emph{SHADE} \cite{SHADE} został wybrany, jako najlepiej sprawdzająca się modyfikacja ewolucji różnicowej \cite{CEC2013Comp}. Algorytm \emph{JADE} \cite{JADE} został wybrany jako pierwowzór \emph{SHADE}, który opiera się o prostsze acz ideologicznie podobne koncepcje. Specyfikę obu algorytmów opisano poniżej:
+Do celów pracy wybrano dwie modyfikacje stosujące adaptację parametrów (rozdział \ref{Adaptation}), jak również powiększone okno historii (rozdział \ref{ArchiveLiterature}). Algorytm \emph{SHADE} \cite{SHADE} został wybrany, jako najlepiej sprawdzająca się modyfikacja ewolucji różnicowej \cite{CEC2013Comp}. Algorytm \emph{JADE} \cite{JADE} został wybrany jako pierwowzór \emph{SHADE}, który opiera się o prostsze acz ideologicznie podobne koncepcje. Specyfikę obu algorytmów opisano poniżej:
 }
 \begin{description}
 \item[JADE] \cite{JADE} -- algorytm \emph{JADE} jest algorytmem ewolucji różnicowej, wykorzystującym schemat mutacji \emph{current-to-pbest} (zalecane $p \in [0.05, 0.2]$). Algorytm cechuje także indywidualna wartość współczynnika $F$ oraz $Cr$ dla każdego mutowanego i krzyżowanego osobnika w każdej kolejnej iteracji (oznaczenie $F_i^t$, $Cr_i^t$ lub po prostu $F_i$, $Cr_i$). Taka mnogość prób wykorzystywana jest, do adaptacji tych współczynników. Wartości współczynników zmieniane są na podstawie sukcesów bądź porażek przy stosowaniu ich konkretnych wartości. Ponadto, algorytm ten wykorzystuje archiwum punktów do generowania wektorów różnicowych. Stanowi więc on dalekie rozszerzenie podstawowej idei ewolucji różnicowej. Poniżej opisano kluczowe modyfikacje względem \emph{DE/rand/1/bin} występujące w algorytmie.
@@ -689,7 +697,7 @@ W algorytmie \emph{JADE} zastosowano archiwum o wielkości dwóch populacji -- w
 }
 \subsubsection{Adaptacja $F_i$}
 \par{
-Mechanizm adaptacji współczynników $F_i$ opiera się o generowanie losowych wartości wokół zadoptowanej wartości $F_{mid}$ z rozkładem $F \sim Cauchy(F_{mid}, 0.1)$ z ograniczeniem wartości $F_i \in [0, 1]$. Dla wartości poniżej tego zakresu wartość $F_i$ jest ponownie generowana. Dla wartości powyżej tego zakresu przyjmowane jest $F_i = 1$.
+Mechanizm adaptacji współczynników $F_i$ opiera się o generowanie losowych wartości wokół zaadaptowanej wartości $F_{mid}$ z rozkładem $F \sim Cauchy(F_{mid}, 0.1)$ z ograniczeniem wartości $F_i \in [0, 1]$. Dla wartości poniżej tego zakresu wartość $F_i$ jest ponownie generowana. Dla wartości powyżej tego zakresu przyjmowane jest $F_i = 1$.
 }
 \par{
 Model adaptacji wymaga wprowadzenia pojęcia sukcesu.
@@ -701,7 +709,7 @@ Sukcesem próby $i$ w iteracji $t$ nazywamy sytuację, gdy $\mathbf{x_i^{t+1} = 
 Oznaczmy także jako $S^t$ zbiór prób z iteracji $t$, które zakończyły się sukcesem.
 }
 \par{
-Wartość $F_{mid}$ inicjalizowna jest przez wartość $0.5$. W kolejnych pokoleniach jest ona zmieniana na średnią ważoną $F_{mid}$ i wartości $F_{S^t}$ zdefiniowanej jako średnia Lehmera z wartości $F_{i}^{t}$ prób zakończonych sukcesem:
+Wartość $F_{mid}$ inicjalizowana jest przez wartość $0.5$. W kolejnych pokoleniach jest ona zmieniana na średnią ważoną $F_{mid}$ i wartości $F_{S^t}$ zdefiniowanej jako średnia Lehmera z wartości $F_{i}^{t}$ prób zakończonych sukcesem:
 }
 \begin{equation}
 F_{S^t}~=~\frac{\sum_{s \in S^t} {F_s}^2}{\sum_{s \in S^t} {F_s}}
@@ -752,50 +760,96 @@ Dodatkową modyfikacją wprowadzoną w ramach algorytmu \emph{SHADE} jest uzmien
 }
 \end{description}
 
-\chapter{Metodologia badań}
+\chapter{Metodyka badań}
 \section{Modelowanie statystyczne}
 \par{
-(Czemu służy, dlaczego potrzebne do tych badań)
-}
-\section{Testy statystyczne}
-\par{
-Wymagane dla niedeterministycznych algorytmów
+Modelowanie statystyczne to dziedzina zajmująca się tworzeniem modeli charakterystyki zmiennych losowych w oparciu o statystyki z próby losowej. W przypadku niedeterministycznych algorytmów optymalizujących, wynik algorytmu jest zmienną losową. Z tego powodu, porównanie pojedynczych wyników różnych algorytmów, nawet w kontekście tego samego problemu niesie bardzo niewielką informację.
 }
 \par{
-(Ogólna koncepcja, p-value)
+Narzędzia modelowania statystycznego pozwalają przy użyciu skończonej liczby próbek zbudować przybliżoną charakterystykę otrzymywanych w kolejnych próbach wyników. Porównanie tego rodzaju charakterystyk niesie już znacznie większą informację, choć zawsze wyznaczaną z pewnym tylko prawdopodobieństwem. W tym rozdziale zostaną opisane metody modelowania statystycznego wykorzystane przy badaniu i porównywaniu algorytmów w ramach pracy.
 }
+\subsection{Testy statystyczne}
+\label{TestingStats}
+\par{
+Testy statystyczne służą do estymacji prawdopodobieństwa prawdziwości pewnej hipotezy dotyczącej losowego modelu na podstawie próby losowej. Innymi słowy testy te, pozwalają stwierdzić z pewnym prawdopodobieństwem, że pewna własność zmiennych losowych zachodzi lub nie zachodzi.
+}
+\par{
+W przypadku testów statystycznych, testowana hipoteza nosi nazwę hipotezy zerowej, a hipoteza uznawana za prawdziwą w przypadku odrzucenia hipotezy zerowej nazywana jest hipotezą alternatywną.
+}
+\par{
+Omawiane testy statystyczne, opierają się o wyznaczenie pewnej statystyki testowej (będącej zmienną losową). Następnie, przy użyciu narzędzi modelowania statystycznego, jest wyznaczane prawdopodobieństwo, że przy prawdziwości hipotezy zerowej, uzyskana wartość statystyki będzie taka sama lub bardziej odległa od oczekiwanej -- w ten sposób definiowana jest $p-wartosc$ (poziom istotności). Samo określenie, która wartość jest bardziej odległa od hipotezy zerowej zależy od konstrukcji konkretnych testów.
+}
+\par{
+W przypadku, gdy na podstawie testu chcemy wysnuć (choćby z pewnym prawdopodobieństwem) twierdzenie na temat modelu losowego, często przyjmuje się próg istotności (graniczny poziom istotności), dla którego odrzuca się hipotezę zerową. Najczęściej pojawiającym się w literaturze granicznym istotności jest 0.05 \cite{lowry}, taka wartość będzie przyjęta również w tej pracy. Tego rodzaju wartość oznacza, że średnio co dwudziesta próba udowodnienia hipotezy zerowej zostanie niepoprawnie odrzucona mimo jej poprawności. Tego rodzaju zaburzenia nie powinny jednak wpływać na ogólne wnioski.
+}
+\subsubsection{Testy statystyczne w kontekście algorytmów optymalizacyjnych}
+\par{
+W przypadku niedeterministycznych algorytmów optymalizacyjnych, zmienną losową, która może zostać poddana testowaniu statystycznemu i nieść informację na temat jakości algorytmu jest minimalna wartość funkcji optymalizowanej uzyskiwana w kolejnych powtórzeniach algorytmu. Dla celów przykładów w dalszych częściach rozdziału zmienną tę oznaczono $R_{algorytm}$.
+}
+\par{
+Próbki z tej zmiennej zebrane dla różnych algorytmów i tego samego problemu pozwalają na modelowanie i porównywanie między sobie algorytmów w kontekście uzyskiwanych przez nie wyników. To z kolei pozwala na wysnuwanie statystycznych wniosków na temat przewagi algorytmu w kontekście pojedynczego zadania. W rozdziale \ref{benchmarkChapter} wskazano jak poszerzyć zastosowanie testów statystycznych przy użyciu dodatkowych narzędzi, w celu umożliwienia badania jakości uzyskiwanych przez algorytm wyników w oderwaniu od konkretnych problemów.
 \subsection{Testy parametryczne}
 \par{
-(Co to jest i kiedy się stosuje)
-}
-\subsubsection{Test T-studenta}
+Statystyczne testy parametryczne służą do weryfikacji pewnych hipotez w oparciu o próbę oraz znaną postać ogólną dystrybuanty statystyki testowej.
 \par{
-(Jak działa, ZAŁOŻENIA)
+Często przyjmowanym w statystyce rozkładem zmiennej losowej o której nie ma żadnych dodatkowych informacji, jest rozkład normalny. Ze względu na prawo wielkich liczb oraz centralne twierdzenie graniczne \cite{centrallimit}, rozkład ten występuje bowiem w realnych problemach nadzwyczaj często. Rozkład ten jest więc często dobrym punktem wyjścia dla pierwszych badań nad modelem losowym.
+}
+\subsubsection{Test T-Studenta dla prób niezależnych}
+\par{
+Jednym z testów zakładających normalny rozkład badanych zmiennych losowych, jest test T-Studenta dla prób niezależnych. Test ten, weryfikuje hipotezę zerową o równości średnich rozkładów dwóch zmiennych losowych na podstawie prób z nich pochodzących przy założeniu rozkładu normalnego tychże rozkładów.
 }
 \par{
-(Wady zalety).
+Średnia wartość zmiennej $R_{algorytm}$ jest uniwersalnym (choć nie jedynym możliwym) sposobem oceny algorytmu w kontekście problemu. W związku z tym, sprawdzenie hipotezy o nierówności średnich, z dwóch prób pochodzących z różnych algorytmów, pozwala wysnuć poprawny statystycznie wniosek na temat przewagi uzyskiwanych przez algorytm wyników. Wniosek ten, obarczony będzie błędem na poziomie granicznego poziomu istotności.
 }
-
+\par{
+Z tym testem wiążą się jednak dwa podstawowe problemy:
+\begin{description}
+\item[Założenie o normalności rozkładu] -- w przypadku generowanych przez różne algorytmy optymalizacyjne wyników prób na zmiennej losowej $R_{algorytm}$, rozkład tej zmiennej zależy zarówno od algorytmu jak i od rozwiązywanego problemu. Założenie o dążeniu rozkładu rzeczywistego $R_{algorytm}$ do rozkładu normalnego jest w niektórych wypadkach poprawne, jednak istnieją funkcje i algorytmy tego założenia niespełniające. W związku z tym test ten  w zaproponowanym zastosowaniu, zdaje się być obarczony nieznanym błędem metodycznym, co wyklucza jego zastosowanie w tych badaniach.
+\item[Niestabilność średniej] -- średnia arytmetyczna jako statystyka próby podlega znacznemu wpływowi wartości odstających. Odpowiedź na pytanie, czy jest to cecha pożądana, zależy ściśle od tego, co jest rzeczywiście obiektem naszych badań. W tym konkretnym wypadku, przy użyciu wybieranej statystyki staramy się dowiedzieć, jak algorytm wypada w typowym przypadku. Wydaje się, że mediana jest statystyką znacznie lepiej pasującą do tego ogólnego opisu. Warto zauważyć, że choć na potrzeby zawartych w pracy badań wybrano medianę, to nie jest to jedyny właściwy wybór i jest on podyktowany wyłącznie intuicją badacza (i dostępnością narzędzi do testowania hipotez).
+\end{description}
+}
 \subsection{Testy nieparametryczne}
 \par{
-(Co to jest i kiedy się stosuje)
+W odróżnieniu od testów parametrycznych, w testach nieparametrycznych nie czyni się założeń dotyczących rozkładu badanych zmiennych. W tym wypadku, bada się więc zachowania pewnych statystyk zmiennej losowej w oderwaniu od jej rzeczywistego rozkładu.
 }
-\subsection{Test Wilcoxona}
+\subsubsection{Test Wilcoxona dla prób niezależnych}
 \label{Wilcoxon}
 \par{
-(Opis, działanie, ZAŁOŻENIA)
+Test Wilcoxona \cite{mann1947} to nieparametryczny test statystyczny, badający hipotezę o równości median dwóch liczb losowych. Porównuje on dwie próby $\mathbf{r_{algorytm1}}$ i $\mathbf{r_{algorytm2}}$ pochodzące ze zmiennych kolejno $R_{algorytm1}$ i $R_{algorytm2}$ przy założeniu:
+\begin{itemize}
+\item Ciągłości rozkładu $R_{algorytm1}$ i $R_{algorytm2}$.
+\item Zmienne $r_{algorytm1,i}$ i $r_{algorytm2,i}$ są parowane losowo.
+\item Zmienne $R_{algorytm1}$ i $R_{algorytm2}$ są zmiennymi losowymi na zbiorze ze zdefiniowaną relacją częściowego porządku.
+\end{itemize}
 }
 \par{
-(Wady zalety)
+Wszystkie powyższe założenia są spełnione dla badanego przypadku. W związku z tym, można przy użyciu tego testu wysnuwać statystycznie poprawne wnioski dotyczące przewagi konkretnych algorytmów (mediany wyników) w konkretnych problemach, bez obarczania wyników błędem metodycznym. To rozwiązanie wydaje się odpowiadać w pełni wymaganiom poniższych badań, w związku z tym test Wilcoxona dla prób niezależnych został w nich wykorzystany.
 }
 \subsection{Dystrybuanta empiryczna}
-\section{Testy sprawności typu \emph{black-box} MS: ŹRÓDŁA :(}
-\subsection{Testy sprawności (ang. \emph{benchmark})}
 \par{
-W rozdziale \ref{Wilcoxon} wskazano metodę sprawdzenia jakości heurystycznego algorytmu rozwiązującego problem optymalizacji w kontekście konkretnego problemu. Ze względu na charakter optymalzowanej funkcji $f$ i kształty przeszukiwanej podprzestrzeni wyznaczanej przez funkcje $g_1,g_2, \ldots g_n$ różne algorytmy zachowują się różnie dla różnych instancji problemu optymalizacyjnego. Z tego powodu ocena algorytmu w konteście konkretnego problemu nie może być traktowana jako rzetelna algorytmu.
+Dystrybuanta to funkcja zmiennej losowej opisująca prawdopodobieństwo wystąpienia poszczególnych jej wartości. Dla zmiennej losowej $L$ dystrybuanta $D_L(x)$ jest zdefiniowana następująco:
+\begin{equation}
+D_L(x) = P(L \le x)
+\end{equation}
 }
 \par{
-Naturalną konsekwencją powyższego twierdzenia, jest próba skonstruowania mechanizmu umożlwiającego ocenę algorytmów niezależnie od konkretnego algorytmu. Testy sprawności (\emph{benchmark}) stanowią pod wieloma względami odpowiedź na to zapotrzebowanie. Ich podstawowym założeniem, jest teza, że właściwą oceną dla algorytmu średnia jakość jego działania dla wszystkich możliwych problemów danej klasy.
+Funkcja ta dokładnie opisuje rozkład zmiennej pozwalając wyznaczyć prawdopodobieństwo wystąpienia wartości $x$ dla dowolnego zbioru. Wykres tej funkcji jest także często wykorzystywana jako wizualizacja rozkładu.
+}
+\par{
+Dystrybuantą empiryczną zmiennej losowej $L$ nazywamy funkcję stanowiącą aproksymację funkcji $D_L$ na podstawie uzyskanych wartości $x$. Uzyskana w ten sposób krzywa, ma zawsze charakter schodkowy (ze względu na skończoną liczbę prób), jednak wraz ze wzrostem wielkości próby, średni błąd dystrybuanty empirycznej względem dystrybuanty rzeczywistej, dąży do zera. Z tego powodu, dystrybuanta empiryczna, przy licznych próbach, pełni nadal funkcję wizualizacyjną.
+}
+\par{
+Na rysunku \ref{EmpiricDist} zaprezentowano wykres rzeczywistej dystrybuanty rozkładu normalnego i nałożony na niego wykres dystrybuanty empirycznej wygenerowanej ze stu elementowej próby.
+}
+
+\section{Testy sprawności typu \emph{black-box}}
+\label{benchmarkChapter}
+\subsection{Testy sprawności (ang. \emph{benchmark})}
+\par{
+W rozdziale \ref{TestingStats} wskazano metodę sprawdzenia jakości heurystycznego algorytmu rozwiązującego problem optymalizacji w kontekście konkretnego problemu. Ze względu na charakter optymizowanej funkcji $f$ i kształty przeszukiwanej podprzestrzeni wyznaczanej przez funkcje $g_1,g_2, \ldots g_n$ różne algorytmy zachowują się różnie dla różnych instancji problemu optymalizacyjnego. Z tego powodu ocena algorytmu w kontekście konkretnego problemu nie może być traktowana jako rzetelna algorytmu.
+}
+\par{
+Naturalną konsekwencją powyższego twierdzenia, jest próba skonstruowania mechanizmu umożliwiającego ocenę algorytmów niezależnie od konkretnego algorytmu. Testy sprawności (\emph{benchmark}) stanowią pod wieloma względami odpowiedź na to zapotrzebowanie. Ich podstawowym założeniem, jest teza, że właściwą oceną dla algorytmu średnia jakość jego działania dla wszystkich możliwych problemów danej klasy.
 }
 \par{
 Przyjmując to założenie, autorzy testów tego typu starają się dostarczyć reprezentatywnej próbki problemów. Dzięki temu, oceniając średnią jakość algorytmu w kontekście tych problemów, oczekujemy podobnej średniej jakości co w przypadku wszystkich dopuszczalnych problemów. Oznacza to, że średnia jakość algorytmu w kontekście algorytmów z testu, jest estymatorem średniej jakości algorytmu we wszystkich rozważanych problemach. Zgodnie z pierwotnym założeniem, można więc stwierdzić, że jakość algorytmu w kontekście problemów testów sprawnościowych, stanowi estymator jakości algorytmu.
@@ -805,7 +859,7 @@ Dodatkowo, należy zauważyć, że ze względu na reprezentatywny charakter prob
 }
 \subsection{Testy typu \emph{black-box}}
 \par{
-Określenie \emph{black-box} odnosi się do charakteru realizacji problemów i dostępu do nich. Założeniem, towarzyszącym testom określanym jako \emph{black-box} jest zgodność problemu z punktu widzenia użytkownia z definicją z rozdziału \ref{ProblemDefinition}. Oznacza to, że użytkownik testów nie możliwości skorzystnia przy implementowania algorytmów z innych informacji dt. problemu niż:
+Określenie \emph{black-box} odnosi się do charakteru realizacji problemów i dostępu do nich. Założeniem, towarzyszącym testom określanym jako \emph{black-box} jest zgodność problemu z punktu widzenia użytkownika z definicją z rozdziału \ref{ProblemDefinition}. Oznacza to, że użytkownik testów nie możliwości skorzystania przy implementowania algorytmów z innych informacji dt. problemu niż:
 \begin{description}
 \item[definicji funkcji ograniczeń $g_1, g_2, \ldots g_m$]
 \item[wartości funkcji $f$ w zadanym przez użytkownika zbiorze $X_B$] -- gdzie $X_B$ stanowi skończony zbiór zadanych przez algorytm punktów w przestrzeni $X_D$.
@@ -813,9 +867,9 @@ Określenie \emph{black-box} odnosi się do charakteru realizacji problemów i d
 Tego rodzaju konstrukcja testu pozwala na zakwalifikowanie rozwiązanego przez użytkownika problemu do zdefiniowanego w sekcji \ref{ProblemDefinition} problemu.
 }
 \par{
-W praktyce, ilość informacji udostępnianych przez twórców testów sprawności typu \emph{black-box} prawie zawsze jest większa niż opisana wyżej. Ideą tych testów i warunkiem koniecznym dla uzyskania pewności oferowanych przez nie wyników jest jednak takie wykorzystanie dodatkowych danych, by nie wpłynęły one na przebieg algorytmu. Dodatkowe dane mają stawnowić cenną wskazówkę przy analizie konkretnych rozwiązań lub uproszczenie przy implementacj (np. raportowania).
+W praktyce, ilość informacji udostępnianych przez twórców testów sprawności typu \emph{black-box} prawie zawsze jest większa niż opisana wyżej. Ideą tych testów i warunkiem koniecznym dla uzyskania pewności oferowanych przez nie wyników jest jednak takie wykorzystanie dodatkowych danych, by nie wpłynęły one na przebieg algorytmu. Dodatkowe dane mają stanowić cenną wskazówkę przy analizie konkretnych rozwiązań lub uproszczenie przy implementacji (np. raportowania).
 \par{
-Klasycznym przykładem tego rodzaju dodatkowej informacji jest podanie przez twórców testu wartości $f_{min}$ czyli wartosci funkcji $f$ w punkcie zgodnym z najlepszym możliwym rozwiązaniem. Wartość ta pomaga skonstruować wykresy oparte o błąd zdefiniowany jako $e(x) = f_{min} - f(x)$. Przewagą tej funkcji nad funkcją $f(x)$ jest przeciwdziedzina $D^{-1} \in [0, \infty]$ która pozwala np. na skonstruowanie wykresu w skali logarytmicznej.
+Klasycznym przykładem tego rodzaju dodatkowej informacji jest podanie przez twórców testu wartości $f_{min}$ czyli wartości funkcji $f$ w punkcie zgodnym z najlepszym możliwym rozwiązaniem. Wartość ta pomaga skonstruować wykresy oparte o błąd zdefiniowany jako $e(x) = f_{min} - f(x)$. Przewagą tej funkcji nad funkcją $f(x)$ jest przeciwdziedzina $D^{-1} \in [0, \infty]$ która pozwala np. na skonstruowanie wykresu w skali logarytmicznej.
 }
 
 \subsection{Warunki dodatkowe testów}
@@ -833,7 +887,7 @@ Popularnymi warunkami dodaktowymi są \textbf{budżet} i \textbf{ilość wykona�
 \begin{description}
 \item[budżet] -- definiuje $X_{B}^{max}$ jako liczbę naturalną taką, że $|X_B| \le X_{B}^{max}$. Wyznaczenie przez zestaw testowy budżetu zwalnia użytkownika z konieczności definiowania deterministycznego warunku stopu algorytmu -- stanowi w tym kontekście warunek awaryjny.
 
-Ponadto zastosowanie budżetu pozwala na nakierowanie badań przy użyciu danego zestawu testów na odwzorowanie realiów konkrentych problemów. Przykładem mogą być testy przy bardzo ograniczonym budżecie, które testują jakość algorytmów przy założeniu braku możliwości dokładnego zbadania przeszukiwanej przestrzeni.
+Ponadto zastosowanie budżetu pozwala na nakierowanie badań przy użyciu danego zestawu testów na odwzorowanie realiów konkretnych problemów. Przykładem mogą być testy przy bardzo ograniczonym budżecie, które testują jakość algorytmów przy założeniu braku możliwości dokładnego zbadania przeszukiwanej przestrzeni.
 \item[ilość wykonań] -- dotyczy algorytmów niedeterministycznych i określa jaka ilość prób jaką należy wykonać na danym problemie by statystyki wyznaczane na otrzymanych wynikach były reprezentatywne.
 \end{description}
 }
@@ -851,24 +905,24 @@ Cześć z tych problemów zostało rozwiązanych np. w testach \emph{BBComp} \ci
 }
 \par{
 Niestety rozwiązanie zastosowane w \emph{BBComp} ma pewne wady. Po pierwsze wartości uzyskiwane w pojedynczych wykonaniach dla konkretnych problemów są nieodporne na przypadkowe niepowodzenia (lub sukcesy) wynikające ze stochastycznego charakteru badanych algorytmów.
-Po drugie, nadal udostępniana jest informacja pomocnicza w postaci wartości optymalnej dla każdej z dostępnych w benchmarku funkcji. Pondato z punktu widzenia bezpieczeństwa systemu, problemem jest metoda weryfikacji nowych użytkowników (brak weryfikacji) a także sama technologiczna konstrukcja testu pozostawiająca możliwości przekraczania budżetu jak i analizy poszczególnych funkcji.
+Po drugie, nadal udostępniana jest informacja pomocnicza w postaci wartości optymalnej dla każdej z dostępnych w benchmarku funkcji. Ponadto z punktu widzenia bezpieczeństwa systemu, problemem jest metoda weryfikacji nowych użytkowników (brak weryfikacji) a także sama technologiczna konstrukcja testu pozostawiająca możliwości przekraczania budżetu jak i analizy poszczególnych funkcji.
 }
 \par{
 Poza problemami związanymi z weryfikowalnością, występują jeszcze inne problemy charakterystyczne dla testów sprawności typu \emph{black-box}:
 \begin{description}
-\item[precyzja cyfrowa] -- problem wynikający z binarnego charaketeru reprezentacji i skończoności pamięci maszyn cyfrowych obsługujących testy. Zbiór liczb rzeczywistych w reprezentacji cyfrowej jest skończony a zgodnie z modelem matematycznym powinien mieć liczność $\mathfrak{c}$. Konsekwencją tego faktu jak również typowo stosowanego standardu reprezentacji liczb zmienno przecinkowych IEEE-754 \cite{IEEE754}, jest pewnien spodziewany przedział wartości $\epsilon$ na przeszukiwanej przestrzeni $X_D$, dla którego zmienność badanej funkcji jest pomijalna. Tego rodzaju wnioskowanie nie jest możliwe w oparciu o matematyczny model \ref{Model} a zarazem jest powszechnie wykorzystywane np. w algorytmie \emph{ADE} opisanym w rozdziale \ref{ArchiveLiterature}.
-\item[znany charakter problemów] -- problemy tworzone w ramach testów sprawności, są często sztucznymi funkcjami skonstruowanymi wg. najprostszych dla danych właściwości matematycznych formuł. Pewne elementarne własności charakterystyczne dla tych problemów (dla których nie ma naturalnego wytłumaczenia w modelu matematycznym) mogą być wykorzystane przez algorytmy w celu poprawy jakości ich działania. Walka z tym zjawiskiem powinna być możliwa, ale znacząco utrudnia konstruowanie testów. Pewne próby w tym kierunku poczyniono w ramach testów \emph{CEC 2013 benchmark} opisanychw rozdziale \ref{CEC2013chapter}. Jak pokazują wyniki tych testów, zjawisko to ma wpływ na jakość wyników -- problem ten jest więc rzeczywiście obecny w badaniach.
+\item[precyzja cyfrowa] -- problem wynikający z binarnego charakteru reprezentacji i skończoności pamięci maszyn cyfrowych obsługujących testy. Zbiór liczb rzeczywistych w reprezentacji cyfrowej jest skończony a zgodnie z modelem matematycznym powinien mieć liczność $\mathfrak{c}$. Konsekwencją tego faktu jak również typowo stosowanego standardu reprezentacji liczb zmiennoprzecinkowych IEEE-754 \cite{IEEE754}, jest pewien spodziewany przedział wartości $\epsilon$ na przeszukiwanej przestrzeni $X_D$, dla którego zmienność badanej funkcji jest pomijalna. Tego rodzaju wnioskowanie nie jest możliwe w oparciu o matematyczny model \ref{Model} a zarazem jest powszechnie wykorzystywane np. w algorytmie \emph{ADE} opisanym w rozdziale \ref{ArchiveLiterature}.
+\item[znany charakter problemów] -- problemy tworzone w ramach testów sprawności, są często sztucznymi funkcjami skonstruowanymi wg. najprostszych dla danych właściwości matematycznych formuł. Pewne elementarne własności charakterystyczne dla tych problemów (dla których nie ma naturalnego wytłumaczenia w modelu matematycznym) mogą być wykorzystane przez algorytmy w celu poprawy jakości ich działania. Walka z tym zjawiskiem powinna być możliwa, ale znacząco utrudnia konstruowanie testów. Pewne próby w tym kierunku poczyniono w ramach testów \emph{CEC 2013 benchmark} opisanych w rozdziale \ref{CEC2013chapter}. Jak pokazują wyniki tych testów, zjawisko to ma wpływ na jakość wyników -- problem ten jest więc rzeczywiście obecny w badaniach.
 \item[przeuczenie] -- Proces tworzenia i modyfikowania algorytmów oparty jest o badanie jak zmiany w algorytmie wpływają na wyniki testów sprawności uzyskiwane przez algorytm. W związku z tym, przy próbie oceny jakości algorytmu przy użyciu tego samego lub podobnego zestawu testów, może występować znany z uczenia maszynowego problem przeuczenia. Choć podejście twórców algorytmów, oparte jest o założenie o reprezentatywności zestawu testów w kontekście wszystkich problemów, to praktyczna nieprawdziwość tego założenia odbija się w błędzie wyników testów sprawności, rozumianych jako estymator jakości algorytmu. Ponieważ w czasie tworzenia algorytmu staramy się maksymalizować jakość algorytmu oceniając ją przez pryzmat obarczonego błędem estymatora, po pierwsze pomijamy błąd estymatora w badaniach, ale co gorsza generujemy algorytm, który najprawdopodobniej będzie w praktyce jakościowo słabszy.
 
 \par{
-Niestety uniknięcie tego problemu jest problematyczne, głównie ze względu na fakt, że większość testów sprawności zbudowana jest w oparciu o podobne funkcje, a zatem wykorzystnie innego zestawu testów do tworzenia i badania algorytmu, prawdopodobnie tylko w niewielkim stopniu zredukuje zaistniały problem. Tezę tę należało by jednak poddać weryfikacji w toku dalszych badań.
+Niestety uniknięcie tego problemu jest problematyczne, głównie ze względu na fakt, że większość testów sprawności zbudowana jest w oparciu o podobne funkcje, a zatem wykorzystanie innego zestawu testów do tworzenia i badania algorytmu, prawdopodobnie tylko w niewielkim stopniu zredukuje zaistniały problem. Tezę tę należało by jednak poddać weryfikacji w toku dalszych badań.
 } 
 \end{description}
 }
 \subsection{\emph{CEC 2013 benchmark}}
 \label{CEC2013chapter}
 \par{
-Przykładem testu sprawności typu \emph{black-box} jest zestaw testów opracowany w ramach konferencji \emph{CEC 2013 - IEEE Congress on Evolutionary Computation} -- \emph{CEC2013 bechmark}. Pełen opis benchmarka, funkcji, zakresów przeszukiwania jak i warunków dodatkowych został zawarty w \cite{Li13benchmarkfunctions}.
+Przykładem testu sprawności typu \emph{black-box} jest zestaw testów opracowany w ramach konferencji \emph{CEC 2013 - IEEE Congress on Evolutionary Computation} -- \emph{CEC2013 bechmark}. Pełen opis testu, funkcji, zakresów przeszukiwania jak i warunków dodatkowych został zawarty w \cite{Li13benchmarkfunctions}.
 }
 \par{
 Zestaw testów \emph{CEC 2013 benchmark} składa się z 28 funkcji podzielonych na 3 grupy:
@@ -887,14 +941,14 @@ Wszystkie funkcje dostarczone w ramach testu są dostępne dla wymiarowości prz
 Dla wszystkich funkcji zdefiniowano wartość minimum globalnego. Ponadto zdefiniowano, że wartości błędu poniżej $10^{-8}$ nie powinny być rozróżniane i powinny być traktowane jako optimum globalne $\mathbf{x_{best}}$ takie, że $e(\mathbf{x_{best}}) = 0$.
 }
 \par{
-Cechą charakterystyczną tego zestawu testów jest zastosowanie pewnych funkcji w wariantach standardowych jak i odwróconych. Pozwala to na wykrycie na etapie testów preferencji algorytmu dla funkcji, które mają wyróżnioną charakterystykę wzdłuż osi. Wyniki eksperymentów wielu algorytmów sugerują znaczący wpływ takiej preferencji \cite{JADE,SHADE}, która zdaje się nie mieć silnego poparcia w realnych problemach.
+Cechą charakterystyczną tego zestawu testów jest zastosowanie pewnych funkcji w wariantach standardowych jak i obróconych. Pozwala to na wykrycie na etapie testów preferencji algorytmu dla funkcji, które mają wyróżnioną charakterystykę wzdłuż osi. Wyniki eksperymentów wielu algorytmów sugerują znaczący wpływ takiej preferencji \cite{JADE,SHADE}, która zdaje się nie mieć silnego poparcia w realnych problemach.
 }
 \par{
 W ramach opisu testu \emph{CEC 2013 benchmark} dostarczono szeregu wskazań opisujących sposób zebrania danych. Wyszczególniono:
 \begin{itemize}
 \item budżet -- $X_B^{max} = D \cdot 10'000$
 \item ilość wykonań -- $R = 51$
-\item Punkty charakterystyczne na przestrzeni budżetu dla których należy zbierać informacje o najlepszym dotąd odnalezionym punkcie. Pozwala to na sprawdzenie jak zachowuje się dany algorytm dla zadanego budżetu, ale także dla zdefiniownych mniejszych budżetów -- dla wszysktich badań podąrzających za wytycznymi.
+\item Punkty charakterystyczne na przestrzeni budżetu dla których należy zbierać informacje o najlepszym dotąd odnalezionym punkcie. Pozwala to na sprawdzenie jak zachowuje się dany algorytm dla zadanego budżetu, ale także dla zdefiniowanych mniejszych budżetów -- dla wszystkich badań podążających za wytycznymi.
 \end {itemize}
 }
 
@@ -909,7 +963,7 @@ Wartym odnotowania jest fakt, że w ramach badań w oparciu o testy \emph{CEC 20
 \end{itemize}
 }
 \par{
-Ponieważ algorytm \emph{SHADE} uzyskał najlepszy wynik pośród algorytmów ewolucji różnicowej, został on wybrany jako baza do zaawansownego algorytmu \emph{ANADE}.
+Ponieważ algorytm \emph{SHADE} uzyskał najlepszy wynik pośród algorytmów ewolucji różnicowej, został on wybrany jako baza do zaawansowanego algorytmu \emph{ANADE}.
 }
 
 \subsubsection{Motywacja wyboru zestawu testów}
@@ -920,12 +974,16 @@ Zróżnicowane funkcje testowe, precyzyjne wytyczne co do zbierania danych, licz
 \chapter{Algorytmy \emph{NADE} i \emph{ANADE}}
 \section{Cele i założenia}
 \par{
-Główną ideą stojącą za projektowaniem algorytmu \emph{NADE} (ang. \emph{Normalized Archive Differential Evolution}), było skonstruowanie algorytmu wykorzystującego archiwum punktów odbiegającego w możliwie niewielkim stopniu od typowych wariantów ewolucji różnicowej. Skupiono się tu przedewszystkim na próbie dołączenia archiwum do klasycznego algorytmu \emph{DE}/\emph{rand}/\emph{1}/\emph{bin}.
+Główną ideą stojącą za projektowaniem algorytmu \emph{NADE} (ang. \emph{Normalized Archive Differential Evolution}), było skonstruowanie algorytmu wykorzystującego archiwum punktów odbiegającego w możliwie niewielkim stopniu od typowych wariantów ewolucji różnicowej. Skupiono się tu przede wszystkim na próbie dołączenia archiwum do klasycznego algorytmu \emph{DE}/\emph{rand}/\emph{1}/\emph{bin}.
 }
 \par{
-Tego rodzaju podejście pozwala zbadać użyteczność archiwum w oderwaniu od innych metod poprawy jakości działania algorytmu. Istnieje możliwość, że uzyskane rezultaty będą przynosiły korzyści zanikające w przypadku bardziej wysublimowanych wariantów algorytmu. W związku z tym, w rozdziale \ref{ANADE} zaproponowano algorytm \emph{ANADE} (ang. \emph{Adaptive Normalized Archive Differential Evolution}), czerpiący rozwiąznia dt. adaptacji z algorymtów \emph{SHADE} i \emph{JADE}. W rozdziale \ref{badania}, każdy z zaprojektowanych algorytmów zostnie porównany ze swoim niewykorzystującym archiwum opowiednikiem.
+Tego rodzaju podejście pozwala zbadać użyteczność archiwum w oderwaniu od innych metod poprawy jakości działania algorytmu. Istnieje możliwość, że uzyskane rezultaty będą przynosiły korzyści zanikające w przypadku bardziej wysublimowanych wariantów algorytmu. W związku z tym, w rozdziale \ref{ANADE} zaproponowano algorytm \emph{ANADE} (ang. \emph{Adaptive Normalized Archive Differential Evolution}), bazujący na algorytmie \emph{SHADE}. W rozdziale \ref{badania}, każdy z zaprojektowanych algorytmów zostanie porównany ze swoim niewykorzystującym archiwum odpowiednikiem.
+}
+\par{
+W rozdziale tym, w przypadku odwołań do wcześniej istniejących wariantów ewolucji różnicowej, stosowane będą oznaczenia z rozdziału \ref{DEvolChapter}.
 }
 \section{Uproszczony schemat badań}
+\label{StandardParamsSimple}
 \par{
 W czasie projektowania algorytmu sprawdzenia wymagały pewne tezy dotyczące możliwych dróg rozwoju algorytmu. Ponieważ przeprowadzenie kompletnego schematu badań zestawu testów sprawności \emph{CEC 2013 benchmark} jest czasochłonne, zdecydowano się do celów wstępnych badań zastosować procedurę ustaloną w oparciu o następujące założenia:
 \begin{itemize}
@@ -941,46 +999,853 @@ W czasie projektowania algorytmu sprawdzenia wymagały pewne tezy dotyczące mo�
 \item Wykorzystanie testu Wilcoxona na zebranych danych w celu weryfikacji określonych tez. Przyjęto standardowy poziom istotności $0.05$.
 \end{itemize}
 }
+
 \par{
-W dalszym ciągu tego rozdziału będą prezentowane całościowe lub częściowe wyniki badań uproszczonych w celu uzasadnienia podejmowanych w czasie projektowania algorytmu decyzji. Istniejące ryzyko przeuczenia wynikające z projektowania algorytmu w oparciu o zestaw testów go oceniających. Testy \emph{CEC 2013 benchmark} są jednak traktowane jako reprezentatywne dla wszystkich możliwych problemów. Zarazem decyzje w czasie projektowania algorytmów będą podejmowane wyłącznie w oparciu o jasne przesłanki (tzn. wyraźna przewaga konkretnego wariantu). W związkut z tym, wydaje się, że problem przeuczenia nie powinien mieć wpływu na wynik badań lub też zgodnie z tezą postawioną w rozdziale \ref{WadyBB} uniknięcie tego problemu nie było by możliwe przez użycie innego zestawu testów.
+W dalszym ciągu tego rozdziału będą prezentowane całościowe lub częściowe wyniki badań uproszczonych w celu uzasadnienia podejmowanych w czasie projektowania algorytmu decyzji.
+\par{
+Istnieje ryzyko przeuczenia algorytmów wynikające z projektowania algorytmu w oparciu o zestaw testów go oceniających. Testy \emph{CEC 2013 benchmark} są jednak traktowane jako reprezentatywne dla wszystkich możliwych problemów. Zarazem decyzje w czasie projektowania algorytmów będą podejmowane wyłącznie w oparciu o jasne przesłanki (tzn. wyraźna przewaga konkretnego wariantu). W związku z tym, wydaje się, że problem przeuczenia nie powinien mieć wpływu na wynik badań lub też zgodnie z tezą postawioną w rozdziale \ref{WadyBB} uniknięcie tego problemu nie było by możliwe przez użycie innego zestawu testów do badań niż do projektowania.
 }
+
 \section{Algorytm \emph{NADE}}
-\section{Podejścia do wykorzystania archiwum}
+\subsection{Podejścia do wykorzystania archiwum}
 \par{
-Podstawowym celem wykorzystania archiwum w procesie ewolucji różnicowej, było ograniczenie ilości osobników w pokoleniu bez utraty ilości możliwych do wygenerowania wektorów różnicowych.
+Podstawowym celem wykorzystania archiwum w procesie ewolucji różnicowej, było zwielokrotnienie liczby możliwych do wygenerowania wektorów różnicowych bez konieczności powiększania populacji. Intuicyjnym sposobem na zbudowanie tego rodzaju algorytmu jest włączenie w skład populacji poddawanej mutacji różnicowej osobników pochodzących z poprzednich iteracji, które zostały już wyeliminowane z bieżącego pokolenia. W ten sposób uzyskiwana jest możliwość sterowania wielkością takiego archiwum za pomocą nowego parametru $H$ oznaczającego wielkość populacji (archiwum) używanego do generowania wektorów różnicowych w mutacji różnicowej.
+}
+\par{
+Tego rodzaju podejście stanowiło punkt wyjścia dla algorytmu \emph{NADE}. Dla poszczególnych badanych wariantów zastosowano $H \in \{ 1.5 \cdot \mu, 2 \cdot \mu, 4 \cdot \mu \}$.  Takie wartości pozwalają na badanie algorytmu w porównaniu do klasycznego algorytmu ewolucji różnicowej przy standardowych nastawach podanych w rozdziale \ref{StandardParamsSimple}, jednocześnie są to wartości bliskie stosowanym do tej pory w innych algorytmach ewolucji różnicowej wykorzystujących archiwum (rozdział \ref{ArchiveLiterature}).
 }
 \subsection{Wybór punktów do archiwum}
-\subsection{Podejście do normalizacji}
+\par{
+Kluczowym przy projektowaniu mechanizmu archiwum jest wybranie mechanizmu doboru elementów wchodzących w jego skład.
+W przypadku algorytmu \emph{NADE} zastosowano jako punkt wyjścia najprostszy (opisany w rozdziale \ref{ArchiveTheoryBase}) mechanizm przesuwnego okna archiwum. W przypadku tego algorytmu, do archiwum $\mathbf{A}$ dodawane są punkty, które w czasie selekcji zostały dodane do populacji $\mathbf{X
+}$. Archiwum inicjalizowane jest pierwszym pokoleniem $X$. W przypadku przepełnienia archiwum ($|\mathbf{A}| + \mu > H$) usuwane są z niego osobniki dodane w najwcześniejszym pokoleniu. W przypadku wielu osobników w archiwum pochodzących z tego samego pokolenia, kolejność usuwania elementów jest losowa.
+}
+\par
+Tak zdefiniowany mechanizm doboru elementów do archiwum został dobrany do algorytmu \emph{NADE} jako podstawowy punkt wyjścia. Jednocześnie w toku dalszych prac nie zostały dostrzeżone przesłanki wskazujące, że zmiana tego mechanizmu na inny cechujący się podobnym stopniem złożoności mogła by przyczynić się do statystycznie istotnej poprawy uzyskiwanych przez algorytm rezultatów.
+}
+\subsection{Normalizacja archiwum}
+\par{
+Pierwsze próba porównania algorytmu \emph{NADE} z \emph{DE/rand/1/bin} przy użyciu uproszczonego schematu badań pozwoliła uzyskać wyniki zaprezentowane w tabeli \ref{Eksp1} w rozdziale \ref{ResultsAttachments} (podsumowanie w tabeli \ref{Eksp1short} poniżej). Wyniki te sugerują, iż przyjęta metoda może mieć potencjał dla wielu funkcji, ale zarazem, że uzyskiwana korzyść zanika w miarę jak rośnie wartość $H$.
+}
+\begin{table}[h]
+\centering
+\caption{Podsumowanie wyników uproszczonego porównania algorytmu \emph{NADE} bez normalizacji z \emph{DE/rand/1/bin} dla różnych wartości $H$ przy użyciu testu Wilcoxona. W tablicy ilość funkcji, dla których wyniki uległy statystycznej istotnej poprawie (+), pogorszeniu (-) i nie uległy statystycznej zmianie (=)}
+\label{Eksp1short}
+\begin{tabular}{|l|l|l|l|}
+\hline
+{\bf H}   & + & -  & =  \\ \hline
+{\bf 90}  & 8 & 4  & 16 \\ \hline
+{\bf 120} & 7 & 13 & 8  \\ \hline
+{\bf 240} & 1 & 19 & 8  \\ \hline
+\end{tabular}
+\end{table}
+\par{
+Warto odnotować, że w przypadku ewolucji różnicowej, oczekiwana jest coraz mniejsza wariancja osobników w kolejnych pokoleniach. Przetestowana wersja algorytmu mogła przyczynić się do zaburzenia tej cechy, ponieważ wariancja osobników w każdym pokoleniu zależy od wielu poprzednich -- innymi słowy -- wraz ze wzrostem wartości $H$ rośnie wariancja bieżącej populacji.
+}
+\par{
+W związku z tym, podjęto próbę modyfikacji algorytmu w celu wyeliminowania tej jego właściwości. W ten sposób powstał mechanizm adaptujący archiwum do bieżącego pokolenia. Mechanizm ten składa się z dwóch elementów:
+\begin{description}
+\item[Normalizacji] -- archiwum znormalizowane $\mathbf{A_{normalized}} = Normalize(\mathbf{A})$, gdzie funkcja $Normalize(\mathbf{A})$ przesuwa elementy archiwum $\mathbf{A}$ o wektor między punktem środkowym a punktem $\mathbf{0^D}$, a następnie dzieli wszystkie współrzędne wszystkich elementów archiwum przez średnią długość wektora miedzy elementami w $\mathbf{A}$, zgodnie z procedurą:
 
+\begin{algorithm}[H]
+\caption{Schemat normalizacji w algorytmie \emph{NADE}}
+\label{algorithm:ea}
+\begin{algorithmic}[1]
+\Function{Normalize}{$A$}
+	\State $distance_{mean}$ $\gets$ \Call{MeanDistance}{$A$}
+    \ForAll{i $\in$ 1:$|A|$}
+        \State $A[i] \gets \frac{A[i] - M_{A}}{distance_{mean}}$
+    \EndFor
+    \State \Return $A$
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+gdzie $\mathbf{M_{A}}$ zdefiniowano w taki sposób, że:
+\begin{equation}
+M_{A,j} = \frac{1}{|A|}\sum_{a \in A}{a_j}
+\end{equation}
+natomiast $MeanDistance(A)$ to średnia odległość euklidesowa:
+\begin{equation}
+MeanDistance(A) = \frac{2}{(|A|^2 - |A|)}\sum_{i = 1}^{|A|}{\sum_{j = (i+1)}^{|A|}{\sqrt{\sum_{k = 1}^{D}{(A_{i,k} - A_{j,k})^2}}}}
+\end{equation}
+\item[Denormalizacji] -- archiwum zdenormalizowane $\mathbf{A} = Denormalize(\mathbf{A_{normalized}}, \mathbf{X})$, gdzie funkcja $Denormalize(\mathbf{A})$ stanowi odwrotność funkcji $Normalize$ w kontekście bieżącego pokolenia $\mathbf{X}$. Zachodzi więc:
+\begin{equation}
+\mathbf{A} = Denormalize(Normalize(\mathbf{A}), \mathbf{A})
+\end{equation}
+a procedura opisująca funkcję $Deormalize(\mathbf{A}, \mathbf{X})$ wygląda następująco:
+\end{description}
 
-\section{Kompletna definicja algorytmu}
+\begin{algorithm}[H]
+\caption{Schemat denormalizacji w algorytmie \emph{NADE}}
+\label{algorithm:ea}
+\begin{algorithmic}[1]
+\Function{Denormalize}{$A, X$}
+	\State $distance_{mean}$ $\gets$ \Call{MeanDistance}{$X$}
+    \ForAll{i $\in$ 1:$|A|$}
+        \State $A[i] \gets distance_{mean} \cdot A[i] + M_{X}$
+    \EndFor
+    \State \Return $A$
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+}
+\par{
+Ten sposób normalizacji i denormalizacji, wymusza w każdym pokoleniu istnienie archiwum $\mathbf{A}$, ułożonego wokół punktu środkowego populacji ze średnią długością wektora taką, jak w populacji $\mathbf{X}$. Archiwum $\mathbf{A}$ wykorzystywane może być więc do mutacji różnicowej, natomiast do jego wyznaczenia w każdym pokoleniu wykorzystywane będzie archiwum $\mathbf{A_{normalized}}$.
+}
+\par{
+Przy tak zdefiniowanym algorytmie \emph{NADE} uzyskano rezultaty jak w tabeli \ref{Eksp2} w rozdziale \ref{ResultsAttachments}. W tabeli \ref{eks2summary} zaprezentowanie podsumowanie testu Wilcoxona dla porównania \emph{DE/rand/1/bin} z poszczególnymi nastawami \emph{NADE}.
+\begin{table}[h]
+\centering
+\caption{Podsumowanie wyników porównania algorytmu \emph{NADE} z \emph{DE/rand/1/bin} dla różnych wartości $H$ przy użyciu testu Wilcoxona. W tablicy ilość funkcji, dla których wyniki uległy statystycznej istotnej poprawie (+), pogorszeniu (-) i nie uległy statystycznej zmianie (=)}
+\label{eks2summary}
+\begin{tabular}{|l|l|l|l|}
+\hline
+{\bf H}   & + & -  & =  \\ \hline
+{\bf 90}  & 8 & 8  & 12 \\ \hline
+{\bf 120} & 8 & 12 & 8  \\ \hline
+{\bf 240} & 7 & 13 & 8  \\ \hline
+\end{tabular}
+\end{table}
+}
+\subsection{Wielkość populacji}
+\par{
+Zebrane dane w dalszym ciągu nie sugerowały możliwości statystycznie istotnej poprawy wyników uzyskiwanych przez algorytm \emph{DE/rand/1/bin} a zarazem uzyskane wyniki wskazują na poprawę względem algorytmu \emph{NADE} bez normalizacji. W tej sytuacji zdecydowano się przetestować dodatkowo hipotezę, o możliwości poprawy jakości uzyskiwanych wyników przez zmniejszenie populacji, a zatem zwiększenie ilości iteracji algorytmu w ramach tego samego budżetu. Dodatkowe archiwum, mogło by w tej sytuacji zapewniać równoważną ilość wektorów różnicowych przy mniejszej populacji.
+}
+\par{
+W związku z powyższym, w ramach wstępnego badania, zestawiono algorym \emph{DE/rand/1/bin} dla $\mu = 40$ z algorytmem NADE dla $\mu = 40$ i $H = 60$. Wyniki tego eksperymentu przedstawiono w tabeli \ref{Eksp3} w rozdziale \ref{ResultsAttachments} (skrócona wersja w tabeli \ref{eks3summary} poniżej). Dodatkowo, by stwierdzić, czy wydłużenie czasu obliczeń może wpłynąć pozytywnie na ogół wyników uzyskiwanych w problemach z \emph{CEC 2013 benchmark}, zestawiono algorytm NADE dla powyższych ustawień, z algorytmem $DE/rand/1/bin$ dla ustawień podstawowych ($\mu = 60$) wyniki tych eksperymentów zawarto w tablicach \ref{Eksp4} oraz \ref{eks4summary}.
+}
+
+\begin{table}[h]
+\centering
+\caption{Podsumowanie wyników porównania algorytmu \emph{NADE} ($H = 60$ i $\mu = 40$) z \emph{DE/rand/1/bin} ($\mu = 40$) przy użyciu testu Wilcoxona. W tablicy ilość funkcji, dla których wyniki uległy statystycznej istotnej poprawie (+), pogorszeniu (-) i nie uległy statystycznej zmianie (=)}
+\label{eks3summary}
+\begin{tabular}{|l|l|l|l|}
+\hline
+{\bf H}  & +  & - & =  \\ \hline
+{\bf 60} & 10 & 6 & 12 \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\caption{Podsumowanie wyników porównania algorytmu \emph{NADE} ($H = 60$ i $\mu = 40$) z \emph{DE/rand/1/bin} ($\mu = 60$) przy użyciu testu Wilcoxona. W tablicy ilość funkcji, dla których wyniki uległy statystycznej istotnej poprawie (+), pogorszeniu (-) i nie uległy statystycznej zmianie (=)}
+\label{eks4summary}
+\begin{tabular}{|l|l|l|l|}
+\hline
+{\bf H}  & + & - & =  \\ \hline
+{\bf 60} & 4 & 8 & 16 \\ \hline
+\end{tabular}
+\end{table}
+
+\par{
+Wyniki wskazują, że dla małych populacji dodanie znormalizowanego archiwum pozwalającego na wygenerowanie większej liczby różnych wektorów różnicowych pozwala uzyskać lepsze rezultaty. Z drugiej strony, nadal istnieje podejrzenie, że dla właściwych wartości parametrów \emph{DE/rand/1/bin} tylko nieliczne funkcje mogą być zbadane dokładniej za sprawą zyskanej kosztem liczebności populacji ilości iteracji algorytmu.
+}
+\subsection{Wstępna hipoteza}
+\par{
+Zebrane wyniki sugerują, iż istnienie archiwum zarówno w znormalizowanej jak i zdenormalizowanej nie wpływają korzystnie w statystycznie istotny sposób na wyniki uzyskiwane w większości funkcji z \emph{CEC2013 benchmark}. Istnieje także podejrzenie, że w rzeczywistości istnienie archiwum w takiej formie może powodować pogorszenie uzyskiwanych wyników. Ponieważ jednak wyniki, zwłaszcza w przypadku pomniejszonej populacji są niejednoznaczne, algorytm NADE będzie poddany kompletnym badaniom zgodnym z wytycznymi z \cite{Li13benchmarkfunctions} w rozdziale \ref{badania}.
+}
 
 \section{Algorytm \emph{ANADE}}
 \label{ANADE}
 \par{
-
+Podstawowy wariant algorytmów ewolucji różnicowej, \emph{DE/rand/1/bin} został wielokrotnie pokonany pod kątem możliwości przez inne bardziej wysublimowane warianty tych algorytmów. Z tego powodu, wykazanie możliwości lub braku możliwości poprawy jakości uzyskiwanych przez \emph{DE/rand/1/bin} wyników przez wprowadzenie znormalizowanego archiwum, nie świadczy jednoznacznie o użyteczności tego rozwiązania w kontekście poprawy wyników uzyskiwanych przez algorytmy ze wspomnianej grupy.
 }
-\section{Podejścia do wykorzystania archiwum}
-\subsection{Wybór punktów do archiwum}
-\subsection{Podejście do normalizacji}
+\par{
+Argumentacja ta, doprowadziła do próby skonstruowania algorytmu \emph{ANADE} opartego ściśle o algorytm \emph{SHADE}. Algorytm SHADE został wybrany jako reprezentant zaawansowanych algorytmów ewolucji różnicowej, ze względu na najlepsze w grupie algorytmów ewolucji różnicowej wyniki, jakie uzyskał w teście \emph{CEC2013 benchmark} \cite{CEC2013Comp}.
+}
+\par{
+Algorytm \emph{ANADE} należy więc rozumieć jako taką modyfikację algorytmu \emph{SHADE}, która normalizuje i denormalizuje archiwum (istniejące już w SHADE) wg. schematów znanych z \emph{NADE}. Tę modyfikację poddano weryfikacji przez zestawienie uzyskiwanych przez nią wyników z wynikami uzyskiwanymi przez SHADE. Dla obu algorytmów zastosowano nastawy zgodne z \cite{SHADE}. Jako bazę implementacji wykorzystano kod źródłowy udostępniony przez autorów \emph{SHADE} w ramach konferencji \emph{CEC2013}. W takim zestawieniu uzyskano wyniki jak w tablicy \ref{Eksp3short} poniżej (pełne wyniki w załączniku, tablica \ref{Eksp3}).
+}
 
-Podstawowym celem modyfikacji algorytmu ewolucji różnicowej, było ograniczenie ilości osobników w pokoleniu bez utraty ilości możliwych do wygenerowania wektorów różnicowych. Mając to założenie na względzie rozpatrzono kilka wariantów archiwum punktów.
-\section{Kompletna definicja algorytmu}
+\begin{table}[h]
+\centering
+\caption{Podsumowanie wyników porównania algorytmu \emph{ANADE} z \emph{SHADE} dla proponowanych w \cite{SHADE} wartości parametrów, przy użyciu testu Wilcoxona. W tablicy ilość funkcji, dla których wyniki uległy statystycznej istotnej poprawie (+), pogorszeniu (-) i nie uległy statystycznej zmianie (=)}
+\label{Eksp3short}
+\begin{tabular}{|l|l|l|}
+\hline
+{\bf +} & {\bf -} & {\bf =} \\ \hline
+1       & 4       & 23      \\ \hline
+\end{tabular}
+\end{table}
 
+\par{
+Uzyskane wyniki wskazują na trzy hipotezy do przetestowania w pełnym schemacie badań:
+\begin{itemize}
+\item Wpływ znormalizowanego archiwum na wyniki uzyskiwane przez algorytm zanika w zaawansowanym wariancie ewolucji różnicowej -- \emph{SHADE}.
+\item Średni wpływ znormalizowanego archiwum na działanie algorytmów ewolucji różnicowej jest negatywny.
+\item Istnieją problemy, dla których znormalizowane archiwum poprawia uzyskiwane przez \emph{SHADE} wyniki.
+\end{itemize}
+}
 
 \chapter{Badania}
 \label{badania}
 \section{Cel}
-\section{Plan eksperymentów}
-\section{Dobór parametrów}
-\section{Zbierane rezulataty}
-\subsection{Środek ciężkości populacji (DE/mid)}
-\section{Sposób analizy}
+\par{
+W poprzednim rozdziale przy użyciu uproszczonego schematu badań wysunięto hipotezy dotyczące wpływu znormalizowanego wg. wskazanej procedury archiwum na wyniki uzyskiwane w różnych wariantach ewolucji różnicowej. W celu zweryfikowania tych tez, przeprowadzono badania w oparciu o schemat zgodny z zalecaniami twórców \emph{CEC2013 benchmark}.
+}
+\par{
+Weryfikacji poddane zostaną następujące tezy:
+\begin{enumerate}
+\item Archiwum znormalizowane wg. procedury algorytmu \emph{NADE} powoduje poprawę jakości uzyskiwanych przez ewolucję różnicową dla niektórych typów funkcji.
+\item Tego rodzaju archiwum nie jest perspektywiczne jeśli chodzi o jakość algorytmu dla nieznanego charakteru problemu.
+\item Wpływ takiej modyfikacji na jakość wyników zanika w przypadku zastosowania go w zaawansowanym algorytmie ewolucji różnicowej (\emph{SHADE}).
+\item Archiwum niewielkich rozmiarów (ok. $1.5 \cdot \mu$) daje największe korzyści przy jednoczesnym zminimalizowaniu liczby problemów, dla których przynosi ono skutek negatywny.
+\end{enumerate}
+}
+\par{
+Szczególnie istotne jest sprawdzenie postawionych tez w kontekście innych niż pierwotnie badano wymiarowości problemu.
+}
 
-\section{Wyniki (w załączniku?)}
-\section{Analiza wyników (wnioski)}
+\section{Plan eksperymentów}
+\par{
+\begin{itemize}
+\item Wykorzystanie wszystkich funkcji testowych $f_1$ do $f_{28}$.
+\item Wykonywanie badań dla wymiarowości $D \in \{10, 30, 50\}$.
+\item Wykonywanie 51 powtórzeń dla każdej z funkcji testowych.
+\item Bazowe wartości parametrów DE wg \cite{CEC2013DEbasic} oraz \cite{SHADE},
+\begin{itemize}
+\item $F = 0.5$
+\item $Cr = 0.9$
+\item $\mu = Max(50, 2 \cdot D)$ -- w przypadku \emph{DE/rand/1/bin} i \emph{NADE}
+\item $\mu = 100$ -- w przypadku \emph{SHADE} i \emph{ANADE}
+\end{itemize}
+\item Wykorzystanie testu Wilcoxona na zebranych danych w celu weryfikacji określonych tez. Przyjęto standardowy poziom istotności $0.05$.
+\end{itemize}
+}
+\par{
+W celu weryfikacji tez, wg. powyższego scenariusza zostaną wykonane następujące porównania:
+\begin{itemize}
+\item Porównanie algorytmu \emph{DE/rand/1/bin} i \emph{NADE} dla $H \in \{1.5 \cdot \mu, 2 \cdot \mu, 4 \cdot \mu \}$
+\item Porównanie algorytmu \emph{SHADE} i \emph{NADE} dla standardowych parametrów \emph{SHADE}.
+\end{itemize}
+}
+\par{
+Ze względu na koszta czasowe i niskie rokowania, nie będzie przeprowadzone porównanie algorytmu \emph{NADE} z \emph{DE/rand/1/bin} przy pomniejszonej w stosunku do przyjętej zgodnie z \cite{CEC2013DEbasic} liczebności populacji.
+}
+
+\section{Sposób analizy}
+\par{
+Dla każdego zestawu parametrów, dla każdego algorytmu i każdej funkcji testowej, algorytm zostanie wykonany 51 krotnie. Uzyskane wartości optymalizowanej funkcji w najlepszych punktach w kolejnych próbach będą przedmiotem analizy.
+}
+\par{
+W przypadku porównywania algorytmów, serie danych będą porównywane dla każdej funkcji i każdego zestawu parametrów osobno przy użyciu testu Wilcoxona. Dodatkowo wyznaczona więc będzie średnia wartość błędu z serii informująca o rzeczywistym rzędzie wielkości wyników uzyskiwanych przez algorytmy.
+}
+\par{
+Tak zebrane dane pozwolą na przeanalizowanie otrzymywanych przez różne algorytmy wyników w kontekście konkretnych problemów, a także niezależne porównanie wyników z innymi opublikowanymi pracami wykorzystującymi ten sam zestaw testów.
+}
+\section{Skrót wyników}
+\par{
+Przeprowadzone eksperymenty pozwoliły na uzyskanie wyników przedstawionych w tablicach \ref{FullEksp110} do \ref{FullEksp250} w załączniku pracy, poniżej zaprezentowano ogólny poziom wyników w postaci ilości statystycznie istotnych różnic między porównywanymi algorytmami przy konkretnych parametrach (tablica \ref{FULLSUMMARY}).
+}
+
+\begin{table}[h]
+\centering
+\caption{Podsumowanie wyników kompletnych badań algorytmów \emph{NADE} i \emph{ANADE} w oparciu o zestaw testów \emph{CEC2013 benchmark}. W tablicy ilość funkcji, dla których wyniki uległy statystycznej istotnej poprawie (+), pogorszeniu (-) i nie uległy statystycznej zmianie (=), względem odpowiedników algorytmów nie zawierającego znormalizowanego archiwum, dla różnych wymiarowości $D$.}
+\label{FULLSUMMARY}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+{\bf D}  & \multicolumn{3}{c|}{{\bf NADE $H=1.5 \cdot \mu$}} & \multicolumn{3}{c|}{{\bf NADE $2 \cdot \mu$}} & \multicolumn{3}{c|}{{\bf NADE $H=4 \cdot \mu$}} & \multicolumn{3}{c|}{{\bf ANADE}} \\ \hline
+         & {\bf\hspace{3mm}+\hspace{3mm}}       & {\bf\hspace{4mm}-\hspace{4mm}}      & {\bf\hspace{1mm}=\hspace{1mm}}      & {\bf\hspace{1mm}+\hspace{1mm}}       & {\bf\hspace{1mm}-\hspace{1mm}}       & {\bf\hspace{1mm}=}       & {\bf\hspace{2mm}+\hspace{2mm}}        & {\bf\hspace{3mm}-\hspace{3mm}}        & {\bf\hspace{1mm}=\hspace{1mm}}       & {\bf\hspace{1mm}+\hspace{1mm}}   & {\bf\hspace{1mm}-\hspace{1mm}}   & {\bf\hspace{1mm}=\hspace{1mm}}  \\ \hline
+{\bf 10} & 4             & 11            & 13            & 4             & 12             & 12             & 5              & 13              & 10            & 3         & 2         & 23        \\ \hline
+{\bf 30} & 8             & 8            & 12            & 8             & 11             & 9             & 7              & 13              & 8             & 1         & 4         & 23        \\ \hline
+{\bf 50} & 6             & 13            & 9            & 3             & 14             & 11             & 0              & 17              & 11             & 2         & 4         &  22        \\ \hline
+\end{tabular}
+\end{table}
+
+\section{Wnioski}
+\par{
+Analizując wyniki eksperymentów, należy zwrócić uwagę, na fakt, że w uzyskanych wynikach wyraźnie widać, że dla pewnych funkcji dodanie archiwum (szczególnie w przypadku algorytmu NADE) niezależnie od przyjętych parametrów przynosi korzyść. Wstępne badania sugerowały, że może mieć to związek z charakterem funkcji i dotyczyć w szczególności wielu funkcji jedno modalnych ($f_1$ do $f_5$) oraz złożonych ($f_{21}$ do $f_{28}$). W tych grupach podsumowanie testu Wilcoxona prezentowało się jak w tablicy \ref{FULLSUMMARYUNIandCOMPLEX} poniżej. Sugeruje to, że algorytm poszerzony o niewielkie archiwum w najlepszym razie nie traci na możliwościach przeszukiwania w przypadku funkcji tego rodzaju (i to tylko dla $H = 1.5 \cdot \mu$. Obala to hipotezę pierwszą, szczególnie dla większych wymiarowości problemów. Istnieją funkcje, dla których znormalizowane archiwum przynosi poprawę jednak jest to nieliczna i nieregularna podgrupa wszystkich analizowanych problemów.
+}
+\begin{table}[h]
+\centering
+\caption{Podsumowanie wyników kompletnych badań algorytmów \emph{NADE} i \emph{ANADE} w oparciu o zestaw testów \emph{CEC2013 benchmark} dla funkcji jedno modalnych i złożonych ($f_1 - f_5$ oraz $f_{21} - f_{28}$). W tablicy ilość funkcji, dla których wyniki uległy statystycznej istotnej poprawie (+), pogorszeniu (-) i nie uległy statystycznej zmianie (=), względem odpowiedników algorytmów nie zawierającego znormalizowanego archiwum, dla różnych wymiarowości $D$.}
+\label{FULLSUMMARYUNIandCOMPLEX}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+{\bf D}  & \multicolumn{3}{c|}{{\bf NADE $H=1.5 \cdot \mu$}} & \multicolumn{3}{c|}{{\bf NADE $2 \cdot \mu$}} & \multicolumn{3}{c|}{{\bf NADE $H=4 \cdot \mu$}} & \multicolumn{3}{c|}{{\bf ANADE}} \\ \hline
+         & {\bf\hspace{3mm}+\hspace{3mm}}       & {\bf\hspace{4mm}-\hspace{4mm}}      & {\bf\hspace{1mm}=\hspace{1mm}}      & {\bf\hspace{1mm}+\hspace{1mm}}       & {\bf\hspace{1mm}-\hspace{1mm}}       & {\bf\hspace{1mm}=}       & {\bf\hspace{2mm}+\hspace{2mm}}        & {\bf\hspace{3mm}-\hspace{3mm}}        & {\bf\hspace{1mm}=\hspace{1mm}}       & {\bf\hspace{1mm}+\hspace{1mm}}   & {\bf\hspace{1mm}-\hspace{1mm}}   & {\bf\hspace{1mm}=\hspace{1mm}}  \\ \hline
+{\bf 10} & 2             & 2            & 9            & 2             & 3             & 8             & 2              & 2              & 9             & 1         & 1         & 11        \\ \hline
+{\bf 30} & 5             & 3            & 5            & 5             & 2             & 6             & 4              & 4              & 5             & 1         & 1         & 11        \\ \hline
+{\bf 50} & 4             & 4            & 5            & 2             & 5             & 6             & 0              & 7              & 8             & 0         & 1         &  12        \\ \hline
+\end{tabular}
+\end{table}
+
+
+\par{
+Jednocześnie, ważnym wnioskiem jest jednak fakt, że przyjmując próbę problemów z testu \emph{CEC2013} za reprezentatywną dla wszystkich możliwych problemów, dodanie archiwum powoduje średnio (dla całkowicie nieznanego problemu) pogorszenie wyników uzyskiwanych przez algorytm. Potwierdza to hipotezę drugą, dla wszystkich wymiarowości problemu i analizowanych wariantów ewolucji różnicowej.
+}
+\par{
+Trzecia z hipotez, również wydaje się być potwierdzona. Dla innych wymiarowości i bardziej reprezantatywnej liczby powtórzeń wykonań algorytmu, wyniki nadal wskazują na zanikający wpływ normalizacji archiwum w przypadku zastosowania jej do algorytmu \emph{SHADE}. W takim przypadku zanikają również wzorce o których mówi hipoteza pierwsza, co dodatkowo wpływa na jej obalenie.
+}
+\par{
+Ostatnią z hipotez najłatwiej potwierdzić sumując wartości z kolumny $+$ i $-$ dla wszystkich wymiarowości i kolejnych wielkości $H$. Tego typu operacja ujawnia rezultat widoczny w tabeli \ref{FULLSUMSUM} poniżej. Wynik ten ze względu na zdecydowanie najlepszy bilans dla $H = 1.5 \cdot \mu$ co potwierdza ostatnią z hipotez. Warto jednak zaznaczyć, że ponieważ bilans we wszystkich przypadkach był ujemny, ten wniosek można też przypisać faktowi, że najmniejsze archiwum najmniej ingeruje w podstawowy wariant algorytmu.
+}
+
+\begin{table}[h]
+\centering
+\caption{Podsumowanie ilościowe popraw i pogorszeń uzyskiwanych przez \emph{NADE} w stosunku do \emph{DE/rand/1/bin} w zależności od wartości $H$.}
+\label{FULLSUMSUM}
+\begin{tabular}{|l|l|l|l|}
+\hline
+{\bf H}               & {\bf +} & {\bf -} & {\bf bilans} \\ \hline
+{\bf $1.5 \cdot \mu$} & 18       & 32       & -14            \\ \hline
+{\bf $2 \cdot \mu$}   & 15       & 37       & -22            \\ \hline
+{\bf $4 \cdot \mu$}   & 12       & 43       & -31            \\ \hline
+\end{tabular}
+\end{table}
+
+\chapter{Obserwacje dotyczące metodyki}
+\label{metodyka}
+\par{
+Poza celem pracy, prowadzenie badań doprowadziło do licznych obserwacji dotyczących metodyki badań, które stanowią potencjalny obszar rozwoju w celu lepszego dostosowania się do dalszego prowadzenia badań. Ten rozdział zawiera opis obserwacji i wstępne propozycje rozwiązania niektórych z napotkanych problemów.
+}
+\section{Specyfika algorytmów ewolucji różnicowej}
+\subsection{Stabilność algorytmów}
+\par{
+Podstawowym elementem, który należy rozważyć przy omawianiu metodyki pracy nad algorytmami ewolucji różnicowej, jest podatność wyników przez nie uzyskiwanych na zmiany w algorytmie. Praktyka pokazuje, że niewielkie modyfikacje algorytmów w sposób istotny statystycznie wpływają na otrzymywane wyniki. Analogicznie sytuacja prezentuje się w kwestii ustawień dostępnych w algorytmach parametrów.
+}
+\par{
+Tak niski poziom stabilności badanych algorytmów powoduje dwie ważne konsekwencje:
+\begin{description}
+\item[podatność na błędy] -- popełnienie drobnego błędu w implementacji założonej koncepcji może znacząco wpłynąć na końcowe wyniki. W praktyce gdy błąd doprowadzi do pogorszenia wyników, może to spowodować przedwczesne zakończenie badań nad konkretną koncepcją. Gdy z kolei błąd doprowadzi do poprawy wyników, wysunięte wnioski a przede wszystkim uargumentowanie co spowodowało poprawę rezultatów będą błędne. Zwłaszcza ta druga sytuacja jest niebezpieczna, gdyż autorzy kolejnych prac w oparciu o wcześniejsze badania mogą brnąć w gałąź nauki opartą na błędnych przesłankach.
+\item[dużą ilość stopni swobody] -- ze względu na ogromny wpływ każdego elementu na ogólny wynik działania algorytmu, a także na zachodzące między elementami zależności, ilość wariantów algorytmów które należy poddać badaniu by potwierdzić pewne teorie nie pozostawiając pola na wątpliwości jest niezliczona. Z tego powodu, częstą praktyką jest przyjmowanie pewnych wartości parametrów czy koncepcji ze wcześniejszych prac i domniemanie, że w połączeniu z proponowanymi modyfikacjami będą one stanowiły reprezentatywną próbę. Analogicznie postąpiono w tej pracy. Ponieważ badanie wszelkich kontr teorii dotyczących zmian w wynikach uzyskiwanych przez algorytm jest przy dzisiejszym stanie wiedzy niemożliwe. Próba wyeliminowania tego problemu zdaje się być bardzo ciekawym, choć niewątpliwie dalece złożonym problemem, godnym dalszych badań.
+\end{description}
+}
+\subsection{Czas obliczeń}
+\par{
+Na brak stabilności algorytmów z grupy algorytmów ewolucyjnych, nakłada się dodatkowo fakt, że ich rzetelne przetestowanie wymaga wielokrotnego powtarzania i tak często długotrwałych obliczeń. Przykładowo przeprowadzenie kompletnego badania algorytmu \emph{DE/rand/1/bin} w 30 wymiarach przy tylko jednym zestawie parametrów zgodnie z wytycznymi \cite{CEC2013DEbasic} trwało 2-4h na współczesnym komputerze klasy PC.
+}
+\par{
+Tego rzędu czasy obliczeń zmuszają do uproszczeń w schematach badań przynajmniej na wstępnym etapie prac, a także dodatkowo potęgują problematyczność związaną ze stabilnością wyników. Każdy bowiem błąd jak i każda dodatkowa teza wymagająca sprawdzenia powodują nie tylko konieczność poświęcenia czasu na obliczenia, ale także przestój w pracy badawczej.
+}
+\par{
+Wydaje się więc, że podejmowane w literaturze próby zmniejszania ilości parametrów i wariantów algorytmu, za których przetestowanie odpowiedzialny jest projektant nowego algorytmu, jest drogą słuszną. W przypadku braku przełomowego rozwiązania, umożliwiającego pozbycie się tego rodzaju ograniczeń, dalsze zgłębianie charakteru badanych algorytmów w celu ustalenia, jakie stopnie swobody nie będą wymagały dodatkowych testów przy nowych algorytmach, wydaje się więc kolejnym istotnym i już trwającym kierunkiem badań.
+}
+\subsection{Zbieranie danych}
+\par{
+Innym problemem związanym z metodyką badań nad algorytmami wymagającymi wielokrotnego powtarzania eksperymentów, jest konieczność zbierania danych do analizy cech algorytmów. W podstawowym wariancie dla każdego uruchomienia algorytmu zbierana jest tylko końcowa wartość funkcji przystosowania. Przy bardziej złożonych analizach może okazać się jednak konieczne zebranie licznych serii danych dla każdego uruchomienia, a to z kolei powoduje, że sam sposób gromadzenia tych danych staje się złożonym zagadnieniem z dziedziny baz danych. Ta kwestia także pozostawia wiele pola do rozwoju w przyszłości.
+}
+\section{Implementacja}
+\subsection{Język implementacji}
+\label{jezykdoimpl}
+\par{
+Mimo teoretycznego charakteru pracy, za uzyskiwanymi wynikami stały konkretne implementacje algorytmów. Pierwotne implementacje utworzone były w języku R \cite{Rlang}. Język ten wydawał się odpowiedni, ze względu na wsparcie dla operacji macierzowych, szybkość działania, dostępność implementacji \emph{CEC2013 benchmark} oraz dużą zwięzłość pozwalającą na szybką implementację zakładanych funkcjonalności.
+}
+\par{
+Język ten, choć pozwala na sprawne prototypowanie, niestety posiada szereg wad w kontekście stawianego przed nim zadania spośród których najpoważniejsze to:
+\begin{description}
+\item[słaba typizacja] -- ze względu na słabą kontrolę typów i brak możliwości organizacji typów wektorowych i macierzowych w struktury logiczne bez utraty wydajności obliczeń, język nie stanowi bariery dla potencjalnych błędów ze strony programisty.
+\item[brak kontroli rozmiarów macierzy] -- macierze i wektory w R poddają się operacją arytmetycznym niezależnie od wymiarowości. W pewnych sytuacjach prowadzi to do ostrzeżeń interpretera, jednak w większości wypadków kończy się powodzeniem. Analogicznie jak w przypadku typizacji, problemem jest brak mechanizmów ochrony użytkownika języka przed popełnieniem błędów. 
+\end{description}
+Cechy te, w kontekście postawionych tez dotyczących stabilności algorytmów ewolucji różnicowej sprawiają, że język ten wydaje się nie być odpowiedni do tworzenia końcowych implementacji, ze względu na zbyt duże ryzyko błędu i rozbieżności między planowaną ideą a rzeczywistą interpretacją.
+}
+\par{
+Ponadto, przy wstępnych badaniach, wykorzystanie tego języka może sugerować wstępne wnioski niezgodne z rzeczywistością, co jest szczególne dotkliwe z powodu możliwości odrzucenia potencjalnie interesujących gałęzi rozwoju, na wstępnym etapie badań. Wydaje się, że zysk płynący z szybkości implementacji jest niewspółmiernie mały.
+}
+\par{
+Z drugiej strony, język R wydaje się nadal znakomitym narzędziem analizy danych, pozwalającym przy wykorzystaniu wbudowanych funkcjonalności wykonywać złożone operacje statystyczne na danych, bez konieczności wnikania użytkownika w ich implementację. Dodatkowo język R udostępnia szereg mechanizmów wizualizacji, które dodatkowo zwiększają jego atrakcyjność na etapie analizy danych. Stosowność jego zastosowania, jest więc tu podważana tylko w kontekście obliczeń symulacyjnych -- takich jak testy algorytmów optymalizacyjnych.
+}
+\par{
+Tego rodzaju rozumowanie prowadzi do poszukiwania odpowiedzi na pytanie -- jaki język implementacji byłby najbardziej właściwy. W późniejszej części badań w ramach pracy wykorzystano do implementacji silnie typowany język obiektowy -- \emph{C++}. Spowodowało to znaczne zwiększenie tempa prac, mimo spowolnienia tempa implementacji. Mniejsza ilość błędów i większy wachlarz możliwości jeśli chodzi o ich odnajdywanie, spowodowały, że ilość kosztownych uruchomień symulacji znacząco zmalała przy jednoczesnym niewątpliwym wzroście wiarygodności badań. Dodatkową korzyścią płynącą z wykorzystania tego języka był wzrost wydajności obliczeń, a więc skrócenie czasu oczkowania na wyniki. Czas ten nie był dokładnie zmierzony ponieważ nie był on przedmiotem badań, jednak przyspieszenie obliczeń można szacować na 2--3 krotne.
+}
+\par{
+Fakt, że język \emph{C++} sprawdził się w tym zastosowaniu dobrze, nie przesądza o tym, czy jest to najlepsze z możliwych rozwiązań. Należy również wziąć pod uwagę, że zaobserwowany spadek liczby błędów w kodzie może być także spowodowany dużym doświadczeniem autora pracy w tej właśnie technologi.
+}
+\par{
+Sprawą otwartą i wymagającą dalszych badań (a także w dużej mierze zależną od autora konkretnych badań) jest dobranie języka implementacji odpowiedniego do opisywanych badań. Język taki niewątpliwie powinien posiadać mechanizmy kontrolujące logiczną zwartość przetwarzanych informacji i operacji, a także pozwalać na modularyzację algorytmów. Wydaje się więc, że najlepszymi kandydatami będą silnie typowane języki obiektowe oraz silnie typowane języki funkcyjne (np. \emph{Haskell)}.
+}
+\subsection{Modularyzacja}
+\label{modlsubs}
+\par{
+Ważnym aspektem, który należy wziąć pod uwagę, przy projektowaniu algorytmów, jest możliwość podzielenia ich na niezależne moduły, funkcje czy też podalgorytmy. Takie podejście pozwala nie tylko na analizę i testowanie kodu w częściach, ale także umożliwia dostrzeżenie podobieństw między różnymi stosowanymi algorytmami i wychwycenie rzeczywistych różnic między nimi występujących.
+}
+\par{
+Podział algorytmu, powinien prawdopodobnie przebiegać wzdłuż kolejnych elementów operujących na danych w sposób możliwie niezależny od siebie. Wydaje się, że koncepcją którą może się sprawdzić (i dla której \emph{proof of concept} stanowiła implementacja w \emph{C++} algorytmów w ramach badań w tej pracy), jest podział algorytmu na niezależne części, które operują na stanie algorytmu i przekazują jego zmodyfikowaną wersję dalej. Pozwala to w idealnym wypadku na konstruowanie algorytmów z niezależnych, raz zaimplementowanych bloków. To z kolei prowadzi do powtarzalności implementacji i daje możliwość poświęcenia większej ilości czasu na badanie poprawności tych właśnie bloków.
+}
+\par{
+Warto odnotować, że do takiego charakteru przetwarzania idealnie zdają się pasować języki funkcyjne. To właśnie one wydają się być godną zbadania alternatywą dla rozwiązań obiektowych w kontekście algorytmów ewolucji różnicowej. Elementem oczekującym na dalsze zbadanie i takim, który może okazać się kluczowy dla rozwinięcia tej idei, jest poszukiwanie rozsądnych linii podziału między kolejnymi modułami w algorytmie.
+}
+\par{
+Innym ale równie istotnym aspektem wymagającym modularyzacji, jest konieczność możliwe dużej separacji wykonywanego algorytmu od mechanizmów zbierania i przetwarzania danych wynikowych. Częstą praktyką jest łączenie tych dwóch elementów, co może prowadzić do utraty czytelności implementacji jak i utrudniać katalogowanie i analizowanie danych zebranych przy badaniach. Ponieważ dane wynikowe dla większości algorytmów z badanej grupy będą miały podobny charakter, wydaje się również że uniezależnienie ich zbierania od samego algorytmu, pozwoliło by wielokrotnie wykorzystywać te same rozwiązania -- co dodatkowo oszczędziło by czas badaczom.
+}
+\subsubsection{Testowanie}
+\par{
+Programowanie jest dziedziną, która wiąże się z dużą ilością błędów. Ze względu na to, że niezależnie od tego co jest implementowane, błędy w kodzie są jego nierozłącznym elementem, informatyka wypracowała mechanizmy pozwalające ograniczyć ich problematyczność do minimum.
+}
+\par{
+Poza silnie typowanymi, chroniącymi przed błędami już na poziomie składni językami, o których mowa w rozdziale \ref{jezykdoimpl}, informatyka proponuje szereg rozwiązań operujących na gotowym kodzie. Dwa najważniejsze to:
+\begin{description}
+\item[testowanie] -- testy aplikacji polegają na przetwarzaniu z góry przygotowanych scenariuszy użycia kodu i porównywaniu uzyskanych wyników ze znanymi oczekiwanymi. Popularne testy regresji, polegają na testowaniu po każdej zmianie kodu, czy do tej pory przewidziane scenariusze nadal funkcjonują w sposób prawidłowy. Ważnym jest też opisywanie w formie scenariuszy testowych takich danych wejściowych, które w przeszłości doprowadzały do wystąpienia błędów. Z punktu widzenia testowania modularyzacja zdaje się być kluczowa. Ze względu bowiem na złożony charakter algorytmów, ich całościowe testowanie jest problematyczne. Testy jednostkowe, wydzielające pod problemy do testowania, pozwalają dokładnie zbadać właściwości kolejnych operatorów nakładanych na dane i w ten sposób znacząco poprawić ich jakość.
+\par{
+Kwestią wymagającą oddzielnych badań wydają się jednak być testy integracyjne -- a więc takie polegające na sprawdzeniu całości algorytmu. Z jednej strony, wydaje się, że mechanizmy łączenia modułów w kompletny algorytm można przetestować na przykładzie prostego i deterministycznego algorytmu. Z drugiej jednak nieoczywistym jest, że proste algorytmy będą ujawniały te same błędne cechy kodu co algorytmy bardziej złożone. Zbadanie możliwości wykorzystania różnych istniejących technik (lub stworzenia nowych) tworzenia testów integracyjnych, jawi się więc jako jeden z istotniejszych kierunków badań służących poprawie zaufania do uzyskiwanych w zastosowanej metodyce wyników.
+}
+\par{
+Odnotować należy również możliwość prowadzenia badań nad algorytmami z wykorzystaniem technik \emph{Test Driven Development}, jako że takie rozwiązanie w wielu źródłach podawane jest jako sposób na znaczącą poprawę jakości kodu \cite{CleanCode}.
+}
+\item[dowodzenie poprawności] -- informatyka wypracowała również metody matematycznego dowodzenia poprawności kodu. Choć techniki te nie są doskonałe, i jednocześnie są czasochłonne (i z tych powodów rzadko stosuje się je w rzeczywistych rozwiązaniach), wydają się one doskonale odpowiadać potrzebom tego rodzaju badań. Sposób skorzystania z tych możliwości informatyki, to kolejny z otwartych kierunków badań nad metodyką pracy przy omawianych problemach.
+\end{description}
+}
+
+\section{Narzędzia wsparcia}
+\par{
+Ostatnią wartą odnotowania obserwacją dotyczącą stosowanej metodyki pracy, jest niska dostępność narzędzi wsparcia. Oznacza to, że mimo sporej społeczności badaczy, zajmujących się tematyką, a także dużej powtarzalności narzędzi wykorzystywanych w badaniach, nie został skonstruowany wspólny ogólnodostępny ich zestaw. W praktyce powoduje to, że każdy z badaczy, poświęca własny czas badań, na przygotowanie pobocznych narzędzi nie będących ich przedmiotem. Jednocześnie należy zwrócić uwagę na fakt, że zwiększa to także ryzyko błędu w implementacji.
+}
+\par{
+Choć współczesne pakiety umożliwiające analizę danych jak \emph{R}, dostarczają łatwo dostępnych wysokopoziomowych funkcji analizy danych, to nie jest to jedyna wspólna część narzędzi dla różnych badaczy. Spośród najistotniejszych braków w bazie narzędziowej należało by bowiem wymienić:
+\begin{description}
+\item[Narzędzie planowania eksperymentów] -- elementem niezmiennym dla wszystkich omawianym badań jest planowanie eksperymentów w oparciu o dostarczony algorytm. Niezależnie od parametrów i typu algorytmu, wiele części planowania wygląda podobnie. Dobierane są konkretne zestawy parametrów i zbierane podobne dane. Wydaje się więc możliwym, stworzenie systemu korzystającego ze wspólnych cech badanych algorytmów, i dostarczającego podstawowych operacji takich jak tworzenie zestawu testów i przeglądanie ich wyników.
+\item[Narzędzie zbieranie danych] -- oprócz planowania eksperymentów istotny jest także sposób składowania danych, który co do zasady powinien być podobny dla większości algorytmów. Dostarczając rozbudowaną implementację zbierania danych i łącząc ją z narzędziem do planowania eksperymentów, można się spodziewać, że cały proces badawczy przetwarzający algorytm na gotowe analizy danych wymagające wyłącznie ręcznego opisania i wstawienia do treści artykułu, mógłby zostać zautomatyzowany.
+\item[Narzędzie budowy algorytmów] -- ostatnim elementem, który mógłby powstać w oparciu o ideę modularnych algorytmów, jest narzędzie pozwalające tworzyć algorytmy w bardziej przejrzystej formie wykorzystując gotowe bloki i dopisując własne. Narzędzie takie by było bardziej użyteczne, niż przejrzyste API posiadające podobne właściwości musiało by być rozbudowane pod kątem interfejsu użytkownika. Stworzenie takiego narzędzia nie wydaje się więc być sprawą priorytetową, jednak na pewno jest to warta odnotowania droga rozwoju dla społeczności badaczy.
+\end{description}
+}
+\par{
+Odnosząc się raz jeszcze do tematu narzędzi wsparcia, można domniemywać, że tego rodzaju zestaw narzędzi stanowił by istotne wsparcie dla badaczy, a zarazem poprawił by jakość i spójność badań. Ponadto można podejrzewać, że uogólnienie niektórych problemów do postaci wystarczającej dla większości badaczy, jest dużym wyzwaniem teoretycznym, mogącym się przyczynić do rozwoju teorii i praktyki różnych dziedzin informatyki.
+}
+
 
 \chapter{Podsumowanie}
+\par{
+Cel pracy został osiągnięty. Skonstruowany został algorytm \emph{NADE}, dodający do klasycznego schematu ewolucji różnicowej zewnętrzne archiwum wykorzystywane w procesie mutacji różnicowej. Algorytm \emph{NADE} został porównany z klasycznym algorytmem \emph{DE/rand/1/bin} pod kątem jakości uzyskiwanych wyników, dla różnych wartości nowego parametru $H$. Tym samym zbadano wpływ zaproponowanego archiwum na jakość uzyskiwanych wyników w mutacji różnicowej.
+}
+\par{
+Uzyskane wyniki wskazały, że archiwum w zaproponowanej formie wpływa w sposób statystycznie istotny na otrzymywane wyniki. Zostało stwierdzone, że choć istnieją problemy, dla których zaproponowana modyfikacja może prowadzić do poprawy uzyskiwanych wyników, to nie ma jasnych przesłanek, według których można by wskazać te problemy. Zgodnie z otrzymanymi rezultatami, należy także przyjąć, iż dla większości funkcji z testu \emph{CEC2013 benchmark}, algorytm \emph{NADE} działa mniej skutecznie niż podstawowy wariant ewolucji różnicowej \emph{DE/rand/1/bin}. Wskazano, że choć wpływ archiwum na uzyskiwane wyniki zależy od badanej funkcji, to traktując funkcje z testu \emph{CEC2013 benchmark} jako reprezentatywną próbkę problemów, archiwum w opisanej formie nie jest pożądaną modyfikacją algorytmu \emph{DE/rand/1/bin} dla całkowicie nieznanego problemu.
+}
+\par{
+Zbadana została możliwość zastosowania znormalizowanego archiwum w wypracowanej formie w zaawansowanej wersji algorytmu ewolucji różnicowej \emph{SHADE} \cite{SHADE}. Został skonstruowany algorytm \emph{ANADE} stanowiący rozszerzenie algorytmu \emph{SHADE} o takie właśnie archiwum, który jakością rozwiązań w ogólnym przypadku nieznacznie odbiegał od swojego pierwowzoru w sposób negatywny. Skłonność proponowanej modyfikacji do statystycznie istotnej zmiany uzyskiwanych wyników w sposób zależny od problemu została potwierdzona. W przypadku algorytmu \emph{ANADE} było to jednak mniej wyraźne zjawisko.
+}
+\par{
+Mając na względzie powyższe wnioski, wydaje się, że dalsze badanie archiwum jako niezależnej od wariantu ewolucji różnicowej metody poprawy jakości jej działania, nie są interesującym kierunkiem rozwoju.
+}
+\par{
+Dodatkowo w ramach pracy w rozdziale \ref{metodyka} poruszono wątki dotyczące metodyki badań i możliwości ich dalszego rozwoju. Omówiono trudności związane z weryfikowalnością implementacji algorytmów, dokładnością oraz czasochłonnością badań. Ten poboczny wątek, który nie był pierwotnym celem pracy, wskazuje kluczowe problemy przy badaniach tego rodzaju i sugeruje cechy jakie powinny posiadać rozwiązania tychże problemów. Metodyka pracy nad niedeterministycznymi algorytmami optymalizującymi, zdaje się być ważnym punktem dla rozwoju dziedziny, a zarazem okazją do rozwijających technologię informacyjną badań zarówno o charakterze teoretycznym jak i inżynierskim.
+}
+
+\chapter{Załącznik - wyniki eksperymentów}
+\label{ResultsAttachments}
+\begin{table}[]
+\centering
+\caption{
+Średnie błędy algorytmu \emph{DE/rand/1/bin} oraz pierwszej wersji algorytmu \emph{NADE} (bez normalizacji punktów w archiwum) dla $H \in \{90, 120, 240\}$ i funkcji z \emph{CEC2013 benchmark}. Dodatkowo podano wyniki testu Wilcoxona dla par, dla uzyskiwanych wyników względem \emph{DE/rand/1/bin}. Wymiarowość przestrzeni przeszukiwań $D = 30$.
+}
+\par{\vphantom{10}}
+\par{ }
+\label{Eksp1}
+\begin{tabular}{|l|l|l|l|l|}
+
+\hline
+          & {\bf DE/rand/1/bin} & {\bf NADE H=90} & {\bf NADE H=120} & {\bf NADE = 240} \\ \hline
+{\bf F1}  & 0.00e+00 (=)        & 0.00e+00 (=)    & 0.00e+00 (=)     & 0.00e+00 (=)     \\ \hline
+{\bf F2}  & 1.76e+05 (=)        & 3.44e+05 (-)    & 4.46e+05 (-)     & 4.88e+06 (-)     \\ \hline
+{\bf F3}  & 1.88e+06 (=)        & 9.75e+04 (+)    & 4.11e+04 (+)     & 7.34e+05 (=)     \\ \hline
+{\bf F4}  & 7.76e+02 (=)        & 7.01e+02 (=)    & 1.55e+03 (-)     & 2.61e+04 (-)     \\ \hline
+{\bf F5}  & 0.00e+00 (=)        & 0.00e+00 (=)    & 0.00e+00 (=)     & 0.00e+00 (=)     \\ \hline
+{\bf F6}  & 2.04e+01 (=)        & 1.44e+01 (+)    & 1.40e+01 (+)     & 1.46e+01 (+)     \\ \hline
+{\bf F7}  & 1.57e+00 (=)        & 1.73e-01 (+)    & 6.41e-02 (+)     & 1.53e+01 (-)     \\ \hline
+{\bf F8}  & 2.09e+01 (=)        & 2.10e+01 (=)    & 2.09e+01 (=)     & 2.09e+01 (=)     \\ \hline
+{\bf F9}  & 1.06e+01 (=)        & 7.40e+00 (+)    & 2.66e+01 (-)     & 3.81e+01 (-)     \\ \hline
+{\bf F10} & 7.15e-02 (=)        & 1.31e-02 (+)    & 4.20e-03 (+)     & 7.80e-01 (-)     \\ \hline
+{\bf F11} & 1.87e+01 (=)        & 1.75e+01 (=)    & 1.17e+02 (-)     & 1.81e+02 (-)     \\ \hline
+{\bf F12} & 1.59e+02 (=)        & 1.70e+02 (=)    & 1.83e+02 (-)     & 2.00e+02 (-)     \\ \hline
+{\bf F13} & 1.70e+02 (=)        & 1.72e+02 (=)    & 1.75e+02 (-)     & 1.98e+02 (-)     \\ \hline
+{\bf F14} & 2.90e+03 (=)        & 3.35e+03 (=)    & 5.56e+03 (-)     & 6.66e+03 (-)     \\ \hline
+{\bf F15} & 7.10e+03 (=)        & 7.09e+03 (=)    & 7.11e+03 (=)     & 7.23e+03 (-)     \\ \hline
+{\bf F16} & 2.41e+00 (=)        & 2.45e+00 (=)    & 2.43e+00 (=)     & 2.60e+00 (=)     \\ \hline
+{\bf F17} & 1.10e+02 (=)        & 1.27e+02 (-)    & 1.74e+02 (-)     & 2.14e+02 (-)     \\ \hline
+{\bf F18} & 2.01e+02 (=)        & 2.01e+02 (=)    & 2.10e+02 (-)     & 2.34e+02 (-)     \\ \hline
+{\bf F19} & 9.19e+00 (=)        & 1.29e+01 (-)    & 1.46e+01 (-)     & 1.65e+01 (-)     \\ \hline
+{\bf F20} & 1.19e+01 (=)        & 1.20e+01 (=)    & 1.21e+01 (-)     & 1.26e+01 (-)     \\ \hline
+{\bf F21} & 3.09e+02 (=)        & 2.93e+02 (=)    & 2.91e+02 (=)     & 2.91e+02 (=)     \\ \hline
+{\bf F22} & 2.56e+03 (=)        & 2.82e+03 (=)    & 5.24e+03 (-)     & 6.75e+03 (-)     \\ \hline
+{\bf F23} & 7.08e+03 (=)        & 7.05e+03 (=)    & 7.06e+03 (=)     & 7.24e+03 (-)     \\ \hline
+{\bf F24} & 2.13e+02 (=)        & 2.01e+02 (+)    & 2.02e+02 (+)     & 2.15e+02 (=)     \\ \hline
+{\bf F25} & 2.44e+02 (=)        & 2.39e+02 (+)    & 2.39e+02 (+)     & 2.52e+02 (-)     \\ \hline
+{\bf F26} & 2.17e+02 (=)        & 2.50e+02 (-)    & 2.54e+02 (-)     & 2.08e+02 (-)     \\ \hline
+{\bf F27} & 4.75e+02 (=)        & 4.05e+02 (+)    & 3.48e+02 (+)     & 8.30e+02 (-)     \\ \hline
+{\bf F28} & 3.00e+02 (=)        & 3.00e+02 (=)    & 3.00e+02 (=)     & 3.00e+02 (=)     \\ \hline
+\end{tabular}
+\end{table}
+
+
+\begin{table}[]
+\centering
+\caption{Średnie błędy algorytmu \emph{DE/rand/1/bin} algorytmu \emph{NADE} dla $H \in \{90, 120, 240\}$ i funkcji z \emph{CEC2013 benchmark}. Dodatkowo podano wyniki testu Wilcoxona dla par, dla uzyskiwanych wyników względem \emph{DE/rand/1/bin}. Wymiarowość przestrzeni przeszukiwań $D = 30$.}
+\label{Eksp2}
+\begin{tabular}{|l|l|l|l|l|}
+\hline
+{\bf }    & {\bf DE/rand/1/bin} & {\bf NADE H=90} & {\bf NADE H=120} & {\bf NADE H=240} \\ \hline
+{\bf F1}  & 0.00e+00 (=)        & 0.00e+00 (=)    & 0.00e+00 (=)     & 0.00e+00 (=)     \\ \hline
+{\bf F2}  & 1.76e+05 (=)        & 3.78e+05 (-)    & 2.97e+05 (-)     & 7.06e+05 (-)     \\ \hline
+{\bf F3}  & 1.88e+06 (=)        & 1.30e+06 (+)    & 6.45e+00 (+)     & 3.60e-03 (+)     \\ \hline
+{\bf F4}  & 7.76e+02 (=)        & 4.35e+02 (+)    & 2.90e+02 (+)     & 6.53e+02 (=)     \\ \hline
+{\bf F5}  & 0.00e+00 (=)        & 0.00e+00 (=)    & 0.00e+00 (=)     & 0.00e+00 (=)     \\ \hline
+{\bf F6}  & 2.04e+01 (=)        & 1.92e+01 (+)    & 1.53e+01 (+)     & 9.37e+00 (+)     \\ \hline
+{\bf F7}  & 1.57e+00 (=)        & 3.09e-01 (+)    & 1.86e-01 (+)     & 3.10e-01 (+)     \\ \hline
+{\bf F8}  & 2.09e+01 (=)        & 2.10e+01 (=)    & 2.09e+01 (=)     & 2.09e+01 (=)     \\ \hline
+{\bf F9}  & 1.06e+01 (=)        & 1.19e+01 (=)    & 2.36e+01 (-)     & 3.87e+01 (-)     \\ \hline
+{\bf F10} & 7.15e-02 (=)        & 2.76e-02 (+)    & 1.22e-02 (+)     & 0.00e+00 (+)     \\ \hline
+{\bf F11} & 1.87e+01 (=)        & 8.85e+01 (-)    & 1.60e+02 (-)     & 1.70e+02 (-)     \\ \hline
+{\bf F12} & 1.59e+02 (=)        & 1.71e+02 (=)    & 1.78e+02 (-)     & 1.87e+02 (-)     \\ \hline
+{\bf F13} & 1.70e+02 (=)        & 1.73e+02 (=)    & 1.78e+02 (-)     & 1.91e+02 (-)     \\ \hline
+{\bf F14} & 2.90e+03 (=)        & 6.46e+03 (-)    & 6.53e+03 (-)     & 6.65e+03 (-)     \\ \hline
+{\bf F15} & 7.10e+03 (=)        & 7.15e+03 (=)    & 7.21e+03 (-)     & 7.16e+03 (=)     \\ \hline
+{\bf F16} & 2.41e+00 (=)        & 2.50e+00 (=)    & 2.52e+00 (=)     & 2.40e+00 (=)     \\ \hline
+{\bf F17} & 1.10e+02 (=)        & 1.92e+02 (-)    & 1.93e+02 (-)     & 2.03e+02 (-)     \\ \hline
+{\bf F18} & 2.01e+02 (=)        & 2.01e+02 (=)    & 2.06e+02 (=)     & 2.20e+02 (-)     \\ \hline
+{\bf F19} & 9.19e+00 (=)        & 1.42e+01 (-)    & 1.52e+01 (-)     & 1.59e+01 (-)     \\ \hline
+{\bf F20} & 1.19e+01 (=)        & 1.21e+01 (-)    & 1.21e+01 (-)     & 1.23e+01 (-)     \\ \hline
+{\bf F21} & 3.09e+02 (=)        & 3.20e+02 (=)    & 3.08e+02 (=)     & 3.01e+02 (=)     \\ \hline
+{\bf F22} & 2.56e+03 (=)        & 6.55e+03 (-)    & 6.73e+03 (-)     & 6.72e+03 (-)     \\ \hline
+{\bf F23} & 7.08e+03 (=)        & 7.15e+03 (=)    & 7.08e+03 (=)     & 7.19e+03 (-)     \\ \hline
+{\bf F24} & 2.13e+02 (=)        & 2.02e+02 (+)    & 2.02e+02 (+)     & 2.01e+02 (+)     \\ \hline
+{\bf F25} & 2.44e+02 (=)        & 2.41e+02 (+)    & 2.41e+02 (+)     & 2.41e+02 (+)     \\ \hline
+{\bf F26} & 2.17e+02 (=)        & 2.39e+02 (-)    & 2.42e+02 (-)     & 2.29e+02 (-)     \\ \hline
+{\bf F27} & 4.75e+02 (=)        & 3.70e+02 (+)    & 3.77e+02 (+)     & 4.48e+02 (+)     \\ \hline
+{\bf F28} & 3.00e+02 (=)        & 3.00e+02 (=)    & 3.00e+02 (=)     & 3.00e+02 (=)     \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[]
+\centering
+\caption{Średnie błędy algorytmu \emph{DE/rand/1/bin} ($\mu = 40$) algorytmu \emph{NADE} dla $\mu = 40$, $H = 60$ i funkcji z \emph{CEC2013 benchmark}. Dodatkowo podano wyniki testu Wilcoxona dla par, dla uzyskiwanych wyników względem \emph{DE/rand/1/bin}. Wymiarowość przestrzeni przeszukiwań $D = 30$.}
+\label{Eksp3}
+\begin{tabular}{|l|l|l|}
+\hline
+          & {\bf DE/rand/1/bin} & {\bf NADE H=60} \\ \hline
+{\bf F1}  & 8.00e-04 (=)        & 0.00e+00 (=)    \\ \hline
+{\bf F2}  & 1.35e+07 (=)        & 1.11e+07 (=)    \\ \hline
+{\bf F3}  & 2.11e+01 (=)        & 3.40e+00 (=)    \\ \hline
+{\bf F4}  & 9.88e+00 (=)        & 1.99e+00 (=)    \\ \hline
+{\bf F5}  & 1.22e+01 (=)        & 6.74e+00 (+)    \\ \hline
+{\bf F6}  & 2.35e+01 (=)        & 1.18e+01 (+)    \\ \hline
+{\bf F7}  & 1.45e+02 (=)        & 1.64e+02 (+)    \\ \hline
+{\bf F8}  & 6.98e+03 (=)        & 7.09e+03 (=)    \\ \hline
+{\bf F9}  & 5.84e+01 (=)        & 1.84e+02 (+)    \\ \hline
+{\bf F10} & 4.36e+00 (=)        & 1.22e+01 (+)    \\ \hline
+{\bf F11} & 2.84e+02 (=)        & 3.44e+02 (+)    \\ \hline
+{\bf F12} & 6.84e+03 (=)        & 6.98e+03 (-)    \\ \hline
+{\bf F13} & 2.55e+02 (=)        & 2.44e+02 (=)    \\ \hline
+{\bf F14} & 6.32e+02 (=)        & 4.35e+02 (-)    \\ \hline
+{\bf F15} & 8.00e-04 (=)        & 0.00e+00 (=)    \\ \hline
+{\bf F16} & 1.35e+07 (=)        & 1.11e+07 (=)    \\ \hline
+{\bf F17} & 2.11e+01 (=)        & 3.40e+00 (-)    \\ \hline
+{\bf F18} & 9.88e+00 (=)        & 1.99e+00 (=)    \\ \hline
+{\bf F19} & 1.22e+01 (=)        & 6.74e+00 (-)    \\ \hline
+{\bf F20} & 2.35e+01 (=)        & 1.18e+01 (=)    \\ \hline
+{\bf F21} & 1.45e+02 (=)        & 1.64e+02 (-)    \\ \hline
+{\bf F22} & 6.98e+03 (=)        & 7.09e+03 (-)    \\ \hline
+{\bf F23} & 5.84e+01 (=)        & 1.84e+02 (=)    \\ \hline
+{\bf F24} & 4.36e+00 (=)        & 1.22e+01 (+)    \\ \hline
+{\bf F25} & 2.84e+02 (=)        & 3.44e+02 (+)    \\ \hline
+{\bf F26} & 6.84e+03 (=)        & 6.98e+03 (=)    \\ \hline
+{\bf F27} & 2.55e+02 (=)        & 2.44e+02 (+)    \\ \hline
+{\bf F28} & 6.32e+02 (=)        & 4.35e+02 (+)    \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[]
+\centering
+\caption{Średnie błędy algorytmu \emph{DE/rand/1/bin} ($\mu = 60$) algorytmu \emph{NADE} dla $\mu = 40$, $H = 60$ i funkcji z \emph{CEC2013 benchmark}. Dodatkowo podano wyniki testu Wilcoxona dla par, dla uzyskiwanych wyników względem \emph{DE/rand/1/bin}. Wymiarowość przestrzeni przeszukiwań $D = 30$.}
+\label{Eksp4}
+\begin{tabular}{|l|l|l|}
+\hline
+          & {\bf DE/rand/1/bin} & {\bf NADE}   \\ \hline
+{\bf F1}  & 0.00e+00 (=)        & 0.00e+00 (=) \\ \hline
+{\bf F2}  & 1.88e+06 (=)        & 1.11e+07 (=) \\ \hline
+{\bf F3}  & 0.00e+00 (=)        & 3.40e+00 (-) \\ \hline
+{\bf F4}  & 1.57e+00 (=)        & 1.99e+00 (=) \\ \hline
+{\bf F5}  & 1.06e+01 (=)        & 6.74e+00 (-) \\ \hline
+{\bf F6}  & 1.87e+01 (=)        & 1.18e+01 (=) \\ \hline
+{\bf F7}  & 1.70e+02 (=)        & 1.64e+02 (=) \\ \hline
+{\bf F8}  & 7.10e+03 (=)        & 7.09e+03 (=) \\ \hline
+{\bf F9}  & 1.10e+02 (=)        & 1.84e+02 (+) \\ \hline
+{\bf F10} & 9.19e+00 (=)        & 1.22e+01 (-) \\ \hline
+{\bf F11} & 3.09e+02 (=)        & 3.44e+02 (+) \\ \hline
+{\bf F12} & 7.08e+03 (=)        & 6.98e+03 (=) \\ \hline
+{\bf F13} & 2.44e+02 (=)        & 2.44e+02 (+) \\ \hline
+{\bf F14} & 4.75e+02 (=)        & 4.35e+02 (-) \\ \hline
+{\bf F15} & 0.00e+00 (=)        & 0.00e+00 (=) \\ \hline
+{\bf F16} & 1.88e+06 (=)        & 1.11e+07 (=) \\ \hline
+{\bf F17} & 0.00e+00 (=)        & 3.40e+00 (-) \\ \hline
+{\bf F18} & 1.57e+00 (=)        & 1.99e+00 (=) \\ \hline
+{\bf F19} & 1.06e+01 (=)        & 6.74e+00 (-) \\ \hline
+{\bf F20} & 1.87e+01 (=)        & 1.18e+01 (+) \\ \hline
+{\bf F21} & 1.70e+02 (=)        & 1.64e+02 (=) \\ \hline
+{\bf F22} & 7.10e+03 (=)        & 7.09e+03 (-) \\ \hline
+{\bf F23} & 1.10e+02 (=)        & 1.84e+02 (=) \\ \hline
+{\bf F24} & 9.19e+00 (=)        & 1.22e+01 (=) \\ \hline
+{\bf F25} & 3.09e+02 (=)        & 3.44e+02 (=) \\ \hline
+{\bf F26} & 7.08e+03 (=)        & 6.98e+03 (-) \\ \hline
+{\bf F27} & 2.44e+02 (=)        & 2.44e+02 (=) \\ \hline
+{\bf F28} & 4.75e+02 (=)        & 4.35e+02 (=) \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[]
+\centering
+\caption{Średnie błędy algorytmu \emph{SHADE} i \emph{ANADE} dla ustawień zgodnych z \cite{SHADE} i funkcji z \emph{CEC2013 benchmark}. Dodatkowo podano wyniki testu Wilcoxona dla par, dla uzyskiwanych wyników względem \emph{SHADE}. Wymiarowość przestrzeni przeszukiwań $D = 30$.}
+\label{Eksp5}
+\begin{tabular}{|l|l|l|}
+\hline
+          & {\bf SHADE}  & {\bf ANADE}  \\ \hline
+{\bf F1}  & 0.00e+00 (=) & 0.00e+00 (=) \\ \hline
+{\bf F2}  & 8.92e+03 (=) & 9.52e+03 (=) \\ \hline
+{\bf F3}  & 7.09e+04 (=) & 3.60e+05 (=) \\ \hline
+{\bf F4}  & 0.00e+00 (=) & 8.00e-04 (=) \\ \hline
+{\bf F5}  & 0.00e+00 (=) & 0.00e+00 (=) \\ \hline
+{\bf F6}  & 1.06e+00 (=) & 1.06e+00 (=) \\ \hline
+{\bf F7}  & 2.38e+00 (=) & 2.21e+00 (=) \\ \hline
+{\bf F8}  & 2.08e+01 (=) & 2.09e+01 (-) \\ \hline
+{\bf F9}  & 2.79e+01 (=) & 2.72e+01 (=) \\ \hline
+{\bf F10} & 7.60e-02 (=) & 9.36e-02 (=) \\ \hline
+{\bf F11} & 0.00e+00 (=) & 0.00e+00 (=) \\ \hline
+{\bf F12} & 2.22e+01 (=) & 2.31e+01 (=) \\ \hline
+{\bf F13} & 4.78e+01 (=) & 5.19e+01 (=) \\ \hline
+{\bf F14} & 1.50e-02 (=) & 4.07e-01 (-) \\ \hline
+{\bf F15} & 3.07e+03 (=) & 3.18e+03 (=) \\ \hline
+{\bf F16} & 9.72e-01 (=) & 9.54e-01 (=) \\ \hline
+{\bf F17} & 3.04e+01 (=) & 3.04e+01 (=) \\ \hline
+{\bf F18} & 7.16e+01 (=) & 7.15e+01 (=) \\ \hline
+{\bf F19} & 1.33e+00 (=) & 1.34e+00 (=) \\ \hline
+{\bf F20} & 1.06e+01 (=) & 1.09e+01 (-) \\ \hline
+{\bf F21} & 2.85e+02 (=) & 2.95e+02 (=) \\ \hline
+{\bf F22} & 9.19e+01 (=) & 1.13e+02 (-) \\ \hline
+{\bf F23} & 3.40e+03 (=) & 3.47e+03 (=) \\ \hline
+{\bf F24} & 2.06e+02 (=) & 2.04e+02 (=) \\ \hline
+{\bf F25} & 2.59e+02 (=) & 2.62e+02 (=) \\ \hline
+{\bf F26} & 2.04e+02 (=) & 2.00e+02 (=) \\ \hline
+{\bf F27} & 3.78e+02 (=) & 3.49e+02 (+) \\ \hline
+{\bf F28} & 2.92e+02 (=) & 3.00e+02 (=) \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[]
+\centering
+\caption{Średnie błędy algorytmu \emph{DE/rand/1/bin} ($\mu = 50$), algorytmu \emph{NADE} dla $H \in \{75, 100, 200\}$ i funkcji z \emph{CEC2013 benchmark}. Dodatkowo podano wyniki testu Wilcoxona dla par, dla uzyskiwanych wyników względem \emph{DE/rand/1/bin}. Wymiarowość przestrzeni przeszukiwań $D = 10$.}
+\label{FullEksp110}
+\begin{tabular}{|l|l|l|l|l|}
+\hline
+          & {\bf DE/rand/1/bin} & {\bf NADE H=75} & {\bf NADE H=100} & {\bf NADE H=200} \\ \hline
+{\bf F1}  & 0.00e+00 (=)        & 0.00e+00 (=)    & 0.00e+00 (=)     & 0.00e+00 (=)     \\ \hline
+{\bf F2}  & 5.06e+03 (=)        & 1.16e+02 (+)    & 0.00e+00 (+)     & 0.00e+00 (+)     \\ \hline
+{\bf F3}  & 2.64e+02 (=)        & 1.57e-01 (=)    & 4.02e-01 (=)     & 9.16e-02 (=)     \\ \hline
+{\bf F4}  & 6.52e+01 (=)        & 5.21e+00 (+)    & 2.80e-03 (+)     & 0.00e+00 (+)     \\ \hline
+{\bf F5}  & 0.00e+00 (=)        & 0.00e+00 (=)    & 0.00e+00 (=)     & 0.00e+00 (=)     \\ \hline
+{\bf F6}  & 4.35e+00 (=)        & 5.05e+00 (=)    & 4.13e+00 (=)     & 6.28e+00 (=)     \\ \hline
+{\bf F7}  & 5.68e-03 (=)        & 0.00e+00 (+)    & 0.00e+00 (+)     & 0.00e+00 (+)     \\ \hline
+{\bf F8}  & 2.04e+01 (=)        & 2.04e+01 (=)    & 2.04e+01 (=)     & 2.03e+01 (+)     \\ \hline
+{\bf F9}  & 1.33e+00 (=)        & 6.85e-01 (+)    & 5.89e-01 (+)     & 5.89e-01 (+)     \\ \hline
+{\bf F10} & 5.53e-02 (=)        & 2.41e-01 (-)    & 3.99e-01 (-)     & 4.95e-01 (-)     \\ \hline
+{\bf F11} & 2.56e+00 (=)        & 1.37e+01 (-)    & 1.66e+01 (-)     & 2.02e+01 (-)     \\ \hline
+{\bf F12} & 1.24e+01 (=)        & 2.12e+01 (-)    & 2.49e+01 (-)     & 2.58e+01 (-)     \\ \hline
+{\bf F13} & 1.38e+01 (=)        & 2.08e+01 (-)    & 2.44e+01 (-)     & 2.65e+01 (-)     \\ \hline
+{\bf F14} & 4.24e+02 (=)        & 9.91e+02 (-)    & 1.03e+03 (-)     & 1.03e+03 (-)     \\ \hline
+{\bf F15} & 1.07e+03 (=)        & 1.30e+03 (-)    & 1.27e+03 (-)     & 1.36e+03 (-)     \\ \hline
+{\bf F16} & 1.06e+00 (=)        & 1.13e+00 (=)    & 1.14e+00 (=)     & 1.17e+00 (-)     \\ \hline
+{\bf F17} & 1.67e+01 (=)        & 2.96e+01 (-)    & 3.05e+01 (-)     & 3.06e+01 (-)     \\ \hline
+{\bf F18} & 3.14e+01 (=)        & 3.45e+01 (-)    & 3.34e+01 (-)     & 3.59e+01 (-)     \\ \hline
+{\bf F19} & 1.09e+00 (=)        & 1.83e+00 (-)    & 1.85e+00 (-)     & 1.87e+00 (-)     \\ \hline
+{\bf F20} & 2.31e+00 (=)        & 2.36e+00 (=)    & 2.30e+00 (=)     & 2.52e+00 (-)     \\ \hline
+{\bf F21} & 3.92e+02 (=)        & 4.00e+02 (=)    & 4.00e+02 (=)     & 4.00e+02 (=)     \\ \hline
+{\bf F22} & 3.10e+02 (=)        & 9.12e+02 (-)    & 9.58e+02 (-)     & 1.01e+03 (-)     \\ \hline
+{\bf F23} & 9.81e+02 (=)        & 1.14e+03 (=)    & 1.27e+03 (-)     & 1.28e+03 (-)     \\ \hline
+{\bf F24} & 2.01e+02 (=)        & 2.03e+02 (=)    & 2.04e+02 (=)     & 2.03e+02 (=)     \\ \hline
+{\bf F25} & 2.02e+02 (=)        & 2.02e+02 (=)    & 2.02e+02 (=)     & 2.02e+02 (=)     \\ \hline
+{\bf F26} & 1.45e+02 (=)        & 1.84e+02 (-)    & 1.72e+02 (-)     & 1.50e+02 (=)     \\ \hline
+{\bf F27} & 3.30e+02 (=)        & 3.50e+02 (=)    & 3.21e+02 (=)     & 3.07e+02 (=)     \\ \hline
+{\bf F28} & 2.84e+02 (=)        & 3.00e+02 (=)    & 3.00e+02 (=)     & 3.00e+02 (=)     \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[]
+\centering
+\caption{Średnie błędy algorytmu \emph{SHADE} i \emph{ANADE} dla ustawień zgodnych z \cite{SHADE} i funkcji z \emph{CEC2013 benchmark}. Dodatkowo podano wyniki testu Wilcoxona dla par, dla uzyskiwanych wyników względem \emph{SHADE}. Wymiarowość przestrzeni przeszukiwań $D = 10$.}
+\label{FullEksp210}
+\begin{tabular}{|l|l|l|}
+\hline
+          & {\bf SHADE}  & {\bf NADE}   \\ \hline
+{\bf F1}  & 0.00e+00 (=) & 0.00e+00 (=) \\ \hline
+{\bf F2}  & 0.00e+00 (=) & 0.00e+00 (=) \\ \hline
+{\bf F3}  & 2.80e-03 (=) & 3.10e-01 (=) \\ \hline
+{\bf F4}  & 0.00e+00 (=) & 0.00e+00 (=) \\ \hline
+{\bf F5}  & 0.00e+00 (=) & 0.00e+00 (=) \\ \hline
+{\bf F6}  & 8.24e+00 (=) & 7.85e+00 (=) \\ \hline
+{\bf F7}  & 3.08e-03 (=) & 5.36e-03 (=) \\ \hline
+{\bf F8}  & 2.04e+01 (=) & 2.03e+01 (=) \\ \hline
+{\bf F9}  & 3.32e+00 (=) & 3.62e+00 (=) \\ \hline
+{\bf F10} & 1.29e-02 (=) & 1.35e-02 (=) \\ \hline
+{\bf F11} & 0.00e+00 (=) & 0.00e+00 (=) \\ \hline
+{\bf F12} & 3.94e+00 (=) & 3.26e+00 (+) \\ \hline
+{\bf F13} & 3.27e+00 (=) & 3.23e+00 (=) \\ \hline
+{\bf F14} & 5.00e-03 (=) & 2.22e-03 (-) \\ \hline
+{\bf F15} & 4.06e+02 (=) & 4.29e+02 (=) \\ \hline
+{\bf F16} & 7.36e-01 (=) & 6.95e-01 (=) \\ \hline
+{\bf F17} & 1.01e+01 (=) & 1.01e+01 (=) \\ \hline
+{\bf F18} & 1.74e+01 (=) & 1.70e+01 (=) \\ \hline
+{\bf F19} & 3.17e-01 (=) & 3.32e-01 (=) \\ \hline
+{\bf F20} & 2.26e+00 (=) & 2.06e+00 (+) \\ \hline
+{\bf F21} & 4.00e+02 (=) & 4.00e+02 (=) \\ \hline
+{\bf F22} & 4.02e+00 (=) & 1.82e+01 (-) \\ \hline
+{\bf F23} & 3.97e+02 (=) & 4.43e+02 (=) \\ \hline
+{\bf F24} & 1.98e+02 (=) & 1.85e+02 (+) \\ \hline
+{\bf F25} & 2.00e+02 (=) & 1.97e+02 (=) \\ \hline
+{\bf F26} & 1.24e+02 (=) & 1.28e+02 (=) \\ \hline
+{\bf F27} & 3.00e+02 (=) & 3.00e+02 (=) \\ \hline
+{\bf F28} & 3.00e+02 (=) & 3.00e+02 (=) \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[]
+\centering
+\caption{Średnie błędy algorytmu \emph{DE/rand/1/bin} ($\mu = 100$), algorytmu \emph{NADE} dla $H \in \{90, 120, 240\}$ i funkcji z \emph{CEC2013 benchmark}. Dodatkowo podano wyniki testu Wilcoxona dla par, dla uzyskiwanych wyników względem \emph{DE/rand/1/bin}. Wymiarowość przestrzeni przeszukiwań $D = 30$.}
+\label{Eksp130}
+\begin{tabular}{|l|l|l|l|l|}
+\hline
+          & {\bf DE/rand/1/bin} & {\bf NADE H=90} & {\bf NADE H=120} & {\bf NADE H=240} \\ \hline
+{\bf F1}  & 0.00e+00 (=)        & 0.00e+00 (=)    & 0.00e+00 (=)     & 0.00e+00 (=)     \\ \hline
+{\bf F2}  & 1.72e+05 (=)        & 3.75e+05 (-)    & 2.88e+05 (-)     & 6.89e+05 (-)     \\ \hline
+{\bf F3}  & 2.91e+06 (=)        & 1.32e+06 (+)    & 8.53e+00 (+)     & 3.33e-03 (+)     \\ \hline
+{\bf F4}  & 7.42e+02 (=)        & 4.33e+02 (+)    & 2.96e+02 (+)     & 6.55e+02 (=)     \\ \hline
+{\bf F5}  & 0.00e+00 (=)        & 0.00e+00 (=)    & 0.00e+00 (=)     & 0.00e+00 (=)     \\ \hline
+{\bf F6}  & 2.04e+01 (=)        & 1.88e+01 (+)    & 1.51e+01 (+)     & 9.37e+00 (+)     \\ \hline
+{\bf F7}  & 1.52e+00 (=)        & 2.96e-01 (+)    & 1.76e-01 (+)     & 3.34e-01 (+)     \\ \hline
+{\bf F8}  & 2.09e+01 (=)        & 2.10e+01 (=)    & 2.09e+01 (=)     & 2.09e+01 (=)     \\ \hline
+{\bf F9}  & 1.06e+01 (=)        & 1.23e+01 (=)    & 2.34e+01 (-)     & 3.88e+01 (-)     \\ \hline
+{\bf F10} & 7.09e-02 (=)        & 2.79e-02 (+)    & 1.26e-02 (+)     & 0.00e+00 (+)     \\ \hline
+{\bf F11} & 1.87e+01 (=)        & 9.14e+01 (-)    & 1.59e+02 (-)     & 1.69e+02 (-)     \\ \hline
+{\bf F12} & 1.60e+02 (=)        & 1.71e+02 (=)    & 1.78e+02 (-)     & 1.86e+02 (-)     \\ \hline
+{\bf F13} & 1.71e+02 (=)        & 1.74e+02 (=)    & 1.78e+02 (-)     & 1.90e+02 (-)     \\ \hline
+{\bf F14} & 2.88e+03 (=)        & 6.46e+03 (-)    & 6.56e+03 (-)     & 6.67e+03 (-)     \\ \hline
+{\bf F15} & 7.12e+03 (=)        & 7.10e+03 (=)    & 7.18e+03 (=)     & 7.18e+03 (=)     \\ \hline
+{\bf F16} & 2.43e+00 (=)        & 2.51e+00 (=)    & 2.52e+00 (=)     & 2.40e+00 (=)     \\ \hline
+{\bf F17} & 1.08e+02 (=)        & 1.92e+02 (-)    & 1.94e+02 (-)     & 2.02e+02 (-)     \\ \hline
+{\bf F18} & 2.01e+02 (=)        & 2.01e+02 (=)    & 2.07e+02 (-)     & 2.19e+02 (-)     \\ \hline
+{\bf F19} & 9.32e+00 (=)        & 1.43e+01 (-)    & 1.52e+01 (-)     & 1.59e+01 (-)     \\ \hline
+{\bf F20} & 1.19e+01 (=)        & 1.21e+01 (-)    & 1.21e+01 (-)     & 1.23e+01 (-)     \\ \hline
+{\bf F21} & 3.04e+02 (=)        & 3.18e+02 (=)    & 3.13e+02 (=)     & 2.97e+02 (=)     \\ \hline
+{\bf F22} & 2.61e+03 (=)        & 6.55e+03 (-)    & 6.73e+03 (-)     & 6.73e+03 (-)     \\ \hline
+{\bf F23} & 7.09e+03 (=)        & 7.14e+03 (=)    & 7.08e+03 (=)     & 7.19e+03 (-)     \\ \hline
+{\bf F24} & 2.13e+02 (=)        & 2.02e+02 (+)    & 2.02e+02 (+)     & 2.01e+02 (+)     \\ \hline
+{\bf F25} & 2.45e+02 (=)        & 2.41e+02 (+)    & 2.41e+02 (+)     & 2.41e+02 (+)     \\ \hline
+{\bf F26} & 2.20e+02 (=)        & 2.40e+02 (-)    & 2.39e+02 (=)     & 2.27e+02 (-)     \\ \hline
+{\bf F27} & 4.80e+02 (=)        & 3.79e+02 (+)    & 3.85e+02 (+)     & 4.37e+02 (+)     \\ \hline
+{\bf F28} & 3.00e+02 (=)        & 3.00e+02 (=)    & 3.00e+02 (=)     & 3.00e+02 (=)     \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[]
+\centering
+\caption{Średnie błędy algorytmu \emph{SHADE} i \emph{ANADE} dla ustawień zgodnych z \cite{SHADE} i funkcji z \emph{CEC2013 benchmark}. Dodatkowo podano wyniki testu Wilcoxona dla par, dla uzyskiwanych wyników względem \emph{SHADE}. Wymiarowość przestrzeni przeszukiwań $D = 30$.}
+\label{Eksp230}
+\begin{tabular}{|l|l|l|}
+\hline
+          & {\bf SHADE}  & {\bf NADE}   \\ \hline
+{\bf F1}  & 0.00e+00 (=) & 0.00e+00 (=) \\ \hline
+{\bf F2}  & 9.92e+03 (=) & 9.76e+03 (=) \\ \hline
+{\bf F3}  & 6.57e+04 (=) & 3.34e+05 (=) \\ \hline
+{\bf F4}  & 0.00e+00 (=) & 7.41e-04 (=) \\ \hline
+{\bf F5}  & 0.00e+00 (=) & 0.00e+00 (=) \\ \hline
+{\bf F6}  & 1.96e+00 (=) & 1.96e+00 (=) \\ \hline
+{\bf F7}  & 2.68e+00 (=) & 2.12e+00 (=) \\ \hline
+{\bf F8}  & 2.08e+01 (=) & 2.10e+01 (-) \\ \hline
+{\bf F9}  & 2.78e+01 (=) & 2.73e+01 (=) \\ \hline
+{\bf F10} & 7.80e-02 (=) & 9.33e-02 (=) \\ \hline
+{\bf F11} & 0.00e+00 (=) & 0.00e+00 (=) \\ \hline
+{\bf F12} & 2.20e+01 (=) & 2.34e+01 (=) \\ \hline
+{\bf F13} & 4.80e+01 (=) & 5.20e+01 (=) \\ \hline
+{\bf F14} & 1.62e-02 (=) & 4.12e-01 (-) \\ \hline
+{\bf F15} & 3.10e+03 (=) & 3.20e+03 (=) \\ \hline
+{\bf F16} & 9.72e-01 (=) & 9.49e-01 (=) \\ \hline
+{\bf F17} & 3.04e+01 (=) & 3.04e+01 (=) \\ \hline
+{\bf F18} & 7.18e+01 (=) & 7.11e+01 (=) \\ \hline
+{\bf F19} & 1.32e+00 (=) & 1.33e+00 (=) \\ \hline
+{\bf F20} & 1.05e+01 (=) & 1.09e+01 (-) \\ \hline
+{\bf F21} & 2.86e+02 (=) & 2.95e+02 (=) \\ \hline
+{\bf F22} & 9.30e+01 (=) & 1.14e+02 (-) \\ \hline
+{\bf F23} & 3.44e+03 (=) & 3.46e+03 (=) \\ \hline
+{\bf F24} & 2.05e+02 (=) & 2.04e+02 (=) \\ \hline
+{\bf F25} & 2.60e+02 (=) & 2.62e+02 (=) \\ \hline
+{\bf F26} & 2.04e+02 (=) & 2.00e+02 (=) \\ \hline
+{\bf F27} & 3.76e+02 (=) & 3.50e+02 (+) \\ \hline
+{\bf F28} & 2.93e+02 (=) & 3.00e+02 (=) \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[]
+\centering
+\caption{Średnie błędy algorytmu \emph{DE/rand/1/bin} ($\mu = 100$), algorytmu \emph{NADE} dla $H \in \{150, 200, 400\}$ i funkcji z \emph{CEC2013 benchmark}. Dodatkowo podano wyniki testu Wilcoxona dla par, dla uzyskiwanych wyników względem \emph{DE/rand/1/bin}. Wymiarowość przestrzeni przeszukiwań $D = 50$.}
+\label{Eksp150}
+\begin{tabular}{|l|l|l|l|l|}
+\hline
+          & {\bf DE/rand/1/bin} & {\bf NADE H=150} & {\bf NADE H=200} & {\bf NADE H=400} \\ \hline
+{\bf F1}  & 0.00e+00 (=)        & 0.00e+00 (=)     & 0.00e+00 (=)     & 0.00e+00 (=)     \\ \hline
+{\bf F2}  & 2.83e+06 (=)        & 9.21e+06 (-)     & 2.32e+07 (-)     & 8.06e+07 (-)     \\ \hline
+{\bf F3}  & 1.35e+06 (=)        & 2.39e+05 (+)     & 3.28e+04 (+)     & 2.15e+07 (-)     \\ \hline
+{\bf F4}  & 1.76e+04 (=)        & 2.54e+04 (-)     & 3.27e+04 (-)     & 5.07e+04 (-)     \\ \hline
+{\bf F5}  & 0.00e+00 (=)        & 0.00e+00 (=)     & 0.00e+00 (=)     & 0.00e+00 (=)     \\ \hline
+{\bf F6}  & 4.35e+01 (=)        & 4.36e+01 (-)     & 4.35e+01 (-)     & 4.34e+01 (=)     \\ \hline
+{\bf F7}  & 3.42e+00 (=)        & 1.37e+00 (+)     & 3.54e+00 (=)     & 3.22e+01 (-)     \\ \hline
+{\bf F8}  & 2.11e+01 (=)        & 2.11e+01 (-)     & 2.11e+01 (=)     & 2.11e+01 (=)     \\ \hline
+{\bf F9}  & 7.21e+01 (=)        & 7.20e+01 (=)     & 7.19e+01 (=)     & 7.23e+01 (=)     \\ \hline
+{\bf F10} & 5.44e-02 (=)        & 3.54e-02 (+)     & 1.39e-02 (+)     & 1.11e+00 (-)     \\ \hline
+{\bf F11} & 2.09e+02 (=)        & 3.20e+02 (-)     & 3.45e+02 (-)     & 3.73e+02 (-)     \\ \hline
+{\bf F12} & 3.56e+02 (=)        & 3.61e+02 (-)     & 3.66e+02 (-)     & 3.97e+02 (-)     \\ \hline
+{\bf F13} & 3.51e+02 (=)        & 3.63e+02 (-)     & 3.70e+02 (-)     & 3.95e+02 (-)     \\ \hline
+{\bf F14} & 1.12e+04 (=)        & 1.28e+04 (-)     & 1.28e+04 (-)     & 1.30e+04 (-)     \\ \hline
+{\bf F15} & 1.38e+04 (=)        & 1.39e+04 (=)     & 1.37e+04 (=)     & 1.39e+04 (=)     \\ \hline
+{\bf F16} & 3.35e+00 (=)        & 3.34e+00 (=)     & 3.28e+00 (=)     & 3.40e+00 (=)     \\ \hline
+{\bf F17} & 3.38e+02 (=)        & 3.90e+02 (-)     & 3.99e+02 (-)     & 4.27e+02 (-)     \\ \hline
+{\bf F18} & 3.99e+02 (=)        & 4.08e+02 (-)     & 4.22e+02 (-)     & 4.38e+02 (-)     \\ \hline
+{\bf F19} & 2.95e+01 (=)        & 3.13e+01 (-)     & 3.20e+01 (-)     & 3.38e+01 (-)     \\ \hline
+{\bf F20} & 2.21e+01 (=)        & 2.22e+01 (=)     & 2.22e+01 (-)     & 2.24e+01 (-)     \\ \hline
+{\bf F21} & 6.31e+02 (=)        & 7.95e+02 (=)     & 6.00e+02 (=)     & 8.35e+02 (=)     \\ \hline
+{\bf F22} & 1.08e+04 (=)        & 1.30e+04 (-)     & 1.28e+04 (-)     & 1.31e+04 (-)     \\ \hline
+{\bf F23} & 1.38e+04 (=)        & 1.38e+04 (=)     & 1.37e+04 (=)     & 1.39e+04 (=)     \\ \hline
+{\bf F24} & 2.32e+02 (=)        & 2.12e+02 (+)     & 2.03e+02 (+)     & 2.38e+02 (=)     \\ \hline
+{\bf F25} & 2.78e+02 (=)        & 2.70e+02 (+)     & 2.78e+02 (=)     & 3.17e+02 (-)     \\ \hline
+{\bf F26} & 2.89e+02 (=)        & 3.35e+02 (-)     & 3.71e+02 (-)     & 4.40e+02 (-)     \\ \hline
+{\bf F27} & 6.93e+02 (=)        & 5.96e+02 (+)     & 8.60e+02 (-)     & 1.74e+03 (-)     \\ \hline
+{\bf F28} & 5.19e+02 (=)        & 4.00e+02 (=)     & 4.00e+02 (=)     & 4.00e+02 (=)     \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[]
+\centering
+\caption{Średnie błędy algorytmu \emph{SHADE} i \emph{ANADE} dla ustawień zgodnych z \cite{SHADE} i funkcji z \emph{CEC2013 benchmark}. Dodatkowo podano wyniki testu Wilcoxona dla par, dla uzyskiwanych wyników względem \emph{SHADE}. Wymiarowość przestrzeni przeszukiwań $D = 50$.}
+\label{FullEksp250}
+\begin{tabular}{|l|l|l|}
+\hline
+          & {\bf SHADE}  & {\bf NADE}   \\ \hline
+{\bf F1}  & 0.00e+00 (=) & 0.00e+00 (=) \\ \hline
+{\bf F2}  & 2.99e+04 (=) & 3.00e+04 (=) \\ \hline
+{\bf F3}  & 1.72e+06 (=) & 1.78e+06 (=) \\ \hline
+{\bf F4}  & 1.20e-03 (=) & 3.60e-03 (=) \\ \hline
+{\bf F5}  & 0.00e+00 (=) & 0.00e+00 (=) \\ \hline
+{\bf F6}  & 4.34e+01 (=) & 4.24e+01 (=) \\ \hline
+{\bf F7}  & 2.19e+01 (=) & 1.60e+01 (+) \\ \hline
+{\bf F8}  & 2.09e+01 (=) & 2.10e+01 (-) \\ \hline
+{\bf F9}  & 5.54e+01 (=) & 5.61e+01 (=) \\ \hline
+{\bf F10} & 1.09e-01 (=) & 1.49e-01 (-) \\ \hline
+{\bf F11} & 0.00e+00 (=) & 0.00e+00 (=) \\ \hline
+{\bf F12} & 5.84e+01 (=) & 5.60e+01 (=) \\ \hline
+{\bf F13} & 1.53e+02 (=) & 1.35e+02 (+) \\ \hline
+{\bf F14} & 3.05e-02 (=) & 2.72e+00 (-) \\ \hline
+{\bf F15} & 6.86e+03 (=) & 6.81e+03 (=) \\ \hline
+{\bf F16} & 1.27e+00 (=) & 1.25e+00 (=) \\ \hline
+{\bf F17} & 5.08e+01 (=) & 5.08e+01 (=) \\ \hline
+{\bf F18} & 1.38e+02 (=) & 1.37e+02 (=) \\ \hline
+{\bf F19} & 2.63e+00 (=) & 2.62e+00 (=) \\ \hline
+{\bf F20} & 1.95e+01 (=) & 1.96e+01 (=) \\ \hline
+{\bf F21} & 7.95e+02 (=) & 8.95e+02 (=) \\ \hline
+{\bf F22} & 1.15e+01 (=) & 2.22e+01 (-) \\ \hline
+{\bf F23} & 7.57e+03 (=) & 7.29e+03 (=) \\ \hline
+{\bf F24} & 2.33e+02 (=) & 2.30e+02 (=) \\ \hline
+{\bf F25} & 3.34e+02 (=) & 3.31e+02 (=) \\ \hline
+{\bf F26} & 2.68e+02 (=) & 2.62e+02 (=) \\ \hline
+{\bf F27} & 8.77e+02 (=) & 9.10e+02 (=) \\ \hline
+{\bf F28} & 5.18e+02 (=) & 4.00e+02 (=) \\ \hline
+\end{tabular}
+\end{table}
+
 
 
 \bibliographystyle{unsrt}
