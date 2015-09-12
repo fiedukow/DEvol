@@ -11,8 +11,10 @@
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 \usepackage{listings}
+\usepackage[textfont={it}]{caption}
+
 \headsep = 30pt
-\usepackage[nottoc,numbib]{tocbibind}
+\usepackage[]{tocbibind}
 %\linespread{2}
 
 
@@ -42,7 +44,11 @@
 \renewcommand{\headrulewidth}{0pt}
 \renewcommand{\footrulewidth}{0pt}}
 
+\usepackage{amsmath}
 \begin{document}
+\makeatletter
+\renewcommand{\ALG@name}{Algorytm}
+
 \DeclareGraphicsExtensions{.pdf,.png,.jpg}
 
 \maketitle
@@ -121,7 +127,7 @@ Stale zwiększający się poziom trudności problemów optymalizacyjnych jak i c
 \par{
 Praca ta, umiejscowiona została w kontekście rozwiązywania problemów optymalizacji gdzie analityczne wyznaczenie ekstremum funkcji jest niemożliwe bądź w ogóle nie jest znana jej analityczna forma. Zakłada się bowiem, że zadanie jest zdefiniowane następująco \cite{StrojnowskiOptymalizacja2}:
 }
-\newtheorem{OptDefinition}{Definition}
+\newtheorem{OptDefinition}{Definicja}
 \par{
 \begin{OptDefinition}
 Problem globalnej optymalizacji funkcji $f: X \rightarrow \mathbb{R}$ polega na wyznaczeniu takiego $x_0 \in X$, że:
@@ -134,7 +140,7 @@ Dla celów tej pracy przyjmuje się możliwość zbadania wartości funkcji $f$ 
 }
 \par{
 W ramach rozpatrywanych problemów istnieje także możliwość, że dziedzina funkcji $f$ jest szersza niż zbiór rozwiązań dopuszczalnych. W takich wypadkach mówimy o problemie optymalizacji z ograniczeniami.
-\begin{OptDefinition}
+\begin{OptDefinition}{Definicja}
 Problem globalnej optymalizacji funkcji $f: X \rightarrow \mathbb{R}$ z ograniczeni $X_D \subset X$ polega na wyznaczeniu takiego $x_0 \in X_D$, że:
 \begin{center}
 	$\forall_{x \in X_D} f(x_0) \leq f(x)$
@@ -145,7 +151,7 @@ Problem globalnej optymalizacji funkcji z ograniczeniami stanowi uogólnienie pr
 }
 \par{
 Szczególnym przypadkiem problemu optymalizacji globalnej z ograniczeniami jest przeszukiwanie przestrzeni ciągłej. 
-\begin{OptDefinition}
+\begin{OptDefinition}{Definicja}
 Problem globalnej optymalizacji funkcji $f: \mathbb{R}^n \rightarrow \mathbb{R}$ z ograniczeniem $X_D = \{x \in \mathbb{R}^n: g_1(x) \leq 0, g_2(x) \leq 0, \ldots, g_m(x) \leq 0\}$, gdzie $g_1, g_2 \ldots g_m: \mathbb{R}^n \rightarrow \mathbb{R}$, nazywamy problemem optymalizacji globalnej przestrzeni ciągłej z ograniczeniami nierównościowymi.
 \end{OptDefinition}
 W tym wariancie przyjmuje się, że $X = \mathbb{R}^n$ gdzie $n \in \mathbb{N}$, a $X_D$ zdefiniowane jest przez funkcje ograniczeń.
@@ -971,7 +977,7 @@ Ponieważ algorytm \emph{SHADE} uzyskał najlepszy wynik pośród algorytmów ew
 Zróżnicowane funkcje testowe, precyzyjne wytyczne co do zbierania danych, liczne badania algorytmów ewolucji różnicowej oraz dostępność implementacji w języku wykorzystanym do implementacji sprawiły, że właśnie test \emph{CEC 2013 benchmark} został wybrany jako właściwy do pokazania właściwości badanych w ramach pracy algorytmów.
 }
 
-\chapter{Algorytmy \emph{NADE} i \emph{ANADE}}
+\chapter{Implementacja archiwum w DE}
 \section{Cele i założenia}
 \par{
 Główną ideą stojącą za projektowaniem algorytmu \emph{NADE} (ang. \emph{Normalized Archive Differential Evolution}), było skonstruowanie algorytmu wykorzystującego archiwum punktów odbiegającego w możliwie niewielkim stopniu od typowych wariantów ewolucji różnicowej. Skupiono się tu przede wszystkim na próbie dołączenia archiwum do klasycznego algorytmu \emph{DE}/\emph{rand}/\emph{1}/\emph{bin}.
@@ -1033,7 +1039,7 @@ Pierwsze próba porównania algorytmu \emph{NADE} z \emph{DE/rand/1/bin} przy u�
 \label{Eksp1short}
 \begin{tabular}{|l|l|l|l|}
 \hline
-{\bf H}   & + & -  & =  \\ \hline
+\multicolumn{1}{|c|}{{\bf H}} & \multicolumn{1}{c|}{{\bf +}} & \multicolumn{1}{c|}{{\bf -}} & \multicolumn{1}{c|}{{\bf =}} \\ \hline
 {\bf 90}  & 8 & 4  & 16 \\ \hline
 {\bf 120} & 7 & 13 & 8  \\ \hline
 {\bf 240} & 1 & 19 & 8  \\ \hline
@@ -1100,7 +1106,7 @@ Przy tak zdefiniowanym algorytmie \emph{NADE} uzyskano rezultaty jak w tabeli \r
 \label{eks2summary}
 \begin{tabular}{|l|l|l|l|}
 \hline
-{\bf H}   & + & -  & =  \\ \hline
+\multicolumn{1}{|c|}{{\bf H}} & \multicolumn{1}{c|}{{\bf +}} & \multicolumn{1}{c|}{{\bf -}} & \multicolumn{1}{c|}{{\bf =}} \\ \hline
 {\bf 90}  & 8 & 8  & 12 \\ \hline
 {\bf 120} & 8 & 12 & 8  \\ \hline
 {\bf 240} & 7 & 13 & 8  \\ \hline
@@ -1121,7 +1127,7 @@ W związku z powyższym, w ramach wstępnego badania, zestawiono algorym \emph{D
 \label{eks3summary}
 \begin{tabular}{|l|l|l|l|}
 \hline
-{\bf H}  & +  & - & =  \\ \hline
+\multicolumn{1}{|c|}{{\bf H}} & \multicolumn{1}{c|}{{\bf +}} & \multicolumn{1}{c|}{{\bf -}} & \multicolumn{1}{c|}{{\bf =}} \\ \hline
 {\bf 60} & 10 & 6 & 12 \\ \hline
 \end{tabular}
 \end{table}
@@ -1132,7 +1138,7 @@ W związku z powyższym, w ramach wstępnego badania, zestawiono algorym \emph{D
 \label{eks4summary}
 \begin{tabular}{|l|l|l|l|}
 \hline
-{\bf H}  & + & - & =  \\ \hline
+\multicolumn{1}{|c|}{{\bf H}} & \multicolumn{1}{c|}{{\bf +}} & \multicolumn{1}{c|}{{\bf -}} & \multicolumn{1}{c|}{{\bf =}} \\ \hline
 {\bf 60} & 4 & 8 & 16 \\ \hline
 \end{tabular}
 \end{table}
@@ -1163,7 +1169,7 @@ Algorytm \emph{ANADE} należy więc rozumieć jako taką modyfikację algorytmu 
 \label{Eksp3short}
 \begin{tabular}{|l|l|l|}
 \hline
-{\bf +} & {\bf -} & {\bf =} \\ \hline
+\multicolumn{1}{c|}{{\bf +}} & \multicolumn{1}{c|}{{\bf -}} & \multicolumn{1}{c|}{{\bf =}} \\ \hline
 1       & 4       & 23      \\ \hline
 \end{tabular}
 \end{table}
@@ -1177,11 +1183,146 @@ Uzyskane wyniki wskazują na trzy hipotezy do przetestowania w pełnym schemacie
 \end{itemize}
 }
 
+\section{Algorytm \emph{grADE}}
+\subsection{Podejście do wykorzystania archiwum}
+\par{
+Ponieważ początkowy pomysł wykorzystania archiwum w procesie mutacji różnicowej przyniósł we wstępnych badaniach wyniki nie wskazujące na jego pozytywny wpływ na jakość uzyskiwanych wyników, zdecydowano się na przetestowanie innego modelu archiwum. Wychodząc, z założenia, że osobniki pochodzące z kolejnych populacji mogą (mimo normalizacji) generować zbyt długie lub zbyt rozrzucone wektory różnicowe, postanowiono zbudować archiwum, które będzie pozwalało na budowanie wektorów różnicowych w oparciu o dwa punkty pochodzące z tej samej populacji.
+}
+\par{
+Zadanie to postanowiono rozwiązać organizując archiwum w zbiór, zbiorów punktów z przestrzeni przeszukiwanej. Każdy zbiór punktów w archiwum, odpowiada jednej z historycznych populacji. W ten sposób uzyskano możliwość sterowania wielkością archiwum jako ilością historycznych pokoleń w nim zawartych. Dla zachowania oznaczeń, na potrzeby tej pracy przyjęto parametr $H$ oznaczający ilość osobników w archiwum. Dla tego algorytmu $H = n \cdot \mu$ gdzie, $n \in \mathbb{N}$. Podobnie jak w przypadku algorytmu \emph{NADE} archiwum zorganizowane zostało w kolejkę -- w przypadku gdy archiwum przekracza zadany parametrem rozmiar, usuwane jest z niego najstarsze pokolenie.
+}
+\par{
+Tego rodzaju archiwum jest wykorzystywane w procesie generowania wektorów różnicowych przez wybranie z równym prawdopodobieństwem populacji archiwum a następnie wybranie z niego dwóch różnych punktów tworzących wektor różnicowy (również z równym prawdopodobieństwem).
+}
+\par{
+Tak zdefiniowany algorytm został nazwany \emph{grADE} (ang. \emph{generation robust archived differential evolution}).
+}
+\subsection{Normalizacja archiwum}
+\par{
+W przypadku algorytmu \emph{NADE} zastosowany mechanizm normalizacji służył przede wszystkim ujednoliceniu punktów pochodzących z różnych pokoleń. W algorytmie \emph{grADE} punkty, które tworzą wektory różnicowe, pochodzą z tego samego pokolenia. W związku z tym, podejrzewać można, że zastosowanie normalizacji w tym przypadku nie powinno wywierać znacznego wpływu na jakość otrzymywanych wyników.
+\par{
+Ponieważ jednak we wcześniejszych badaniach wskazano, że mechanizm normalizacji w sposób statystycznie istotny wpływa na jakość uzyskiwanych przez algorytm wyników, postanowiono zestawić wersję algorytmu \emph{grADE} z i bez normalizacji w celu świadomego odrzucenia jednej z możliwości na wstępnym etapie badań. Zastosowany mechanizm normalizacji został zaczerpnięty z algorytmu \emph{NADE}.
+}
+
+\subsection{Wyniki wstępnych badań}
+\par{
+Podstawowe badanie dwóch sprawdzanych na tym etapie wersji algorytmu, stanowiło porównanie wyników ich działania z \emph{DE/rand/1/bin}. Wyniki tego porównania zawarte są tablicach \ref{Anal10} (\emph{grADE z normalizacją}) oraz \ref{Anal11} (\emph{grADE}) w załączniku \ref{ResultsAttachments}. W tabeli \ref{Anal10Sum} oraz \ref{Anal11Sum} poniżej, zawarto podsumowanie tych badań.
+}
+\begin{table}[h]
+\centering
+\caption{Podsumowanie wyników porównania algorytmu \emph{grADE} z normalizacją z \emph{DE/rand/1/bin} dla różnych wartości $H$ przy użyciu testu Wilcoxona. W tablicy ilość funkcji, dla których wyniki uległy statystycznej istotnej poprawie (+), pogorszeniu (-) i nie uległy statystycznej zmianie (=)}
+\label{Anal10Sum}
+\begin{tabular}{|l|l|l|l|}
+\hline
+{\bf H}   & +  & - & =  \\ \hline
+{\bf 60}  & 9  & 1 & 18 \\ \hline
+{\bf 120} & 10 & 1 & 17 \\ \hline
+{\bf 180} & 10 & 0 & 18 \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\caption{Podsumowanie wyników porównania algorytmu \emph{grADE} z \emph{DE/rand/1/bin} dla różnych wartości $H$ przy użyciu testu Wilcoxona. W tablicy ilość funkcji, dla których wyniki uległy statystycznej istotnej poprawie (+), pogorszeniu (-) i nie uległy statystycznej zmianie (=)}
+\label{Anal11Sum}
+\begin{tabular}{|l|l|l|l|}
+\hline
+\multicolumn{1}{|c|}{{\bf H}} & \multicolumn{1}{c|}{{\bf +}} & \multicolumn{1}{c|}{{\bf -}} & \multicolumn{1}{c|}{{\bf =}} \\ \hline
+{\bf 60}  & 10 & 3 & 15 \\ \hline
+{\bf 120} & 11 & 0 & 17 \\ \hline
+{\bf 180} & 9  & 1 & 18 \\ \hline
+\end{tabular}
+\end{table}
+
+\par{
+Dodatkowo, by stwierdzić zasadność procedury normalizacji w algorytmie \emph{grADE}, przeprowadzono test Wilcoxona dla obu sprawdzanych wariantów algorytmu dla tych samych wartości H. Wyniki tego porównania, dla różnych wartości H zawarto w tabeli \ref{Anal11a} w załączniku \ref{ResultsAttachments}.
+}
+\par{
+Przedstawione wyniki sugerują dwa wnioski:
+\begin{itemize}
+\item Archiwum zorganizowane wg. zaproponowanego schematu, wpływa w sposób statystycznie istotny i pozytywny na jakość uzyskiwanych przez klasyczny algorytm ewolucji różnicowej wyników.
+\item Normalizacja punktów w przypadku tego wariantu archiwum wg. procedury z \emph{NADE} nie wpływa znacząco na uzyskiwane w algorytmie \emph{grADE} wyniki.
+\end{itemize}
+}
+\par{
+Pierwsza z tez, zostanie sprawdzona w pełnych badaniach w rozdziale \ref{badania}. Druga natomiast zostanie przyjęta jako metoda ograniczenia ilości testowanych scenariuszy i związku z tym, w dalszej części pracy będzie wykorzystywana tylko wersja algorytmu bez normalizacji punktów. Tak sformułowany algorytm będzie nazywany \emph{grADE}.
+}
+
+\section{Algorytm \emph{grAADE}}
+\label{grAADE}
+\par{
+Ponieważ zaproponowane w algorytmie \emph{grADE} podejście do archiwum przyniosło we wstępnych badaniach poprawę jakości uzyskiwanych wyników względem \emph{DE/rand/1/bin}, należało skupić się (z powodów opisanych w rozdziale \ref{ANADE}) na możliwości zastosowania tego schematu archiwum w bardziej złożonych wariantach ewolucji różnicowej.
+}
+\par{
+Podobnie jak w przypadku algorytmu \emph{ANADE}, na bazę zaawansowanego algorytmu opartego o zaproponowany schemat mutacji w oparciu o archiwum wybrano algorytm \emph{SHADE}. W konsekwencji, zastąpiono wykorzystywane w mutacji archiwum i wektor różnicowy z losowych punktów populacji, dobierany był z archiwum zgodnym ze schematem \emph{grADE}. W ten sposób powstał algorytm \emph{grAADE}.
+}
+\par{
+Na tak przygotowanym algorytmie przeprowadzono badania wg. uproszczonego schematu uzyskując wyniki jak w tablicy \ref{Anal12} zaprezentowanej w załączniku \ref{ResultsAttachments} (skrót w tablicy \ref{Anal12sum} poniżej).
+}
+\begin{table}[h]
+\centering
+\caption{Podsumowanie wyników porównania algorytmu \emph{grAADE} z \emph{SHADE} dla różnych wartości $H$ przy użyciu testu Wilcoxona. W tablicy ilość funkcji, dla których wyniki uległy statystycznej istotnej poprawie (+), pogorszeniu (-) i nie uległy statystycznej zmianie (=)}
+\label{Anal12sum}
+\begin{tabular}{|l|l|l|l|}
+\hline
+\multicolumn{1}{|c|}{{\bf H}} & \multicolumn{1}{c|}{{\bf +}} & \multicolumn{1}{c|}{{\bf -}} & \multicolumn{1}{c|}{{\bf =}} \\ \hline
+{\bf 100} & 0 & 20 & 8  \\ \hline
+{\bf 200} & 0 & 15 & 13 \\ \hline
+{\bf 300} & 1 & 12 & 15 \\ \hline
+\end{tabular}
+\end{table}
+
+\par{
+Wyniki te, pokazują jednoznaczną tendencję algorytmu \emph{SHADE} do pogorszenia swojej skuteczności w zadanych warunkach. Wielość istotnych statystycznie różnic na niekorzyść nowego algorytmu, stała się przyczynkiem do porzucenia algorytmu \emph{grAADE} już na wstępnym etapie badań jako nieobiecującego. Nie oznacza to jednak całkowitego wykluczenia tego schematu archiwum, ze względu na jego wyniki w kontekście algorytmu \emph{grADE}.
+}
+\par{
+Dodatkowo należy także zauważyć wzrostową tendencję algorytmu grAADE, wraz ze wzrostem wartości $H$. Praca ta nie ma na celu badania optymalnych wartości zaproponowanych parametrów, stąd też nie będzie to dalej badane, jednak tendencja ta wskazuje na potencjał algorytmu \emph{grAADE}, który jest jednym z możliwych kierunków rozwoju tych badań w przyszłych publikacjach.
+}
+
+\section{Algorytm \emph{shAde}}
+\par{
+Inną konsekwencją z badań przeprowadzonych w rozdziale \ref{grAADE}, był wstępny wniosek, że bazowy mechanizm wykorzystania archiwum zawarty w algorytmie \emph{SHADE} działa skuteczniej niż proponowana modyfikacja. Z tego powodu, jako kolejną próbę wykorzystania archiwum do generowania wektorów różnicowych przyjęto wariant zaczerpnięty właśnie z tego algorytmu.
+}
+\par{
+Jak opisano w rozdziale \ref{AdvancedDE}, algorytm \emph{SHADE} wykorzystuje archiwum będące zbiorem odrzuconych z bieżącej populacji punktów. Archiwum to ma parametryzowany rozmiar, a w przypadku potrzeby dodania do niego kolejnego punktu i jego liczności równej już zadanemu maksimum, usuwany jest element losowy.
+}
+\par{
+Innym istotnym aspektem tego schematu wykorzystania archiwum jest wskazanie w jaki sposób jest ono użyte na etapie generowania wektorów różnicowych. W przypadku algorytm \emph{SHADE}, wektor różnicowy, powstaje bowiem zawsze przez odjęcie od losowego elementu pochodzącego z bieżącej populacji, elementu losowego z sumy bieżącego pokolenia i archiwum.
+}
+\par{
+Tak zdefiniowany schemat użycia archiwum został dodany do klasycznego algorytmu ewolucji różnicowej stając się przyczynkiem dla algorytmu \emph{shAde} (ang. \emph{SHADE Archive Differential Evolution}). Algorytm ten został następnie zestawiony w typowy sposób z algorytmem \emph{DE/rand/1/bin} a następnie przez bezpośrednie porównanie z algorytmem \emph{grADE} dla tych samych wartości parametru $H$.
+}
+\par{
+Wyniki pierwszych wspomnianych badań zawarto w tablicy \ref{Anal13} w załączniku \ref{ResultsAttachments} (skrót w tablicy \ref{Anal13Sum} poniżej), natomiast drugich z nich zawarto w tablicy \ref{Anal14}.
+}
+
+\begin{table}[h]
+\centering
+\caption{Podsumowanie wyników porównania algorytmu \emph{DE/rand/1/bin} z \emph{shAde} dla różnych wartości $H$ przy użyciu testu Wilcoxona. W tablicy ilość funkcji, dla których wyniki uległy statystycznej istotnej poprawie (+), pogorszeniu (-) i nie uległy statystycznej zmianie (=)}
+\label{Anal13Sum}
+\begin{tabular}{|l|l|l|l|}
+\hline
+\multicolumn{1}{|c|}{{\bf H}} & \multicolumn{1}{c|}{{\bf +}} & \multicolumn{1}{c|}{{\bf -}} & \multicolumn{1}{c|}{{\bf =}} \\ \hline
+{\bf 60}                      & 14                           & 0                            & 14                           \\ \hline
+{\bf 120}                     & 17                           & 0                            & 11                           \\ \hline
+{\bf 180}                     & 14                           & 0                            & 14                           \\ \hline
+\end{tabular}
+\end{table}
+
+
+\par{
+Zaprezentowane wyniki sugerują następujące tezy, które zostaną poddane weryfikacji w końcowych badaniach:
+\begin{itemize}
+\item Wykorzystanie mechanizmu archiwum znanego z \emph{SHADE} stanowi sposób poprawy działania algorytmów ewolucji różnicowej także w prostszych wariantach tej ewolucji.
+\item Zaproponowany w tym algorytmie schemat wykorzystania archiwum do generowania wektorów różnicowych, jest najskuteczniejszym z zaproponowanych w tej pracy schematów.
+\end{itemize}
+}
+
 \chapter{Badania}
 \label{badania}
 \section{Cel}
 \par{
-W poprzednim rozdziale przy użyciu uproszczonego schematu badań wysunięto hipotezy dotyczące wpływu znormalizowanego wg. wskazanej procedury archiwum na wyniki uzyskiwane w różnych wariantach ewolucji różnicowej. W celu zweryfikowania tych tez, przeprowadzono badania w oparciu o schemat zgodny z zalecaniami twórców \emph{CEC2013 benchmark}.
+W poprzednim rozdziale przy użyciu uproszczonego schematu badań wysunięto hipotezy dotyczące wpływu zorganizowanego wg. wskazanych procedur archiwum na wyniki uzyskiwane w różnych wariantach ewolucji różnicowej. W celu zweryfikowania tych tez, przeprowadzono badania w oparciu o schemat zgodny z zalecaniami twórców \emph{CEC2013 benchmark}.
 }
 \par{
 Weryfikacji poddane zostaną następujące tezy:
@@ -1419,10 +1560,10 @@ Mając na względzie powyższe wnioski, wydaje się, że dalsze badanie archiwum
 \par{
 Dodatkowo w ramach pracy w rozdziale \ref{metodyka} poruszono wątki dotyczące metodyki badań i możliwości ich dalszego rozwoju. Omówiono trudności związane z weryfikowalnością implementacji algorytmów, dokładnością oraz czasochłonnością badań. Ten poboczny wątek, który nie był pierwotnym celem pracy, wskazuje kluczowe problemy przy badaniach tego rodzaju i sugeruje cechy jakie powinny posiadać rozwiązania tychże problemów. Metodyka pracy nad niedeterministycznymi algorytmami optymalizującymi, zdaje się być ważnym punktem dla rozwoju dziedziny, a zarazem okazją do rozwijających technologię informacyjną badań zarówno o charakterze teoretycznym jak i inżynierskim.
 }
-
-\chapter{Załącznik - wyniki eksperymentów}
+\appendix
+\chapter{Wyniki eksperymentów w uproszczonym schemacie badań}
 \label{ResultsAttachments}
-\begin{table}[]
+\begin{table}[h]
 \centering
 \caption{
 Średnie błędy algorytmu \emph{DE/rand/1/bin} oraz pierwszej wersji algorytmu \emph{NADE} (bez normalizacji punktów w archiwum) dla $H \in \{90, 120, 240\}$ i funkcji z \emph{CEC2013 benchmark}. Dodatkowo podano wyniki testu Wilcoxona dla par, dla uzyskiwanych wyników względem \emph{DE/rand/1/bin}. Wymiarowość przestrzeni przeszukiwań $D = 30$.
@@ -1466,7 +1607,7 @@ Dodatkowo w ramach pracy w rozdziale \ref{metodyka} poruszono wątki dotyczące 
 \end{table}
 
 
-\begin{table}[]
+\begin{table}[h]
 \centering
 \caption{Średnie błędy algorytmu \emph{DE/rand/1/bin} algorytmu \emph{NADE} dla $H \in \{90, 120, 240\}$ i funkcji z \emph{CEC2013 benchmark}. Dodatkowo podano wyniki testu Wilcoxona dla par, dla uzyskiwanych wyników względem \emph{DE/rand/1/bin}. Wymiarowość przestrzeni przeszukiwań $D = 30$.}
 \label{Eksp2}
@@ -1504,7 +1645,7 @@ Dodatkowo w ramach pracy w rozdziale \ref{metodyka} poruszono wątki dotyczące 
 \end{tabular}
 \end{table}
 
-\begin{table}[]
+\begin{table}[h]
 \centering
 \caption{Średnie błędy algorytmu \emph{DE/rand/1/bin} ($\mu = 40$) algorytmu \emph{NADE} dla $\mu = 40$, $H = 60$ i funkcji z \emph{CEC2013 benchmark}. Dodatkowo podano wyniki testu Wilcoxona dla par, dla uzyskiwanych wyników względem \emph{DE/rand/1/bin}. Wymiarowość przestrzeni przeszukiwań $D = 30$.}
 \label{Eksp3}
@@ -1542,7 +1683,7 @@ Dodatkowo w ramach pracy w rozdziale \ref{metodyka} poruszono wątki dotyczące 
 \end{tabular}
 \end{table}
 
-\begin{table}[]
+\begin{table}[h]
 \centering
 \caption{Średnie błędy algorytmu \emph{DE/rand/1/bin} ($\mu = 60$) algorytmu \emph{NADE} dla $\mu = 40$, $H = 60$ i funkcji z \emph{CEC2013 benchmark}. Dodatkowo podano wyniki testu Wilcoxona dla par, dla uzyskiwanych wyników względem \emph{DE/rand/1/bin}. Wymiarowość przestrzeni przeszukiwań $D = 30$.}
 \label{Eksp4}
@@ -1580,7 +1721,7 @@ Dodatkowo w ramach pracy w rozdziale \ref{metodyka} poruszono wątki dotyczące 
 \end{tabular}
 \end{table}
 
-\begin{table}[]
+\begin{table}[h]
 \centering
 \caption{Średnie błędy algorytmu \emph{SHADE} i \emph{ANADE} dla ustawień zgodnych z \cite{SHADE} i funkcji z \emph{CEC2013 benchmark}. Dodatkowo podano wyniki testu Wilcoxona dla par, dla uzyskiwanych wyników względem \emph{SHADE}. Wymiarowość przestrzeni przeszukiwań $D = 30$.}
 \label{Eksp5}
@@ -1618,7 +1759,248 @@ Dodatkowo w ramach pracy w rozdziale \ref{metodyka} poruszono wątki dotyczące 
 \end{tabular}
 \end{table}
 
+
+%%%
+
+\begin{table}[h]
+\centering
+\caption{Średnie błędy algorytmu \emph{DE/rand/1/bin} i algorytmu \emph{grADE} z normalizacją dla $H \in \{60, 120, 180\}$ i funkcji z \emph{CEC2013 benchmark}. Dodatkowo podano wyniki testu Wilcoxona dla par, dla uzyskiwanych wyników względem \emph{DE/rand/1/bin}. Wymiarowość przestrzeni przeszukiwań $D = 30$.}
+\label{Anal10}
+\begin{tabular}{|l|l|l|l|l|}
+\hline
+          & {\bf DE/rand/1/bin} & {\bf grADE H = 60} & {\bf grADE H=120} & {\bf grADE H=180} \\ \hline
+{\bf F1}  & 0.00e+00 (=)        & 0.00e+00 (=)       & 0.00e+00 (=)      & 0.00e+00 (=)      \\ \hline
+{\bf F2}  & 1.76e+05 (=)        & 1.59e+05 (=)       & 1.85e+05 (=)      & 1.55e+05 (=)      \\ \hline
+{\bf F3}  & 1.88e+06 (=)        & 1.84e+06 (=)       & 1.38e+06 (=)      & 2.88e+06 (=)      \\ \hline
+{\bf F4}  & 7.76e+02 (=)        & 4.95e+02 (+)       & 4.70e+02 (+)      & 5.88e+02 (+)      \\ \hline
+{\bf F5}  & 0.00e+00 (=)        & 0.00e+00 (=)       & 0.00e+00 (=)      & 0.00e+00 (=)      \\ \hline
+{\bf F6}  & 2.04e+01 (=)        & 2.13e+01 (=)       & 1.87e+01 (+)      & 1.51e+01 (+)      \\ \hline
+{\bf F7}  & 1.57e+00 (=)        & 2.02e+00 (=)       & 3.16e+00 (=)      & 2.04e+00 (=)      \\ \hline
+{\bf F8}  & 2.09e+01 (=)        & 2.09e+01 (=)       & 2.10e+01 (=)      & 2.09e+01 (=)      \\ \hline
+{\bf F9}  & 1.06e+01 (=)        & 9.76e+00 (=)       & 9.29e+00 (=)      & 1.08e+01 (=)      \\ \hline
+{\bf F10} & 7.15e-02 (=)        & 9.83e-02 (-)       & 7.83e-02 (=)      & 5.82e-02 (=)      \\ \hline
+{\bf F11} & 1.87e+01 (=)        & 1.33e+01 (+)       & 1.30e+01 (+)      & 1.24e+01 (+)      \\ \hline
+{\bf F12} & 1.59e+02 (=)        & 1.22e+02 (+)       & 1.34e+02 (+)      & 1.08e+02 (+)      \\ \hline
+{\bf F13} & 1.70e+02 (=)        & 1.64e+02 (+)       & 1.61e+02 (+)      & 1.51e+02 (+)      \\ \hline
+{\bf F14} & 2.90e+03 (=)        & 1.97e+03 (+)       & 2.22e+03 (+)      & 2.08e+03 (+)      \\ \hline
+{\bf F15} & 7.10e+03 (=)        & 7.09e+03 (=)       & 7.02e+03 (=)      & 7.10e+03 (=)      \\ \hline
+{\bf F16} & 2.41e+00 (=)        & 2.53e+00 (=)       & 2.52e+00 (=)      & 2.52e+00 (=)      \\ \hline
+{\bf F17} & 1.10e+02 (=)        & 8.86e+01 (+)       & 8.45e+01 (+)      & 8.36e+01 (+)      \\ \hline
+{\bf F18} & 2.01e+02 (=)        & 1.94e+02 (+)       & 1.93e+02 (+)      & 1.95e+02 (+)      \\ \hline
+{\bf F19} & 9.19e+00 (=)        & 8.23e+00 (=)       & 7.32e+00 (=)      & 8.36e+00 (=)      \\ \hline
+{\bf F20} & 1.19e+01 (=)        & 1.17e+01 (+)       & 1.17e+01 (+)      & 1.16e+01 (+)      \\ \hline
+{\bf F21} & 3.09e+02 (=)        & 3.12e+02 (=)       & 2.79e+02 (=)      & 3.17e+02 (=)      \\ \hline
+{\bf F22} & 2.56e+03 (=)        & 1.07e+03 (+)       & 1.01e+03 (+)      & 1.59e+03 (+)      \\ \hline
+{\bf F23} & 7.08e+03 (=)        & 7.07e+03 (=)       & 7.12e+03 (=)      & 7.05e+03 (=)      \\ \hline
+{\bf F24} & 2.13e+02 (=)        & 2.16e+02 (=)       & 2.14e+02 (=)      & 2.12e+02 (=)      \\ \hline
+{\bf F25} & 2.44e+02 (=)        & 2.45e+02 (=)       & 2.48e+02 (-)      & 2.48e+02 (=)      \\ \hline
+{\bf F26} & 2.17e+02 (=)        & 2.33e+02 (=)       & 2.32e+02 (=)      & 2.13e+02 (=)      \\ \hline
+{\bf F27} & 4.75e+02 (=)        & 4.74e+02 (=)       & 4.57e+02 (=)      & 4.91e+02 (=)      \\ \hline
+{\bf F28} & 3.00e+02 (=)        & 3.00e+02 (=)       & 3.00e+02 (=)      & 3.00e+02 (=)      \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\caption{Średnie błędy algorytmu \emph{DE/rand/1/bin} i algorytmu \emph{grADE} dla $H \in \{60, 120, 180\}$ i funkcji z \emph{CEC2013 benchmark}. Dodatkowo podano wyniki testu Wilcoxona dla par, dla uzyskiwanych wyników względem \emph{DE/rand/1/bin}. Wymiarowość przestrzeni przeszukiwań $D = 30$.}
+\label{Anal11}
+\begin{tabular}{|l|l|l|l|l|}
+\hline
+          & {\bf DE/rand/1/bin} & {\bf grADE H = 60} & {\bf grADE H=120} & {\bf grADE H=180} \\ \hline
+{\bf F1}  & 0.00e+00 (=)        & 0.00e+00 (=)       & 0.00e+00 (=)      & 0.00e+00 (=)      \\ \hline
+{\bf F2}  & 1.76e+05 (=)        & 1.63e+05 (=)       & 1.71e+05 (=)      & 1.62e+05 (=)      \\ \hline
+{\bf F3}  & 1.88e+06 (=)        & 2.65e+06 (-)       & 1.28e+06 (=)      & 3.46e+06 (-)      \\ \hline
+{\bf F4}  & 7.76e+02 (=)        & 6.22e+02 (=)       & 5.30e+02 (+)      & 4.12e+02 (+)      \\ \hline
+{\bf F5}  & 0.00e+00 (=)        & 0.00e+00 (=)       & 0.00e+00 (=)      & 0.00e+00 (=)      \\ \hline
+{\bf F6}  & 2.04e+01 (=)        & 1.94e+01 (+)       & 1.98e+01 (+)      & 2.65e+01 (+)      \\ \hline
+{\bf F7}  & 1.57e+00 (=)        & 2.93e+00 (-)       & 2.02e+00 (=)      & 1.49e+00 (=)      \\ \hline
+{\bf F8}  & 2.09e+01 (=)        & 2.09e+01 (=)       & 2.10e+01 (=)      & 2.10e+01 (=)      \\ \hline
+{\bf F9}  & 1.06e+01 (=)        & 1.03e+01 (=)       & 9.13e+00 (=)      & 9.14e+00 (=)      \\ \hline
+{\bf F10} & 7.15e-02 (=)        & 7.68e-02 (=)       & 6.86e-02 (=)      & 5.74e-02 (=)      \\ \hline
+{\bf F11} & 1.87e+01 (=)        & 1.21e+01 (+)       & 1.29e+01 (+)      & 1.18e+01 (+)      \\ \hline
+{\bf F12} & 1.59e+02 (=)        & 1.24e+02 (+)       & 1.47e+02 (+)      & 1.28e+02 (+)      \\ \hline
+{\bf F13} & 1.70e+02 (=)        & 1.49e+02 (+)       & 1.54e+02 (+)      & 1.56e+02 (+)      \\ \hline
+{\bf F14} & 2.90e+03 (=)        & 1.40e+03 (+)       & 1.47e+03 (+)      & 1.82e+03 (+)      \\ \hline
+{\bf F15} & 7.10e+03 (=)        & 7.01e+03 (=)       & 7.15e+03 (=)      & 7.07e+03 (=)      \\ \hline
+{\bf F16} & 2.41e+00 (=)        & 2.44e+00 (=)       & 2.47e+00 (=)      & 2.41e+00 (=)      \\ \hline
+{\bf F17} & 1.10e+02 (=)        & 7.70e+01 (+)       & 8.05e+01 (+)      & 8.77e+01 (+)      \\ \hline
+{\bf F18} & 2.01e+02 (=)        & 1.92e+02 (+)       & 1.95e+02 (+)      & 1.93e+02 (+)      \\ \hline
+{\bf F19} & 9.19e+00 (=)        & 6.11e+00 (+)       & 5.95e+00 (+)      & 8.15e+00 (=)      \\ \hline
+{\bf F20} & 1.19e+01 (=)        & 1.19e+01 (=)       & 1.18e+01 (+)      & 1.18e+01 (=)      \\ \hline
+{\bf F21} & 3.09e+02 (=)        & 2.93e+02 (=)       & 2.97e+02 (=)      & 2.83e+02 (=)      \\ \hline
+{\bf F22} & 2.56e+03 (=)        & 1.15e+03 (+)       & 1.74e+03 (+)      & 1.28e+03 (+)      \\ \hline
+{\bf F23} & 7.08e+03 (=)        & 7.09e+03 (=)       & 7.07e+03 (=)      & 7.07e+03 (=)      \\ \hline
+{\bf F24} & 2.13e+02 (=)        & 2.15e+02 (=)       & 2.14e+02 (=)      & 2.14e+02 (=)      \\ \hline
+{\bf F25} & 2.44e+02 (=)        & 2.48e+02 (-)       & 2.45e+02 (=)      & 2.47e+02 (=)      \\ \hline
+{\bf F26} & 2.17e+02 (=)        & 2.09e+02 (+)       & 2.19e+02 (=)      & 2.29e+02 (=)      \\ \hline
+{\bf F27} & 4.75e+02 (=)        & 4.65e+02 (=)       & 4.83e+02 (=)      & 4.53e+02 (=)      \\ \hline
+{\bf F28} & 3.00e+02 (=)        & 3.00e+02 (=)       & 3.00e+02 (=)      & 3.00e+02 (=)      \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\caption{Wynik testu Wilcoxona przeprowadzonego między błędami algorytmu \emph{grADE} z normalizacją i \emph{grADE} dla $H \in \{90, 120, 180\}$ i funkcji z \emph{CEC2013 benchmark}. Jako \emph{G} oznaczono statystycznie istotną przewagę algorytmu \emph{grADE}. \emph{N} oznacza statystycznie istotną przewagę algorytmu \emph{grADE} z normalizacją. Wymiarowość przestrzeni przeszukiwań $D = 30$.}
+\label{Anal11a}
+\begin{tabular}{|l|c|c|c|}
+\hline
+\multicolumn{1}{|c|}{{\bf H}}          & \multicolumn{1}{l|}{{\bf60}} & \multicolumn{1}{l|}{{\bf120}} & \multicolumn{1}{l|}{{\bf180}} \\ \hline
+{\bf F1}  & =                               & =                                & =                                \\ \hline
+{\bf F2}  & =                               & =                                & =                                \\ \hline
+{\bf F3}  & =                               & =                                & =                                \\ \hline
+{\bf F4}  & =                               & =                                & =                                \\ \hline
+{\bf F5}  & =                               & =                                & =                                \\ \hline
+{\bf F6}  & =                               & =                                & N                                \\ \hline
+{\bf F7}  & =                               & =                                & =                                \\ \hline
+{\bf F8}  & =                               & =                                & =                                \\ \hline
+{\bf F9}  & =                               & =                                & =                                \\ \hline
+{\bf F10} & =                               & =                                & =                                \\ \hline
+{\bf F11} & =                               & =                                & =                                \\ \hline
+{\bf F12} & =                               & =                                & N                                \\ \hline
+{\bf F13} & =                               & =                                & =                                \\ \hline
+{\bf F14} & G                               & G                                & =                                \\ \hline
+{\bf F15} & =                               & =                                & =                                \\ \hline
+{\bf F16} & =                               & =                                & =                                \\ \hline
+{\bf F17} & G                               & =                                & =                                \\ \hline
+{\bf F18} & =                               & =                                & =                                \\ \hline
+{\bf F19} & =                               & =                                & G                                \\ \hline
+{\bf F20} & N                               & =                                & N                                \\ \hline
+{\bf F21} & =                               & =                                & =                                \\ \hline
+{\bf F22} & =                               & N                                & =                                \\ \hline
+{\bf F23} & =                               & =                                & =                                \\ \hline
+{\bf F24} & =                               & =                                & =                                \\ \hline
+{\bf F25} & =                               & =                                & =                                \\ \hline
+{\bf F26} & G                               & =                                & =                                \\ \hline
+{\bf F27} & =                               & =                                & =                                \\ \hline
+{\bf F28} & =                               & =                                & =                                \\ \hline
+\end{tabular}
+\end{table}
+
+
+%%%%%%%%%%%%%%%
+
+
+
+\begin{table}[h]
+\centering
+\caption{Średnie błędy algorytmu \emph{SHADE} ($H = 100$) i algorytmu \emph{grAADE} ($H \in \{100, 200, 300\}$) i funkcji z \emph{CEC2013 benchmark}. Dodatkowo podano wyniki testu Wilcoxona dla par, dla uzyskiwanych wyników względem \emph{DE/rand/1/bin}. Wymiarowość przestrzeni przeszukiwań $D = 30$.}
+\label{Anal12}
+\begin{tabular}{|l|l|l|l|l|}
+\hline
+          & {\bf SHADE}  & {\bf grAADE H=100} & {\bf grAADE H=200} & {\bf grAADE H=300} \\ \hline
+{\bf F1}  & 0.00e+00 (=) & 0.00e+00 (=)       & 0.00e+00 (=)       & 0.00e+00 (=)       \\ \hline
+{\bf F2}  & 8.92e+03 (=) & 2.34e+04 (-)       & 1.52e+04 (-)       & 1.22e+04 (=)       \\ \hline
+{\bf F3}  & 7.09e+04 (=) & 2.51e+06 (-)       & 1.55e+06 (-)       & 5.14e+05 (-)       \\ \hline
+{\bf F4}  & 0.00e+00 (=) & 3.02e-01 (-)       & 1.76e-02 (-)       & 8.00e-04 (=)       \\ \hline
+{\bf F5}  & 0.00e+00 (=) & 0.00e+00 (=)       & 0.00e+00 (=)       & 0.00e+00 (=)       \\ \hline
+{\bf F6}  & 1.06e+00 (=) & 9.71e+00 (-)       & 2.47e+00 (-)       & 1.07e+00 (-)       \\ \hline
+{\bf F7}  & 2.38e+00 (=) & 5.69e+00 (-)       & 3.55e+00 (=)       & 3.75e+00 (=)       \\ \hline
+{\bf F8}  & 2.08e+01 (=) & 2.09e+01 (-)       & 2.09e+01 (=)       & 2.09e+01 (=)       \\ \hline
+{\bf F9}  & 2.79e+01 (=) & 2.70e+01 (=)       & 2.74e+01 (=)       & 2.66e+01 (+)       \\ \hline
+{\bf F10} & 7.60e-02 (=) & 1.02e-01 (=)       & 1.77e-01 (-)       & 1.60e-01 (-)       \\ \hline
+{\bf F11} & 0.00e+00 (=) & 0.00e+00 (=)       & 0.00e+00 (=)       & 0.00e+00 (=)       \\ \hline
+{\bf F12} & 2.22e+01 (=) & 3.01e+01 (-)       & 2.48e+01 (-)       & 2.49e+01 (-)       \\ \hline
+{\bf F13} & 4.78e+01 (=) & 5.53e+01 (-)       & 5.30e+01 (-)       & 5.33e+01 (=)       \\ \hline
+{\bf F14} & 1.50e-02 (=) & 4.98e+00 (-)       & 3.05e-01 (-)       & 5.85e-02 (-)       \\ \hline
+{\bf F15} & 3.07e+03 (=) & 3.69e+03 (-)       & 3.44e+03 (-)       & 3.35e+03 (-)       \\ \hline
+{\bf F16} & 9.72e-01 (=) & 1.25e+00 (-)       & 1.03e+00 (=)       & 1.15e+00 (-)       \\ \hline
+{\bf F17} & 3.04e+01 (=) & 3.04e+01 (-)       & 3.04e+01 (=)       & 3.04e+01 (=)       \\ \hline
+{\bf F18} & 7.16e+01 (=) & 8.88e+01 (-)       & 8.33e+01 (-)       & 8.04e+01 (-)       \\ \hline
+{\bf F19} & 1.33e+00 (=) & 1.80e+00 (-)       & 1.60e+00 (-)       & 1.48e+00 (-)       \\ \hline
+{\bf F20} & 1.06e+01 (=) & 1.09e+01 (-)       & 1.05e+01 (=)       & 1.06e+01 (=)       \\ \hline
+{\bf F21} & 2.85e+02 (=) & 3.01e+02 (=)       & 2.87e+02 (=)       & 3.01e+02 (=)       \\ \hline
+{\bf F22} & 9.19e+01 (=) & 1.88e+02 (-)       & 1.33e+02 (-)       & 1.14e+02 (-)       \\ \hline
+{\bf F23} & 3.40e+03 (=) & 4.08e+03 (-)       & 3.65e+03 (-)       & 3.70e+03 (-)       \\ \hline
+{\bf F24} & 2.06e+02 (=) & 2.07e+02 (-)       & 2.06e+02 (=)       & 2.06e+02 (=)       \\ \hline
+{\bf F25} & 2.59e+02 (=) & 2.87e+02 (-)       & 2.79e+02 (-)       & 2.74e+02 (-)       \\ \hline
+{\bf F26} & 2.04e+02 (=) & 2.00e+02 (=)       & 2.00e+02 (=)       & 2.00e+02 (=)       \\ \hline
+{\bf F27} & 3.78e+02 (=) & 8.34e+02 (-)       & 6.16e+02 (-)       & 4.74e+02 (=)       \\ \hline
+{\bf F28} & 2.92e+02 (=) & 3.00e+02 (=)       & 3.00e+02 (=)       & 3.00e+02 (=)       \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\caption{Średnie błędy algorytmu \emph{DE/rand/1/bin} i algorytmu \emph{shAde} dla $H \in \{60, 120, 180\}$ i funkcji z \emph{CEC2013 benchmark}. Dodatkowo podano wyniki testu Wilcoxona dla par, dla uzyskiwanych wyników względem \emph{DE/rand/1/bin}. Wymiarowość przestrzeni przeszukiwań $D = 30$.}
+\label{Anal13}
+\begin{tabular}{|l|l|l|l|l|}
+\hline
+          & {\bf DE/rand/1/bin} & {\bf shAde H=60} & {\bf shAde H=120} & {\bf shAde H=180} \\ \hline
+{\bf F1}  & 0.00e+00 (=)        & 0.00e+00 (=)     & 0.00e+00 (=)      & 0.00e+00 (=)      \\ \hline
+{\bf F2}  & 1.76e+05 (=)        & 1.51e+05 (=)     & 1.41e+05 (+)      & 1.69e+05 (=)      \\ \hline
+{\bf F3}  & 1.88e+06 (=)        & 8.32e+05 (=)     & 7.91e+04 (+)      & 8.11e+01 (+)      \\ \hline
+{\bf F4}  & 7.76e+02 (=)        & 1.76e+02 (+)     & 7.51e+01 (+)      & 1.32e+02 (+)      \\ \hline
+{\bf F5}  & 0.00e+00 (=)        & 0.00e+00 (=)     & 0.00e+00 (=)      & 0.00e+00 (=)      \\ \hline
+{\bf F6}  & 2.04e+01 (=)        & 1.14e+01 (+)     & 6.34e+00 (+)      & 6.34e+00 (+)      \\ \hline
+{\bf F7}  & 1.57e+00 (=)        & 9.83e-01 (+)     & 7.01e-01 (+)      & 4.93e-01 (+)      \\ \hline
+{\bf F8}  & 2.09e+01 (=)        & 2.10e+01 (=)     & 2.09e+01 (=)      & 2.09e+01 (=)      \\ \hline
+{\bf F9}  & 1.06e+01 (=)        & 1.13e+01 (=)     & 8.29e+00 (+)      & 8.23e+00 (+)      \\ \hline
+{\bf F10} & 7.15e-02 (=)        & 3.18e-02 (+)     & 1.39e-02 (+)      & 9.80e-03 (+)      \\ \hline
+{\bf F11} & 1.87e+01 (=)        & 1.91e+01 (=)     & 1.81e+01 (=)      & 1.87e+01 (=)      \\ \hline
+{\bf F12} & 1.59e+02 (=)        & 3.87e+01 (+)     & 4.25e+01 (+)      & 4.95e+01 (+)      \\ \hline
+{\bf F13} & 1.70e+02 (=)        & 7.47e+01 (+)     & 7.07e+01 (+)      & 9.08e+01 (+)      \\ \hline
+{\bf F14} & 2.90e+03 (=)        & 8.27e+02 (+)     & 9.32e+02 (+)      & 9.39e+02 (+)      \\ \hline
+{\bf F15} & 7.10e+03 (=)        & 5.26e+03 (+)     & 5.61e+03 (+)      & 6.41e+03 (+)      \\ \hline
+{\bf F16} & 2.41e+00 (=)        & 2.38e+00 (=)     & 2.50e+00 (=)      & 2.42e+00 (=)      \\ \hline
+{\bf F17} & 1.10e+02 (=)        & 5.90e+01 (+)     & 6.01e+01 (+)      & 5.86e+01 (+)      \\ \hline
+{\bf F18} & 2.01e+02 (=)        & 1.56e+02 (+)     & 1.76e+02 (+)      & 2.00e+02 (=)      \\ \hline
+{\bf F19} & 9.19e+00 (=)        & 2.70e+00 (+)     & 3.07e+00 (+)      & 2.80e+00 (+)      \\ \hline
+{\bf F20} & 1.19e+01 (=)        & 1.15e+01 (+)     & 1.16e+01 (+)      & 1.19e+01 (=)      \\ \hline
+{\bf F21} & 3.09e+02 (=)        & 2.81e+02 (=)     & 2.91e+02 (=)      & 2.85e+02 (=)      \\ \hline
+{\bf F22} & 2.56e+03 (=)        & 7.82e+02 (+)     & 7.99e+02 (+)      & 8.41e+02 (+)      \\ \hline
+{\bf F23} & 7.08e+03 (=)        & 5.02e+03 (+)     & 5.90e+03 (+)      & 6.33e+03 (+)      \\ \hline
+{\bf F24} & 2.13e+02 (=)        & 2.16e+02 (=)     & 2.15e+02 (=)      & 2.18e+02 (=)      \\ \hline
+{\bf F25} & 2.44e+02 (=)        & 2.46e+02 (=)     & 2.43e+02 (=)      & 2.43e+02 (=)      \\ \hline
+{\bf F26} & 2.17e+02 (=)        & 2.51e+02 (=)     & 2.31e+02 (=)      & 2.26e+02 (=)      \\ \hline
+{\bf F27} & 4.75e+02 (=)        & 4.75e+02 (=)     & 4.48e+02 (=)      & 4.80e+02 (=)      \\ \hline
+{\bf F28} & 3.00e+02 (=)        & 3.00e+02 (=)     & 3.41e+02 (=)      & 3.00e+02 (=)      \\ \hline
+\end{tabular}
+\end{table}
+
 \begin{table}[]
+\centering
+\caption{Wynik testu Wilcoxona przeprowadzonego między błędami algorytmu \emph{grADE} i \emph{shAde} dla $H \in \{90, 120, 180\}$ i funkcji z \emph{CEC2013 benchmark}. Jako \emph{G} oznaczono statystycznie istotną przewagę algorytmu \emph{grADE}. \emph{S} oznacza statystycznie istotną przewagę algorytmu \emph{shAde} z normalizacją. Wymiarowość przestrzeni przeszukiwań $D = 30$.}
+\label{Anal14}
+\begin{tabular}{|l|c|c|c|}
+\hline
+\multicolumn{1}{|c|}{{\bf H}} & {\bf 60} & {\bf 120} & {\bf 180} \\ \hline
+{\bf F1}                      & =        & =         & =         \\ \hline
+{\bf F2}                      & =        & =         & =         \\ \hline
+{\bf F3}                      & S        & S         & S         \\ \hline
+{\bf F4}                      & S        & S         & S         \\ \hline
+{\bf F5}                      & =        & =         & =         \\ \hline
+{\bf F6}                      & S        & S         & S         \\ \hline
+{\bf F7}                      & S        & S         & S         \\ \hline
+{\bf F8}                      & =        & =         & =         \\ \hline
+{\bf F9}                      & =        & S         & S         \\ \hline
+{\bf F10}                     & S        & S         & S         \\ \hline
+{\bf F11}                     & G        & G         & G         \\ \hline
+{\bf F12}                     & S        & S         & S         \\ \hline
+{\bf F13}                     & S        & S         & S         \\ \hline
+{\bf F14}                     & S        & S         & S         \\ \hline
+{\bf F15}                     & S        & S         & S         \\ \hline
+{\bf F16}                     & =        & =         & =         \\ \hline
+{\bf F17}                     & S        & S         & S         \\ \hline
+{\bf F18}                     & S        & =         & G         \\ \hline
+{\bf F19}                     & S        & S         & S         \\ \hline
+{\bf F20}                     & =        & =         & G         \\ \hline
+{\bf F21}                     & =        & =         & =         \\ \hline
+{\bf F22}                     & =        & =         & =         \\ \hline
+{\bf F23}                     & S        & S         & S         \\ \hline
+{\bf F24}                     & =        & =         & =         \\ \hline
+{\bf F25}                     & =        & S         & S         \\ \hline
+{\bf F26}                     & =        & =         & =         \\ \hline
+{\bf F27}                     & =        & S         & =         \\ \hline
+{\bf F28}                     & =        & =         & =         \\ \hline
+\end{tabular}
+\end{table}
+
+
+%%%%%%%%%%%%%%%
+
+\chapter{Wyniki eksperymentów w pełnym schemacie badań}
+
+\begin{table}[h]
 \centering
 \caption{Średnie błędy algorytmu \emph{DE/rand/1/bin} ($\mu = 50$), algorytmu \emph{NADE} dla $H \in \{75, 100, 200\}$ i funkcji z \emph{CEC2013 benchmark}. Dodatkowo podano wyniki testu Wilcoxona dla par, dla uzyskiwanych wyników względem \emph{DE/rand/1/bin}. Wymiarowość przestrzeni przeszukiwań $D = 10$.}
 \label{FullEksp110}
@@ -1656,7 +2038,7 @@ Dodatkowo w ramach pracy w rozdziale \ref{metodyka} poruszono wątki dotyczące 
 \end{tabular}
 \end{table}
 
-\begin{table}[]
+\begin{table}[h]
 \centering
 \caption{Średnie błędy algorytmu \emph{SHADE} i \emph{ANADE} dla ustawień zgodnych z \cite{SHADE} i funkcji z \emph{CEC2013 benchmark}. Dodatkowo podano wyniki testu Wilcoxona dla par, dla uzyskiwanych wyników względem \emph{SHADE}. Wymiarowość przestrzeni przeszukiwań $D = 10$.}
 \label{FullEksp210}
@@ -1694,7 +2076,7 @@ Dodatkowo w ramach pracy w rozdziale \ref{metodyka} poruszono wątki dotyczące 
 \end{tabular}
 \end{table}
 
-\begin{table}[]
+\begin{table}[h]
 \centering
 \caption{Średnie błędy algorytmu \emph{DE/rand/1/bin} ($\mu = 100$), algorytmu \emph{NADE} dla $H \in \{90, 120, 240\}$ i funkcji z \emph{CEC2013 benchmark}. Dodatkowo podano wyniki testu Wilcoxona dla par, dla uzyskiwanych wyników względem \emph{DE/rand/1/bin}. Wymiarowość przestrzeni przeszukiwań $D = 30$.}
 \label{Eksp130}
@@ -1732,7 +2114,7 @@ Dodatkowo w ramach pracy w rozdziale \ref{metodyka} poruszono wątki dotyczące 
 \end{tabular}
 \end{table}
 
-\begin{table}[]
+\begin{table}[h]
 \centering
 \caption{Średnie błędy algorytmu \emph{SHADE} i \emph{ANADE} dla ustawień zgodnych z \cite{SHADE} i funkcji z \emph{CEC2013 benchmark}. Dodatkowo podano wyniki testu Wilcoxona dla par, dla uzyskiwanych wyników względem \emph{SHADE}. Wymiarowość przestrzeni przeszukiwań $D = 30$.}
 \label{Eksp230}
@@ -1770,7 +2152,7 @@ Dodatkowo w ramach pracy w rozdziale \ref{metodyka} poruszono wątki dotyczące 
 \end{tabular}
 \end{table}
 
-\begin{table}[]
+\begin{table}[h]
 \centering
 \caption{Średnie błędy algorytmu \emph{DE/rand/1/bin} ($\mu = 100$), algorytmu \emph{NADE} dla $H \in \{150, 200, 400\}$ i funkcji z \emph{CEC2013 benchmark}. Dodatkowo podano wyniki testu Wilcoxona dla par, dla uzyskiwanych wyników względem \emph{DE/rand/1/bin}. Wymiarowość przestrzeni przeszukiwań $D = 50$.}
 \label{Eksp150}
@@ -1808,7 +2190,7 @@ Dodatkowo w ramach pracy w rozdziale \ref{metodyka} poruszono wątki dotyczące 
 \end{tabular}
 \end{table}
 
-\begin{table}[]
+\begin{table}[h]
 \centering
 \caption{Średnie błędy algorytmu \emph{SHADE} i \emph{ANADE} dla ustawień zgodnych z \cite{SHADE} i funkcji z \emph{CEC2013 benchmark}. Dodatkowo podano wyniki testu Wilcoxona dla par, dla uzyskiwanych wyników względem \emph{SHADE}. Wymiarowość przestrzeni przeszukiwań $D = 50$.}
 \label{FullEksp250}
@@ -1845,8 +2227,6 @@ Dodatkowo w ramach pracy w rozdziale \ref{metodyka} poruszono wątki dotyczące 
 {\bf F28} & 5.18e+02 (=) & 4.00e+02 (=) \\ \hline
 \end{tabular}
 \end{table}
-
-
 
 \bibliographystyle{unsrt}
 \nocite{*}
