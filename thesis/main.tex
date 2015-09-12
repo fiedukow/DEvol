@@ -1321,6 +1321,7 @@ Zaprezentowane wyniki sugerują następujące tezy, które zostaną poddane wery
 \chapter{Badania}
 \label{badania}
 \section{Cel}
+\label{CelHipotezy}
 \par{
 W poprzednim rozdziale przy użyciu uproszczonego schematu badań wysunięto hipotezy dotyczące wpływu zorganizowanego wg. wskazanych procedur archiwum na wyniki uzyskiwane w różnych wariantach ewolucji różnicowej. W celu zweryfikowania tych tez, przeprowadzono badania w oparciu o schemat zgodny z zalecaniami twórców \emph{CEC2013 benchmark}.
 }
@@ -1430,7 +1431,22 @@ Przeprowadzone eksperymenty pozwoliły na uzyskanie wyników przedstawionych w t
 \end{tabular}
 \end{table}
 
+\begin{table}[h]
+\centering
+\caption{Podsumowanie porównania algorytmów \emph{grADE} i \emph{shAde} dla różnych wymiarowości. W tabeli zaprezentowano procent problemów rozwiązanych statystycznie istotnie lepiej niż drugi z algorytmów, dla wszystkich testowanych wartości parametrów i funkcji przy danej wymiarowości problemu.}
+\label{shAdevsgrADE}
+\begin{tabular}{|c|c|c|c|}
+\hline
+{\bf D}   & {\bf grADE} & {\bf shAde} & {\bf =} \\ \hline
+{\bf 10}  & 32.14\%     & 27.38\%     & 40.48\% \\ \hline
+{\bf 30}  & 7.14\%      & 48.81\%     & 44.05\% \\ \hline
+{\bf 50}  & 22.62\%     & 38.10\%     & 39.29\% \\ \hline
+{\bf śr.} & 20.63\%     & 38.10\%     & 41.27\% \\ \hline
+\end{tabular}
+\end{table}
+\newpage
 \section{Wnioski}
+\subsection{Algorytmy \emph{NADE} i \emph{ANADE}}
 \par{
 Analizując wyniki eksperymentów, należy zwrócić uwagę, na fakt, że w uzyskanych wynikach wyraźnie widać, że dla pewnych funkcji dodanie archiwum (szczególnie w przypadku algorytmu NADE) niezależnie od przyjętych parametrów przynosi korzyść. Wstępne badania sugerowały, że może mieć to związek z charakterem funkcji i dotyczyć w szczególności wielu funkcji jedno modalnych ($f_1$ do $f_5$) oraz złożonych ($f_{21}$ do $f_{28}$). W tych grupach podsumowanie testu Wilcoxona prezentowało się jak w tablicy \ref{FULLSUMMARYUNIandCOMPLEX} poniżej. Sugeruje to, że algorytm poszerzony o niewielkie archiwum w najlepszym razie nie traci na możliwościach przeszukiwania w przypadku funkcji tego rodzaju (i to tylko dla $H = 1.5 \cdot \mu$. Obala to hipotezę pierwszą, szczególnie dla większych wymiarowości problemów. Istnieją funkcje, dla których znormalizowane archiwum przynosi poprawę jednak jest to nieliczna i nieregularna podgrupa wszystkich analizowanych problemów.
 }
@@ -1456,7 +1472,7 @@ Jednocześnie, ważnym wnioskiem jest jednak fakt, że przyjmując próbę probl
 Trzecia z hipotez, również wydaje się być potwierdzona. Dla innych wymiarowości i bardziej reprezantatywnej liczby powtórzeń wykonań algorytmu, wyniki nadal wskazują na zanikający wpływ normalizacji archiwum w przypadku zastosowania jej do algorytmu \emph{SHADE}. W takim przypadku zanikają również wzorce o których mówi hipoteza pierwsza, co dodatkowo wpływa na jej obalenie.
 }
 \par{
-Ostatnią z hipotez najłatwiej potwierdzić sumując wartości z kolumny $+$ i $-$ dla wszystkich wymiarowości i kolejnych wielkości $H$. Tego typu operacja ujawnia rezultat widoczny w tabeli \ref{FULLSUMSUM} poniżej. Wynik ten ze względu na zdecydowanie najlepszy bilans dla $H = 1.5 \cdot \mu$ co potwierdza ostatnią z hipotez. Warto jednak zaznaczyć, że ponieważ bilans we wszystkich przypadkach był ujemny, ten wniosek można też przypisać faktowi, że najmniejsze archiwum najmniej ingeruje w podstawowy wariant algorytmu.
+Czwartą hipotezę najłatwiej potwierdzić sumując wartości z kolumny $+$ i $-$ dla wszystkich wymiarowości i kolejnych wielkości $H$. Tego typu operacja ujawnia rezultat widoczny w tabeli \ref{FULLSUMSUM} poniżej. Wynik ten ze względu na zdecydowanie najlepszy bilans dla $H = 1.5 \cdot \mu$ co potwierdza ostatnią z hipotez. Warto jednak zaznaczyć, że ponieważ bilans we wszystkich przypadkach był ujemny, ten wniosek można też przypisać faktowi, że najmniejsze archiwum najmniej ingeruje w podstawowy wariant algorytmu.
 }
 
 \begin{table}[h]
@@ -1471,6 +1487,28 @@ Ostatnią z hipotez najłatwiej potwierdzić sumując wartości z kolumny $+$ i 
 {\bf $4 \cdot \mu$}   & 12       & 43       & -31            \\ \hline
 \end{tabular}
 \end{table}
+\subsection{Algorytmy \emph{grADE} i \emph{shAde}}
+\par{
+Na podstawie zebranych rezultatów można wysnuć wnioski dotyczące postawionych w rozdziale \ref{CelHipotezy}. Na podstawie tablicy \ref{shAde_and_grADE} można potwierdzić hipotezy piątą oraz szóstą. Bilans jakości dla wszystkich badanych wymiarowości problemu i wartości parametrów nowych algorytmów jest bowiem dodatni (tablica \ref{Bilans_shAde_grAde}).
+}
+\par{
+Ostatnia z postawionych hipotez pozostaje sprawą otwartą. Dla wymiarowości $D \in {30, 50}$ algorytm \emph{shAde} rozwiązał statystycznie istotnie lepiej od \emph{grADE} znacznie więcej problemów niż gorzej. Warto jednak zwrócić uwagę, na niejednoznaczną sytuację w przypadku wymiarowości $D = 10$, gdzie algorytm \emph{grADE} wysuwa się na niewielkie prowadzenie.
+}
+\par{
+Dodatkowo, należy zwrócić uwagę, że z wyjątkiem wymiarowości $D = 30$, \emph{grADE} rozwiązał statystycznie istotnie lepiej niż \emph{shAde} znaczną liczbę problemów (ponad 20\%). Należy w związku z tym wnosić, że zarówno wymiarowość problemu, jak i jego charakter może wpływać na skuteczność obu metod i sprawiać, że jedna zyskuje przewagę nad drugą.
+}
+\par{
+Archiwum zaczerpnięte z \emph{shAde} nadal jawi się jako najlepszy i najbezpieczniejszy spośród przebadanych punkt wyjścia dla nieznanego problemu. Zebrane dane nie pozwalają jednak na bezkrytyczne przyjęcie tej metody i w wskazanie jej jednoznacznej przewagi. Istnieją ku temu trzy powody:
+\begin{itemize}
+\item Nie przeanalizowano zachowania badanych metod w kontekście innych niż \emph{SHADE} zaawansowanych algorytmów ewolucji różnicowej.
+\item Nie została dostatecznie zbadana przestrzeń parametrów tych algorytmów w kontekście jakości uzyskiwanych przez nie wyników.
+\item Zebrane dane nie wskazują w sposób jednoznaczny lepszej metody.
+\end{itemize}
+}
+\par{
+Ostatnia z hipotez nie może więc zostać uznana za potwierdzoną.
+}
+
 
 \chapter{Obserwacje dotyczące metodyki}
 \label{metodyka}
@@ -1583,21 +1621,37 @@ Odnosząc się raz jeszcze do tematu narzędzi wsparcia, można domniemywać, ż
 
 \chapter{Podsumowanie}
 \par{
-Cel pracy został osiągnięty. Skonstruowany został algorytm \emph{NADE}, dodający do klasycznego schematu ewolucji różnicowej zewnętrzne archiwum wykorzystywane w procesie mutacji różnicowej. Algorytm \emph{NADE} został porównany z klasycznym algorytmem \emph{DE/rand/1/bin} pod kątem jakości uzyskiwanych wyników, dla różnych wartości nowego parametru $H$. Tym samym zbadano wpływ zaproponowanego archiwum na jakość uzyskiwanych wyników w mutacji różnicowej.
+Cel pracy został osiągnięty. Skonstruowane zostały algorytmy \emph{NADE}, \emph{grADE} oraz \emph{shAde} dodający do klasycznego schematu ewolucji różnicowej realizowane w różny sposób zewnętrzne archiwum wykorzystywane w procesie mutacji różnicowej. Algorytmy te zostały porównane z klasycznym algorytmem \emph{DE/rand/1/bin} pod kątem jakości uzyskiwanych wyników, dla różnych wartości nowego i ujednoliconego dla wszystkich algorytmów parametru $H$. Tym samym zbadano wpływ zaproponowanych form archiwum na jakość uzyskiwanych wyników w algorytmach ewolucji różnicowej.
 }
 \par{
-Uzyskane wyniki wskazały, że archiwum w zaproponowanej formie wpływa w sposób statystycznie istotny na otrzymywane wyniki. Zostało stwierdzone, że choć istnieją problemy, dla których zaproponowana modyfikacja może prowadzić do poprawy uzyskiwanych wyników, to nie ma jasnych przesłanek, według których można by wskazać te problemy. Zgodnie z otrzymanymi rezultatami, należy także przyjąć, iż dla większości funkcji z testu \emph{CEC2013 benchmark}, algorytm \emph{NADE} działa mniej skutecznie niż podstawowy wariant ewolucji różnicowej \emph{DE/rand/1/bin}. Wskazano, że choć wpływ archiwum na uzyskiwane wyniki zależy od badanej funkcji, to traktując funkcje z testu \emph{CEC2013 benchmark} jako reprezentatywną próbkę problemów, archiwum w opisanej formie nie jest pożądaną modyfikacją algorytmu \emph{DE/rand/1/bin} dla całkowicie nieznanego problemu.
+Uzyskane wyniki wskazały, że archiwum w każdej z zaproponowanych form, wpływa w sposób statystycznie istotny na otrzymywane wyniki.
 }
 \par{
-Zbadana została możliwość zastosowania znormalizowanego archiwum w wypracowanej formie w zaawansowanej wersji algorytmu ewolucji różnicowej \emph{SHADE} \cite{SHADE}. Został skonstruowany algorytm \emph{ANADE} stanowiący rozszerzenie algorytmu \emph{SHADE} o takie właśnie archiwum, który jakością rozwiązań w ogólnym przypadku nieznacznie odbiegał od swojego pierwowzoru w sposób negatywny. Skłonność proponowanej modyfikacji do statystycznie istotnej zmiany uzyskiwanych wyników w sposób zależny od problemu została potwierdzona. W przypadku algorytmu \emph{ANADE} było to jednak mniej wyraźne zjawisko.
+Zostało stwierdzone, że choć istnieją problemy, dla których archiwum według procedury z algorytmu \emph{NADE} może prowadzić do poprawy uzyskiwanych wyników, to nie ma jasnych przesłanek, według których można by wskazać te problemy. Zgodnie z otrzymanymi rezultatami, należy także przyjąć, iż dla większości funkcji z testu \emph{CEC2013 benchmark}, algorytm \emph{NADE} działa mniej skutecznie niż podstawowy wariant ewolucji różnicowej \emph{DE/rand/1/bin}. Wskazano, że choć wpływ takiego archiwum na uzyskiwane wyniki zależy od badanej funkcji, to traktując funkcje z testu \emph{CEC2013 benchmark} jako reprezentatywną próbkę problemów, archiwum tego rodzaju nie jest pożądaną modyfikacją algorytmu \emph{DE/rand/1/bin} dla całkowicie nieznanego problemu.
 }
 \par{
-Mając na względzie powyższe wnioski, wydaje się, że dalsze badanie archiwum jako niezależnej od wariantu ewolucji różnicowej metody poprawy jakości jej działania, nie są interesującym kierunkiem rozwoju.
+Zbadana została możliwość zastosowania znormalizowanego archiwum w wypracowanej w algorytmie \emph{NADE} formie w zaawansowanej wersji algorytmu ewolucji różnicowej \emph{SHADE} \cite{SHADE}. Został skonstruowany algorytm \emph{ANADE} stanowiący rozszerzenie algorytmu \emph{SHADE} o takie właśnie archiwum, który jakością rozwiązań w ogólnym przypadku nieznacznie odbiegał od swojego pierwowzoru w sposób negatywny. Skłonność tej modyfikacji do statystycznie istotnej zmiany uzyskiwanych wyników w sposób zależny od problemu została potwierdzona. W przypadku algorytmu \emph{ANADE} było to jednak mniej wyraźne zjawisko.
+}
+\par{
+Mając na względzie powyższe wnioski, wydaje się, że dalsze badanie archiwum zaproponowanego w algorytmie \emph{NADE} jako niezależnej od wariantu ewolucji różnicowej metody poprawy jakości jej działania, nie są interesującym kierunkiem rozwoju.
+}
+\par{
+Wskazano, że druga z zaproponowanych metod dołączania archiwum do algorytmów ewolucji różnicowej opisana w ramach algorytmu \emph{grADE} przynosi statystycznie istotną poprawę dla niemal wszystkich badanych funkcji optymalizowanych i wymiarowości przestrzeni przeszukiwań. Algorytm ten został wskazany jako jedna z możliwych form archiwum wymagającą dalszego zbadania w kontekście charakterystyki uzyskiwanej przezeń jakości rezultatów w zależności od wartości dostępnych parametrów.
+}
+\par{
+Wykazano, że także ostatnia z proponowanych form archiwum (zaczerpnięta z algorytmu \emph{SHADE}) pozwala na uzyskanie statystycznie istotnej poprawy jakości wyników uzyskiwanych przez algorytm ewolucji różnicowej, potwierdzając tę tezę dla niemal wszystkich badanych problemów i wszystkich wymiarowości.
+}
+\par{
+Bezpośrednie porównanie algorytmów \emph{grADE} i \emph{shAde}, nie pozwoliło na jednoznaczne określenie przewagi któregokolwiek z proponowanych przez te algorytmy podejść do stosowania archiwum. Choć z przeprowadzonych badań zdaje się wyłaniać przewaga metody stosowanej w algorytmie \emph{shAde}, to dokładne porównanie tych metod wymaga dalszych badań.
+}
+\par{
+W ramach pracy zaproponowano kierunek dalszego rozwoju dziedziny przez dokładne zbadania charakterystyki algorytmów \emph{grADE} oraz \emph{shAde} w kontekście ich nowego parametru $H$. Ponadto do dalszych badań pozostawiono sprawdzenie działania skonstruowanych w pracy archiwów po ich dołączeniu do innych wariantów algorytmów ewolucji różnicowej. Takie badania pozwoliły by wysnuć ogólne wnioski dotyczące archiwum w ewolucji różnicowej i na potraktowanie archiwum niezależnie od innych składników ewolucji różnicowej.
 }
 \par{
 Dodatkowo w ramach pracy w rozdziale \ref{metodyka} poruszono wątki dotyczące metodyki badań i możliwości ich dalszego rozwoju. Omówiono trudności związane z weryfikowalnością implementacji algorytmów, dokładnością oraz czasochłonnością badań. Ten poboczny wątek, który nie był pierwotnym celem pracy, wskazuje kluczowe problemy przy badaniach tego rodzaju i sugeruje cechy jakie powinny posiadać rozwiązania tychże problemów. Metodyka pracy nad niedeterministycznymi algorytmami optymalizującymi, zdaje się być ważnym punktem dla rozwoju dziedziny, a zarazem okazją do rozwijających technologię informacyjną badań zarówno o charakterze teoretycznym jak i inżynierskim.
 }
 \appendix
+\begin{samepage}
 \chapter{Wyniki eksperymentów w uproszczonym schemacie badań}
 \label{ResultsAttachments}
 \begin{table}[h]
@@ -1642,7 +1696,7 @@ Dodatkowo w ramach pracy w rozdziale \ref{metodyka} poruszono wątki dotyczące 
 {\bf F28} & 3.00e+02 (=)        & 3.00e+02 (=)    & 3.00e+02 (=)     & 3.00e+02 (=)     \\ \hline
 \end{tabular}
 \end{table}
-
+\end{samepage}
 
 \begin{table}[h]
 \centering
