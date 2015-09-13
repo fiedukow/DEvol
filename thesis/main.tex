@@ -541,14 +541,29 @@ Schemat ten, podobnie jak dwa poprzednie, opiera się o przypuszczenie, że istn
 \item[current-to-pbest] \cite{JADE} -- ten schemat zakłada zmianę schematu \ref{eq:DiffMutation} na:
 
 \begin{equation}
-\mathbf{v_i^{t}} = \mathbf{x_i^t} + F \cdot (\mathbf{x_{r_{pbest}}^t} - x_i^t) + F \cdot (\mathbf{r_1} - \mathbf{r_{2}})
+\mathbf{v_i^{t}} = \mathbf{x_i^t} + F \cdot (\mathbf{x_{r_{pbest}}^t} - \mathbf{x_i^t}) + F \cdot (\mathbf{r_1} - \mathbf{r_{2}})
 \end{equation}
 gdzie $\mathbf{x_{r_{pbest}}^t}$ to osobnik wybrany losowo spośród $p \cdot n$ osobników o najniższej wartości funkcji optymalizowanej, $p \in (0,1]$. W niektórych pracach \cite{SHADE} proponowane jest dolne ograniczenie wartości $p$ jako $p_{min} = \frac{2}{\mu}$, co oznacza, że osobnik $\mathbf{x_{r_{pbest}}^t}$ jest zawsze losowany spośród co najmniej dwóch najlepszych osobników.
 
 Rozwiązanie to ma za zadanie dołączyć do zalet schematu \emph{current-to-best} dodatkowe rozrzucenie osobników w przeszukiwanej przestrzeni i osłabienie siły przyciągania jednego najmocniejszego osobnika, a więc zmniejszenie elitaryzmu całego algorytmu.
 
 
+\par{
+Działanie poszczególnych operatorów mutacji zaprezentowano na rysunkach \ref{mutations1} i \ref{mutations2}.
+}
 
+
+\begin{figure}[h]
+\begin{center}\includegraphics[scale=0.375]{img/mutations1.png}\end{center}
+\caption{Działanie poszczególnych schematów mutacji różnicowej przy pokazanej populacji pierwotnej.}
+\label{mutations1}
+\end{figure}
+
+\begin{figure}[h]
+\begin{center}\includegraphics[scale=0.375]{img/mutations2.png}\end{center}
+\caption{Działanie poszczególnych schematów mutacji różnicowej przy pokazanej na rysunku \ref{mutations1} populacji pierwotnej.}
+\label{mutations2}
+\end{figure}
 
 \end{description}
 }
