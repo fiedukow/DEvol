@@ -12,19 +12,18 @@
 \usepackage{algpseudocode}
 \usepackage{listings}
 \usepackage[textfont={it}]{caption}
+\usepackage[all]{nowidow}
 
 \headsep = 30pt
 \usepackage[]{tocbibind}
 %\linespread{2}
 
-
-
 \selectlanguage{polish}
 \frenchspacing
 
-\title{\textbf{Wpływ wykorzystania archiwum do mutacji różnicowej w algorytmie ewolucji różnicowej na jakość optymalizacji w przestrzeni ciągłej.}}
-\author{Andrzej Fiedukowicz}
-\date{}
+%\title{\textbf{Wpływ wykorzystania archiwum wygenerowanych punktów w algorytmie ewolucji różnicowej na jakość uzyskiwanych wyników.}}
+%\author{Andrzej Fiedukowicz}
+%\date{}
 
 \usepackage{mathtools}
 \usepackage{fancyhdr}
@@ -51,64 +50,62 @@
 
 \DeclareGraphicsExtensions{.pdf,.png,.jpg}
 
-\maketitle
+%\maketitle
 \tableofcontents
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % INTRO
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newpage
-\subsubsection{Streszczenie}
-\par{
-\emph{
-Algorytmy ewolucji różnicowej (DE) występują w wielu wariantach i odmianach, których właściwości są cały czas badane. Jedną z proponowanych modyfikacji tego algorytmu stanowi wykorzystanie przy operatorze mutacji różnicowej osobników pochodzących z szerszego niż jednopokoleniowego okna historii.
-}
-}
-\par{
-\emph{
-Niniejsza praca opisuje proces opracowywania metody zastosowania archiwum osobników w celu poprawy jakości wyników uzyskiwanych w ewolucji różnicowej. W dalszej części praca skupia się na sprawdzeniu hipotezy o możliwości poprawy klasycznego schematu ewolucji różnicowej \emph{DE/rand/1/bin} przez wykorzystanie archiwum, proponując algorytm \emph{NADE}.
-Ponadto, praca odnosi także zaproponowaną modyfikację do zaawansowanego algorytmu ewolucji różnicowej \emph{SHADE} \cite{SHADE}, proponując algorytm \emph{ANADE} wprowadzający ową modyfikację do algorytmu \emph{SHADE}.
-}
-}
-\par{
-\emph{
-W ramach pracy porównano proponowane algorytmy i wyciągnięto wnioski na temat możliwości poprawy uzyskiwanych przez algorytmy wyników przez zastosowanie archiwum. Badania skuteczności poszczególnych metod przeprowadzone zostały w oparciu o zestaw funkcji testowych opracowanych w ramach konferencji \emph{IEEE Congress on Evolutionary Computation 2013 (CEC2013)}.
-}
-}
-\par{
-\emph{
-Dodatkowo w ramach pracy poruszono problematykę metodyki badań nad stochastycznymi algorytmami optymalizacyjnymi, wskazując na potencjalne drogi jej rozwoju.
-}
-}
-\subsubsection{Słowa kluczowe}
-\par{
-\emph{Ewolucja Różnicowa, DE, Algorytmy Ewolucyjne, AE, Optymalizacja, Optymalizacja black--box}
-}
-\subsubsection{Abstract}
-\par{
-\emph{There are many forms of differential evolution algorithms (DE), which properties are yet to be discovered. One of possible modifications of those algorithms is using historical points to perform differential mutation.}.
-}
-\par{
-\emph{
-This thesis describes development process of method of using such archive to increase DE results quality. Hereafter this thesis is checking hipotesis about possibility of improving classic \emph{DE/rand/1/bin} by using archive, proposing the \emph{NADE} algorithm. This thesis also propose \emph{ANADE} algorithm that applies proposed archive technique to advanced differencial evolution algorithm -- \emph{SHADE}.
-}
-}
-\par{
-\emph{
-This thesis compares proposed algorithms and puts a proposal about possibility of improving algorithm performance by applying archive to their basic design.
-All experiments performed during this reasearch are based on benchmark functions set developed during the \emph{IEEE Congress of Evolutionary Computation 2013 conference (CEC2013)}.
-}
-}
-\par{
-\emph{
-Additionally this thesis describes issues of methodology used in this research, pointing possible ways of its improvements.
-}
-}
-\subsubsection{Keywords}
-\par{
-\emph{Differential Evolution, DE, Evolutionary Algorithms, EA, Optimization, Black--box optimization}
-}
+%\newpage
+%\subsubsection{Streszczenie}
+%\par{
+%\emph{
+%Algorytmy ewolucji różnicowej (DE) występują w wielu wariantach i odmianach, których właściwości są cały czas badane. Jedną z proponowanych modyfikacji %tego algorytmu stanowi wykorzystanie przy operatorze mutacji różnicowej osobników pochodzących z szerszego niż jednopokoleniowego okna historii.
+%}
+%}
+%\par{
+%\emph{
+%Niniejsza praca, proponuje trzy schematy wykorzystania archiwum w algorytmach ewolucji różnicowej, wyodrębnione i opracowane w oparciu o pojawiające %się w literaturze przykłady.
+%}
+%}
+%\par{
+%\emph{
+%W dalszej części pracy opisano przebieg i wyniki przeprowadzonych badań jakościowych, opartych o zestaw funkcji testowych opracowanych w ramach konferencji \emph{IEEE Congress on Evolutionary Computation 2013 (CEC2013)}. Badaniom jakościowym poddano  wszystkie zaproponowane algorytmy, porównując jakość uzyskiwanych przez nie wyników z ich pierwowzorami nie wykorzystującymi archiwum. Jako bazę opracowywanych algorytmów wykorzystano klasyczny algorytm ewolucji różnicowej \emph{DE/rand/1/bin} oraz algorytm zaawansowany algorytm ewolucji różnicowej -- \emph{SHADE}\cite{SHADE}. Przeprowadzone porównania pozwoliły na wyciągnięcie wniosków na temat możliwości poprawy jakości uzyskiwanych w ewolucji różnicowej wyników przez zastosowanie poszczególnych schematów wykorzystania archiwum.
+%}
+%}
+%\par{
+%\emph{
+%Dodatkowo w ramach pracy poruszono problematykę metodyki badań nad stochastycznymi algorytmami optymalizacyjnymi, wskazując na potencjalne drogi jej rozwoju.
+%}
+%}
+%\subsubsection{Słowa kluczowe}
+%\par{
+%\emph{Ewolucja Różnicowa, DE, Algorytmy Ewolucyjne, AE, Optymalizacja black--box}
+%}
+%\subsubsection{Abstract}
+%\par{
+%\emph{There are many forms of differential evolution algorithms (DE), which properties are yet to be discovered. One of possible modifications of those algorithms is using historical points to perform differential mutation.}
+%}
+%\par{
+%\emph{
+%This thesis proposes three schemes of using an archive in DE, which were extracted and developed based on examples available in literature.
+%}
+%}
+%\par{
+%\emph{
+%Hereafter this thesis describes process of conducting and results of performed benchmarks. All benchmarks used in thesis were based on benchmark functions developed during the \emph{IEEE Congress of Evolutionary Computation 2013 conference (CEC2013)}. Benchmarks were performed for all proposed algorithms, and based on their results, all algorithms were compared with their basic form (without archive). Classic differential evolution algorithm \emph{DE/rand/1/bin}, and its advanced variant \emph{SHADE}\cite{SHADE} were used as the base for proposed modifications. Performed comparison enables drawing conclusions about possibility of improving quality of results in differential evolution by using individual forms of archive.
+%}
+%}
+%\par{
+%\emph{
+%Additionally this thesis describes issues of methodology used in this research, pointing possible ways of its improvements.
+%}
+%}
+%\subsubsection{Keywords}
+%\par{
+%\emph{Differential Evolution, DE, Evolutionary Algorithms, EA, Optimization}
+%}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CHAPTER 1: Wstęp
@@ -116,16 +113,16 @@ Additionally this thesis describes issues of methodology used in this research, 
 
 \chapter{Wstęp}
 \par{
-Problem optymalizacji jest jednym z najczęściej pojawiających się w praktycznych zastosowaniach problemów numerycznych. Sama powszechność podstawowego problemu, ale także możliwość sprowadzenia do problemu optymalizacji problemów klasyfikacji, regresji, grupowania czy też określając szerzej -- uczenia maszynowego \cite{SpringerIntroToEvol,SearchingInteligent,ArchivedDE}, sprawia, że przed algorytmami optymalizacji stawiane są coraz bardziej złożone i wymagające zadania.
+Problem optymalizacji jest jednym z najczęściej pojawiających się w praktycznych zastosowaniach problemów numerycznych. Sama powszechność podstawowego problemu, ale także możliwość sprowadzenia do problemu optymalizacji problemów klasyfikacji, regresji, grupowania, czy też określając szerzej -- uczenia maszynowego \cite{SpringerIntroToEvol,SearchingInteligent,ArchivedDE}, sprawia, że przed algorytmami optymalizacji stawiane są coraz bardziej złożone i wymagające zadania.
 }
 \par{
-Stale zwiększający się poziom trudności problemów optymalizacyjnych jak i ciągła niedoskonałość dotychczas wytworzonych metod ich rozwiązywania powoduje duże zainteresowanie badaniami dotyczącymi tworzenia coraz doskonalszych, szybszych i dających lepsze rezultaty algorytmów owe problemy rozwiązujących \cite{StateOfArt}.
+Stale zwiększający się poziom trudności problemów optymalizacyjnych, jak i ciągła niedoskonałość dotychczas wytworzonych metod ich rozwiązywania, powoduje duże zainteresowanie badaniami dotyczącymi tworzenia coraz doskonalszych, szybszych i dających lepsze rezultaty algorytmów owe problemy rozwiązujących \cite{StateOfArt}.
 }
 
 \section{Definicja problemu}
 \label{ProblemDefinition}
 \par{
-Praca ta, umiejscowiona została w kontekście rozwiązywania problemów optymalizacji gdzie analityczne wyznaczenie ekstremum funkcji jest niemożliwe bądź w ogóle nie jest znana jej analityczna forma. Zakłada się bowiem, że zadanie jest zdefiniowane następująco \cite{StrojnowskiOptymalizacja2}:
+Praca ta umiejscowiona została w kontekście rozwiązywania problemów optymalizacji, gdzie analityczne wyznaczenie ekstremum funkcji jest niemożliwe bądź w ogóle nie jest znana jej analityczna forma. Zakłada się bowiem, że zadanie jest zdefiniowane następująco \cite{StrojnowskiOptymalizacja2}:
 }
 \newtheorem{OptDefinition}{Definicja}
 \par{
@@ -139,26 +136,26 @@ Problem globalnej optymalizacji funkcji $f: X \rightarrow \mathbb{R}$ polega na 
 Dla celów tej pracy przyjmuje się możliwość zbadania wartości funkcji $f$ w dowolnym punkcie ze zbioru $X$, jednak brak możliwości bezpośredniego zbadania jakichkolwiek innych własności tejże funkcji. W tej formie problem ten można nazwać problemem optymalizacji funkcji zadanej w formie reaktywnej (\emph{Black--box optimization}).
 }
 \par{
-W ramach rozpatrywanych problemów istnieje także możliwość, że dziedzina funkcji $f$ jest szersza niż zbiór rozwiązań dopuszczalnych. W takich wypadkach mówimy o problemie optymalizacji z ograniczeniami.
-\begin{OptDefinition}{Definicja}
-Problem globalnej optymalizacji funkcji $f: X \rightarrow \mathbb{R}$ z ograniczeni $X_D \subset X$ polega na wyznaczeniu takiego $x_0 \in X_D$, że:
+W ramach rozpatrywanych problemów istnieje także możliwość, że dziedzina funkcji $f$ jest szersza niż zbiór rozwiązań dopuszczalnych. W takich wypadkach mówimy o~problemie optymalizacji z ograniczeniami.
+\begin{OptDefinition}
+Problem globalnej optymalizacji funkcji $f: X \rightarrow \mathbb{R}$ z ograniczeniem $X_D \subset X$ polega na wyznaczeniu takiego $x_0 \in X_D$, że:
 \begin{center}
 	$\forall_{x \in X_D} f(x_0) \leq f(x)$
 \end{center}
 \end{OptDefinition}
-Dla tego rodzaju problemów, możliwe jest wyznaczanie wartości funkcji w całej jej dziedzinie $X$, jednak poszukiwane rozwiązanie musi pochodzić z ograniczonego zbioru $X_D$.
+Dla tego rodzaju problemów możliwe jest wyznaczanie wartości funkcji w całej jej dziedzinie $X$, jednak poszukiwane rozwiązanie musi pochodzić z ograniczonego zbioru $X_D$.
 Problem globalnej optymalizacji funkcji z ograniczeniami stanowi uogólnienie problemu optymalizacji globalnej bez ograniczeń.
 }
 \par{
 Szczególnym przypadkiem problemu optymalizacji globalnej z ograniczeniami jest przeszukiwanie przestrzeni ciągłej. 
-\begin{OptDefinition}{Definicja}
-Problem globalnej optymalizacji funkcji $f: \mathbb{R}^n \rightarrow \mathbb{R}$ z ograniczeniem $X_D = \{x \in \mathbb{R}^n: g_1(x) \leq 0, g_2(x) \leq 0, \ldots, g_m(x) \leq 0\}$, gdzie $g_1, g_2 \ldots g_m: \mathbb{R}^n \rightarrow \mathbb{R}$, nazywamy problemem optymalizacji globalnej przestrzeni ciągłej z ograniczeniami nierównościowymi.
+\begin{OptDefinition}
+Problem globalnej optymalizacji funkcji $f: \mathbb{R}^n \rightarrow \mathbb{R}$ z ograniczeniem $X_D = \{x \in \mathbb{R}^n: g_1(x) \leq 0, g_2(x) \leq 0, \ldots, g_m(x) \leq 0\}$, gdzie $g_1, g_2 \ldots g_m: \mathbb{R}^n \rightarrow \mathbb{R}$, nazywamy problemem optymalizacji globalnej przestrzeni rzeczywistoliczbowej z ograniczeniami nierównościowymi.
 \end{OptDefinition}
-W tym wariancie przyjmuje się, że $X = \mathbb{R}^n$ gdzie $n \in \mathbb{N}$, a $X_D$ zdefiniowane jest przez funkcje ograniczeń.
+W tym wariancie przyjmuje się, że $X \equiv \mathbb{R}^n$ gdzie $n \in \mathbb{N}$, a zbiór $X_D$ zdefiniowany jest przez funkcje ograniczeń $g_1(x), \ldots, g_m(x)$
 }
 
 \par{
-Przy tych założeniach, należy zauważyć, że dla każdego z powyższych problemów jeśli zbiór $X$ jest nieskończenie liczny (nawet przeliczalny), nie jest możliwe zweryfikowanie, czy wyznaczony punkt jest rozwiązaniem zadanego problemu. Co więcej, w wielu przypadkach (brak istnienia hiperpłaszczyzny $X$, takiej, że w każdym jej punkcie wartość funkcji jest równa poszukiwanemu ekstremum) prawdopodobieństwo odnalezienia rozwiązania problemu (niezależnie od metody przeszukiwania przestrzeni) wynosi zero.
+Przy tych założeniach należy zauważyć, że dla każdego z powyższych problemów, jeśli zbiór $X$ jest nieskończenie liczny (nawet przeliczalny), nie jest możliwe zweryfikowanie, czy wyznaczony punkt jest rozwiązaniem zadanego problemu. Co więcej, w wielu przypadkach prawdopodobieństwo odnalezienia rozwiązania problemu (niezależnie od metody przeszukiwania przestrzeni) wynosi zero. Przypadek taki ma miejsce zawsze, gdy nie istnieje hiperpłaszczyzna $X$, taka że w każdym jej punkcie wartość funkcji jest równa poszukiwanemu ekstremum.
 }
 \par{
 Mając to na względzie by problem można było uznać za rozwiązany, należy go przeformułować tak, że rozwiązaniem jest dowolny element $x \in X_D$, a jego jakość wyznaczana jest przez wartość funkcji $f$ w tym punkcie. Dla tak zadanego problemu możliwe jest porównywanie różnych metod przeglądania przestrzeni $X_D$ pod względem jakości otrzymanego rozwiązania.
@@ -175,24 +172,24 @@ Warto zwrócić uwagę, że pomimo iż między różnymi rozwiązaniami problemu
 Jednym z podejść do zdefiniowanego powyżej problemu optymalizacji jest wykorzystanie algorytmów ewolucji różnicowej (DE) \cite{RainerStorn}. Algorytm ten zaproponowany w 1995r. od wielu lat rozwijany w ramach licznych prac naukowych \cite{Opara,SpringerIntroToEvol} cieszy się zwykle bardzo dobrymi rezultatami w testach jakościowych \cite{CEC2013Comp}. 
 }
 \par{
-Typową procedurą przy heurystycznych algorytmach optymalizacyjnych jest wykorzystywanie do generowania kolejnych punktów w przestrzeni przeszukiwań punktów z okna historii o zmiennej szerokości. W przypadku klasycznego algorytmu ewolucji różnicowej, okno historii ma rozmiar równy liczności populacji -- starsze punkty nie są wykorzystywane w kolejnych pokoleniach. Choć w przeszłości podejmowano próby wykorzystywania szerszego okna historii w tym algorytmie \cite{JADE,SHADE}, temat ten zwykle występował przy okazji innych badań i nie był osobno zbadany. Praca ta będzie starała się dokładnie zbadać możliwości wykorzystania tego rodzaju strategii i określić w jaki sposób wykorzystanie tej strategii wpłynie na jakość uzyskiwanych przy pomocy ewolucji różnicowej wyników.
+Typową procedurą przy heurystycznych algorytmach optymalizacyjnych jest wykorzystywanie do generowania kolejnych punktów w przestrzeni przeszukiwań punktów z~okna historii o zmiennej szerokości. W przypadku klasycznego algorytmu ewolucji różnicowej, w każdym pokoleniu wykorzystywana jest tylko bieżąca populacja -- wcześniej odrzucone punkty nie są wykorzystywane w kolejnych pokoleniach. Choć w przeszłości podejmowano próby wykorzystywania szerszego okna historii w tym algorytmie \cite{JADE,SHADE}, temat ten zwykle występował przy okazji innych badań i nie był osobno zbadany. Praca ta będzie starała się dokładnie zbadać możliwości wykorzystania tego rodzaju strategii i określić w jaki sposób wykorzystanie tej strategii wpłynie na jakość uzyskiwanych przy pomocy ewolucji różnicowej wyników.
 }
 
 \section{Cel}
 \par{
-Celem pracy jest zbadanie zmodyfikowanego klasycznego algorytmu ewolucji różnicowej tak by wektory mutacji różnicowej były budowane w oparciu o osobniki z archiwum o parametryzowalnym rozmiarze.
+Celem pracy jest zbadanie zmodyfikowanego klasycznego algorytmu ewolucji różnicowej tak, aby wektory mutacji różnicowej były budowane w oparciu o osobniki z archiwum o parametryzowalnym rozmiarze.
 }
 \par{
-Przebadane zostaną możliwe podejścia do wykorzystania tych osobników i wynikające z nich zmiany jakości działania algorytmu. W wyniku tych działań zdefiniowany zostanie możliwie najskuteczniejszy algorytm parametryzowany wielkością archiwum ($H$) (zwany dalej \emph{NADE}).
+Przebadane zostaną możliwe podejścia do wykorzystania tych osobników i wynikające z nich zmiany jakości działania algorytmu. W wyniku tych działań zaproponowane zostaną algorytmy ewolucji różnicowej zawierające poszczególne schematy wykorzystania archiwum.
 }
 \par{
-Cel pracy stanowi także zbadanie gotowego algorytmu \emph{NADE} przy różnych wartościach nowego parametru i ustalenie jak zmiana parametru wpływa na jakość wyników. Otrzymane rezultaty zostaną następnie zestawione z klasycznym algorytmem ewolucji różnicowej, a także przedstawione w kontekście zmodyfikowanych wariantów ewolucji różnicowej przebadanych w ramach konferencji CEC2013 (\emph{IEEE Congress on Evolutionary Computation}).
+Cel pracy stanowi także zbadanie zaproponowanych algorytmów przy różnych wartościach nowego parametru. Otrzymane rezultaty zostaną następnie zestawione z klasycznym algorytmem ewolucji różnicowej, a także przedstawione w kontekście zmodyfikowanych wariantów ewolucji różnicowej przebadanych w ramach konferencji CEC2013 (\emph{IEEE Congress on Evolutionary Computation}).
 }
 \par{
-W szczególności utworzony zostanie algorytm \emph{ANADE} oparty o algorytm \emph{SHADE} \cite{SHADE} w celu sprawdzenia, jak proponowane podejście do archiwum będzie sprawdzało się w przypadku zaawansowanych wariantów ewolucji różnicowej.
+W szczególności utworzone zostaną modyfikacje algorytmu \emph{SHADE} \cite{SHADE} w celu sprawdzenia, jak proponowane schematy wykorzystania archiwum będą sprawdzały się w przypadku zaawansowanych wariantów ewolucji różnicowej.
 }
 \par{
-Wszelkie badania jakościowe w ramach pracy będą opracowane przy użyciu testowych funkcji wyspecyfikowanych w ramach konferencji CEC2013 i porównania rezultatów otrzymanych w określonym w ramach konferencji budżecie zapytań o wartości funkcji \cite{Li13benchmarkfunctions}.
+Wszelkie badania ilościowe i porównania algorytmów w ramach pracy będą opracowane przy użyciu testowych funkcji wyspecyfikowanych w ramach konferencji CEC2013. Zostaną przy tym wykorzystane oficjalnie zdefiniowane zasady testowania algorytmów zdefiniowane w \cite{Li13benchmarkfunctions}.
 }
 
 
@@ -206,18 +203,18 @@ Wszelkie badania jakościowe w ramach pracy będą opracowane przy użyciu testo
 \section{Podejscie heurystyczne do problemu optymalizacji}
 \label{OptHeur}
 \par{
-Do rozwiązywania problemów optymalizacji ze względu na ich złożoność i (w wielu przypadkach) brak możliwości odnalezienia precyzyjnego rozwiązania stosuje się algorytmy o charakterze heurystycznym. Algorytmy te mają za zadanie rozwiązywać problemy w sposób przybliżony tj. z założenia nie muszą podać rozwiązania dokładnego. Są one stosowane zamiast algorytmów dokładnych tam, gdzie: 
+Do rozwiązywania problemów optymalizacji ze względu na ich złożoność i (w wielu przypadkach) brak możliwości odnalezienia precyzyjnego rozwiązania stosuje się algorytmy o charakterze heurystycznym. Algorytmy te mają za zadanie rozwiązywać problemy w sposób przybliżony tj. z założenia nie muszą podać rozwiązania dokładnego. Są~one stosowane zamiast algorytmów dokładnych tam, gdzie: 
 \begin{itemize}
-\item nie jest możliwe stworzenie precyzyjnego algorytmu
-\item nie jest znany precyzyjny algorytm
-\item precyzyjny algorytm jest zbyt kosztowny w wykonaniu
+\item nie jest możliwe stworzenie precyzyjnego algorytmu,
+\item nie jest znany precyzyjny algorytm,
+\item precyzyjny algorytm jest zbyt kosztowny w wykonaniu.
 \end{itemize}
 }
 \par{
 Algorytmy tej klasy bywają stosowane jako rozwiązanie kompromisowe pomiędzy jakością rozwiązania a czasem jego poszukiwania.
 }
 \par{
-Podejście tego rodzaju niosą za sobą ciekawe konsekwencje. Warto zauważyć, że ponieważ z definicji prowadzą one do rozwiązania nie koniecznie najlepszego, to jeśli istnieje metoda porównywania jakości wyników, można także mówić o porównywaniu jakości działania różnych algorytmów w kontekście danego zadania. Mimo, iż wiele z algorytmów heurystycznych ma charakter niedeterministyczny (tj. dla tego samego wejścia mogą wygenerować dwa różne wyjścia) posługując się narzędziami statystyki i probabilistyki można wysnuwać wnioski dt. jakości algorytmów w kontekście problemu.
+Podejście tego rodzaju niosą za sobą ciekawe konsekwencje. Warto zauważyć, że ponieważ z definicji prowadzą one do rozwiązania niekoniecznie najlepszego, to jeśli istnieje metoda porównywania jakości wyników, można także mówić o porównywaniu jakości działania różnych algorytmów w kontekście danego zadania. Mimo, iż wiele z algorytmów heurystycznych ma charakter niedeterministyczny (tj. dla tego samego wejścia mogą wygenerować dwa różne wyjścia) posługując się narzędziami statystyki i probabilistyki można wysnuwać wnioski dotyczące jakości algorytmów w kontekście problemu.
 }
 \par{
 Wartym wspomnienia w kontekście algorytmów heurystycznych jest sposób ich konstruowania. Często dyktowany jest on intuicją, a podstawy teoretyczne działania tego rodzaju algorytmów bywają badane dużo później \cite{Opara}. Tego rodzaju podejście pozwoliło na stworzenie wielu dobrze sprawujących się algorytmów, lecz zarazem ich analityczne badanie pozwala na dokładniejsze zrozumienie problematyki, uogólnienie lub uproszczenie reguł ich działania \cite{Opara}.
@@ -226,21 +223,28 @@ Wartym wspomnienia w kontekście algorytmów heurystycznych jest sposób ich kon
 \subsection{Model heurystycznego algorytmu optymalizacyjnego}
 \label{Model}
 \par{
-Algorymty heurystyczne, służące rozwiązywaniu problemu optymalizacji, opierają się o ideę domniemywania pewnych właściwości przeszukiwanej przestrzeni na podstawie punktów już sprawdzonych i przyjętych \emph{a priori} złożeń. Mając na względzie ten fakt, jak i wcześniej przedstawiony problem, definiując \cite{SearchingInteligent} zadanie optymalizacyjne jako czwórkę $\Pi = \langle{}X,~f,~S,~T\rangle$ gdzie:
+Algorytmy heurystyczne, służące rozwiązywaniu problemu optymalizacji, opierają się o ideę domniemywania pewnych właściwości przeszukiwanej przestrzeni na podstawie punktów już sprawdzonych i przyjętych \emph{a priori} złożeń. Mając na względzie ten fakt, jak i wcześniej przedstawiony problem, definiując \cite{SearchingInteligent} zadanie optymalizacyjne jako czwórkę $\Pi = \langle{}X,~f,~S,~T\rangle$ gdzie:
 \begin{itemize}
-\item $X$ -- przestrzeń przeszukiwań
-\item $f$ -- funkcja optymalizowana
-\item $S$ -- zbiór punktów początkowych 
-\item $T$ -- kryterium zatrzymania
+\item $X$ -- przestrzeń przeszukiwań,
+\item $f$ -- funkcja optymalizowana,
+\item $S$ -- zbiór punktów początkowych,
+\item $T$ -- kryterium zatrzymania.
 \end{itemize}
 możemy określić także metodę przeszukiwania jako trójkę $M = \langle{}X,~I,~O\rangle$ \cite{SearchingInteligent}, gdzie:
 \begin{itemize}
-\item $X$ -- przestrzeń przeszukiwań 
-\item $I$ -- operator inicjacji -- $I: S \times U \rightarrow X$
-\item $O$ -- operator zagregowany -- $X: \Pi \times H \times U \rightarrow X$
+\item $I$ -- operator inicjalizacji -- $I: S \times U \rightarrow X$,
+\item $O$ -- operator zagregowany -- $X: \Pi \times H \times U \rightarrow X$.
 \end{itemize}
-Jako $U$ oznaczono przestrzeń sekwencji losowych, natomiast jako $H$ -- dotychczas otrzymane przez algorytm wyniki badania zadania $\Pi$.
+Jako $U$ oznaczono przestrzeń sekwencji losowych, natomiast jako $H \in X^*$ -- dotychczas otrzymane przez algorytm wyniki badania zadania $\Pi$. Przy tak zdefiniowanych oznaczeniach, schemat wykonywania algorytmu heurystycznego przedstawiony został na rysunku \ref{HeurSchema}.
 }
+
+%%%%% Rysunek: Model archiwum FIFO
+\begin{figure}[htb]
+\begin{center}\includegraphics[scale=0.6]{img/Heur}\end{center}
+\caption{Ogólny schemat działania heurystycznego algorytmu optymalizacyjnego.}
+\label{HeurSchema}
+\end{figure}
+
 
 %%%%% Archiwum
 \subsection{Archiwum}
@@ -249,11 +253,11 @@ Jako $U$ oznaczono przestrzeń sekwencji losowych, natomiast jako $H$ -- dotychc
 W kontekście przedstawionego powyżej modelu, można zauważyć, że istotą konkretnego algorytmu optymalizacyjnego jest operator zagregowany $O$, na którego działanie wpływ ma wyłącznie sam problem ($\Pi$), ewentualne wyniki pseudolosowych operacji ($U$) oraz wyniki otrzymane dotychczas przez algorytm przy badaniu optymalizowanej funkcji ($H$). Ten ostatni element nazywany jest \textbf{archiwum} i stanowi centralny punkt proponowanej modyfikacji algorytmu ewolucji różnicowej -- stąd zostanie on bardziej dokładnie opisany.
 }
 \par{
-Szeroka definicja archiwum, nie wymaga by miało ono w jakikolwiek sposób ograniczoną pojemność. W skrajnym wypadku można więc pokazać algorytm, wykorzystujący wszystkie zbadane dotąd wartości funkcji optymalizowanej. Typowe algorytmy operują jednak tylko na oknie archiwum będącym podzbiorem $H$ (Rysunek \ref{ModelArchiwumImg}). Taka charakterystyka algorytmów jest uzasadniona w szczególności ze względu na:
+Szeroka definicja archiwum nie wymaga, by miało ono w jakikolwiek sposób ograniczoną pojemność. W skrajnym wypadku można więc pokazać algorytm, wykorzystujący wszystkie zbadane dotąd wartości funkcji optymalizowanej. Typowe algorytmy operują jednak tylko na oknie archiwum będącym podzbiorem $H$ (Rysunek \ref{ModelArchiwumImg}). Taka charakterystyka algorytmów jest uzasadniona w szczególności ze względu na:
 \par{
 	\begin{itemize}
 		\item Kosztowność przechowywania i przetwarzania całego archiwum.
-		\item Brak poprawy jakości algorytmu przy wykorzystaniu większej ilości punktów w archiwum lub poprawę niewystarczającą względem dodatkowych kosztów przetwarzania.
+		\item Brak poprawy jakości algorytmu przy wykorzystaniu większej liczby punktów w~archiwum lub poprawę niewystarczającą względem dodatkowych kosztów przetwarzania.
 		\item Brak cennych dla działania algorytmu informacji i przesłanek w starszych punktach archiwum.
 \end{itemize}
 }
@@ -269,7 +273,7 @@ Szeroka definicja archiwum, nie wymaga by miało ono w jakikolwiek sposób ogran
 I tak na przykład w opisanym w rozdziale \ref{DEvol_section} klasycznym algorytmie ewolucji różnicowej, mamy do czynienia z archiwum o rozmiarze równym wielkości populacji. Oznacza to, że do przeprowadzenia iteracji $N+1.$ algorytmu, oprócz $\Pi$ oraz $U$ potrzebujemy także wyniku $N.$ iteracji, ale już nie wyniku iteracji $N-1$. a tym bardziej całego archiwum $H$.
 }
 \par{
-Tego rodzaju ograniczenia w wykorzystywaniu archiwum $H$ skłaniają do rozważań nad możliwością i stosownością wykorzystania informacji lub przesłanek ukrytych w nieużywanej części archiwum do poprawienia funkcjonowania algorytmu. W dziedzinie algorytmów heurystycznych, nie jest koncepcją nową [IGdzieŹródło] by parametryzować wykorzystywaną wielkość okna archiwum -- umożliwiając w ten sposób strojenie algorytmu oraz poprawianie jakości uzyskiwanych rezultatów. Pojawia się więc przypuszczenie, że także w przypadku ewolucji różnicowej powiększenie wykorzystywanego okna archiwum może umożliwiać uzyskiwanie lepszych jakościowo wyników optymalizacji.
+Tego rodzaju ograniczenia w wykorzystywaniu archiwum $H$ skłaniają do rozważań nad~możliwością i stosownością wykorzystania informacji lub przesłanek ukrytych w nieużywanej części archiwum do poprawienia funkcjonowania algorytmu. W dziedzinie algorytmów heurystycznych nie jest koncepcją nową, by parametryzować wykorzystywaną wielkość okna archiwum -- umożliwiając w ten sposób strojenie algorytmu oraz poprawianie jakości uzyskiwanych rezultatów. Pojawia się więc przypuszczenie, że także w przypadku ewolucji różnicowej powiększenie wykorzystywanego okna archiwum może umożliwiać uzyskiwanie lepszych jakościowo wyników optymalizacji.
 }
 
 
@@ -280,20 +284,20 @@ Tego rodzaju ograniczenia w wykorzystywaniu archiwum $H$ skłaniają do rozważa
 %%%%% Standard Evol
 \subsection{Algorytmy z grupy ewolucyjnych}
 \par{
-Przykładem algorytmów heurystycznych stosowanych do rozwiązywania problemu optymalizacyjnego są algorytmy należące do grupy algorytmów ewolucyjnych (ang. \emph{Evolutionary Algorithms} -- AE) \cite{WykladyEvol,SpringerIntroToEvol}. Algorytmy te, wzorowane na ewolucji naturalnej operują pojęciami takimi jak osobnik, środowisko czy przystosowanie w celu adaptacyjnego przeszukiwania przestrzeni optymalizacyjnej.
+Przykładem algorytmów heurystycznych stosowanych do rozwiązywania problemu optymalizacyjnego są algorytmy należące do grupy algorytmów ewolucyjnych (ang. \emph{Evolutionary Algorithms} -- AE) \cite{WykladyEvol,SpringerIntroToEvol}. Algorytmy te, wzorowane na ewolucji naturalnej operują pojęciami takimi jak \emph{osobnik}, \emph{środowisko} czy \emph{przystosowanie} w celu adaptacyjnego przeszukiwania przestrzeni optymalizacyjnej.
 }
 \par{
-Ogólna idea stojąca za algorytmami ewolucyjnymi, polega na opisaniu genotypu osobników, z których następnie można odczytać fenotyp (stanowiący punkt przestrzeni przeszukiwań) oceniany przez środowisko (funkcję optymalizowaną). Osobniki -- podobnie jak osobniki w naturze -- podlegają krzyżowaniu oraz niewielkim mutacjom, walcząc między sobą o zasoby naturalne. Zgodnie z teorią doboru naturalnego, osobniki gorzej dostosowane do środowiska są -- w szerokiej perspektywie czasowej i przy odpowiednio dużej populacji -- wypierane przez te dostosowane lepiej.
+Ogólna idea stojąca za algorytmami ewolucyjnymi, polega na opisaniu genotypu osobników, z których następnie można odczytać fenotyp (stanowiący punkt przestrzeni przeszukiwań) oceniany przez środowisko (funkcję optymalizowaną). Osobniki -- podobnie jak~osobniki w naturze -- podlegają krzyżowaniu oraz niewielkim mutacjom, walcząc między~sobą o zasoby naturalne. Zgodnie z teorią doboru naturalnego, osobniki gorzej dostosowane do środowiska są -- w szerokiej perspektywie czasowej i przy odpowiednio dużej populacji -- wypierane przez te dostosowane lepiej.
 }
 \par{
 W związku z powyższą analogią w ramach algorytmów ewolucyjnych wyróżnia się następujące operatory:
 \begin{description}
-  \item[Krzyżowanie] -- to operator opisujący w jaki sposób na podstawie genotypu dwóch lub więcej osobników wytworzyć genotyp jednego lub więcej osobnika potomnego.
-  \item[Mutacja] -- to operator wprowadzający w genotypie wybranego osobnika losowe (nieznaczne) zabużanie.
+  \item[Krzyżowanie] -- to operator opisujący w jaki sposób na podstawie genotypu dwóch lub~więcej osobników wytworzyć genotyp jednego lub więcej osobnika potomnego.
+  \item[Mutacja] -- to operator wprowadzający w genotypie wybranego osobnika losowe (nieznaczne) zaburzenie.
   \item[Selekcja] -- to operator odpowiadający selekcji naturalnej, który oceniając osobniki na podstawie przystosowania ich fenotypu do środowiska odrzuca część z nich preferując pozostawienie w populacji osobników lepiej dostosowanych.
   \item[Dobór do krzyżowania] -- to operator wybierający zestawy osobników podlegające krzyżowaniu. Operator ten opisuje znany z natury mechanizm preferencji (fenotypowej) organizmów przy rozmnażaniu.
   \item[Dobór do mutacji] -- to operator wybierający, które spośród osobników w populacji należy poddać mutacji. Odpowiada on zmiennemu w zależności od fenotypu organizmu prawdopodobieństwu wystąpienia u niego mutacji.
-  \item[Inicjalizacja] -- to operator nieco oderwany od teorii ewolucji (gdyż ta nie opisuje powstawania pierwszych organizmów) opisujący sposób wygenerowania populacji początkowej spośród wszystkich możliwych genotypów. Operując na nomenklaturze z modelu opisanego w rozdziale \ref{Model}, operator ten jest funkcją przeprowadzającą zbiór punktów początkowych $S$ w początkowy zbiór genotypów.
+  \item[Inicjalizacja] -- to operator opisujący sposób wygenerowania populacji początkowej spośród wszystkich możliwych genotypów. Operując na nomenklaturze z modelu opisanego w rozdziale \ref{Model}, operator ten jest funkcją przeprowadzającą zbiór punktów początkowych $S$ w początkowy zbiór genotypów.
   %%% dopasowanie do zakresu
 \end{description}
 }
@@ -304,7 +308,7 @@ Ogólny schemat działania algorytmu ewolucyjnego opiera się o iteracyjną adap
 \label{algorithm:ea}
 \begin{algorithmic}[1]
 \Function{Ewolucja}{$S$, $U$, $f$}
-\State P $\gets$ $S$
+\State P $\gets$ \Call{I}{$S$, $U$}
 	\While{!stop}
 		\State C $\gets$ \Call{DoborDoKrzyzowania}{P, $U$, $f$}
 		\State P $\gets$ P $\cup$ \Call{Krzyzowanie}{C, $U$}
@@ -312,13 +316,13 @@ Ogólny schemat działania algorytmu ewolucyjnego opiera się o iteracyjną adap
 		\State P $\gets$ P $\cup$ \Call{Mutacja}{M}
 		\State P $\gets$ \Call{Selekcja}{P, $U$, $f$}
 	\EndWhile
-    \State \Return $argmin_{x \in X} f(x)$
+    \State \Return $argmin_{x \in H} f(x)$
 \EndFunction
 \end{algorithmic}
 \end{algorithm}
 }
 \par{
-W tym miejscu warto nadmienić, że choć w powyższym opisie algorytmów ewolucyjnych jest wprost mowa o podziale na genotyp i fenotyp, to na potrzeby zdefiniowanego problemu pojęcie fenotypu będzie wystarczające. Algorytmy opierające się o operacje na zakodowanym genotypie oderwanym od jego semantyki stanowią odrębną gałąź algorytmów ewolucyjnych i są nazywane algorytmami genetycznymi. Algorytmy te, ze względu na specyfikę swojego działania wymagają odpowiedniej reprezentacji danych i odpowiednio dobranych do reprezentacji operatorów. W przypadku rozważanego w pracy problemu optymalizacji, operowanie bezpośrednio na fenotypie ocenianym przez środowisko (a więc wektorach liczb rzeczywistych dla których wyznaczane są wartości funkcji optymalizowanej) ze względu na właściwości i możliwości samych liczb rzeczywistych wydaje się być w zupełności wystarczające. Zagadnienie podziału na genotyp i fenotyp będzie w dalszej części pracy zaniedbane.
+W tym miejscu warto nadmienić, że choć w powyższym opisie algorytmów ewolucyjnych jest wprost mowa o podziale na genotyp i fenotyp, to na potrzeby zdefiniowanego problemu pojęcie fenotypu będzie wystarczające. Algorytmy opierające się o operacje na~zakodowanym genotypie oderwanym od jego semantyki stanowią odrębną gałąź algorytmów ewolucyjnych i są nazywane algorytmami genetycznymi. Algorytmy te, ze względu na specyfikę swojego działania wymagają odpowiedniej reprezentacji danych i odpowiednio dobranych do reprezentacji operatorów. W przypadku rozważanego w pracy problemu optymalizacji, operowanie bezpośrednio na fenotypie ocenianym przez środowisko (a więc wektorach liczb rzeczywistych dla których wyznaczane są wartości funkcji optymalizowanej) ze względu na właściwości i możliwości samych liczb rzeczywistych wydaje się być w zupełności wystarczające. Zagadnienie podziału na genotyp i fenotyp będzie w dalszej części pracy zaniedbane.
 }
 \subsubsection{Eksploracja i Eksploatacja}
 \par{
@@ -329,14 +333,17 @@ Ważnymi pojęciami opisującymi sposób w jaki osobniki w ramach algorytmów ew
 \end{description}
 }
 \par{
-Uzyskanie właściwego balansu między tymi dwoma aspektami działania algorytmów ewolucyjnych jest kluczowe dla powodzenia algorytmu ewolucyjnego. Efekt sterowania siłą dwóch charakterystyk przeszukiwań otrzymuje się, przez odpowiednie definiowanie operatorów oraz ich parametrów. W szczególności, zadaniem operatora krzyżowania jest przede wszystkim prowadzenie populacji w kierunku eksploatacji, natomiast zadaniem mutacji jest generowanie punktów poza w danej chwili badanym obszarem przyciągania - a więc eksploracja przestrzeni przeszukiwań. Istotnym elementem regulującym tę równowagę jest także operator selekcji, której charakter znacząco wpływa na przeżywalność i siłę przyciągania osobników pionierów (wygenerowanych losowo, nielicznych punktów, w nowym, atrakcyjnym obszarze przyciągania).
+Uzyskanie właściwej równowagi między tymi dwoma aspektami działania algorytmów ewolucyjnych jest kluczowe dla efektywności algorytmu ewolucyjnego. Sterowanie naciskiem na te dwa aspekty przeszukiwania odbywa się przez odpowiednie definiowanie operatorów oraz ich parametrów. Często przyjmuje się, że zadaniem operatora krzyżowania jest przede wszystkim prowadzenie populacji w kierunku eksploatacji, natomiast zadaniem mutacji jest generowanie punktów poza w danej chwili badanym obszarem przyciągania - a więc eksploracja przestrzeni przeszukiwań.
+}
+\par{
+Istotnym elementem regulującym tę równowagę jest także operator selekcji. Operator~ten, determinuje bowiem z jakim prawdopodobieństwem pozostaną w populacji osobniki, w zależności od ich jakości. W szczególności operator ten wpływa na przeżywalność, a więc możliwość rozwoju tzw. pionierów. Pionierami nazywane są takie, nieliczne punkty w populacji, które odbiegają znacznie od bieżącego obszaru eksploatacji znajdując się w obszarze przyciągania innego minimum lokalnego, ale ciągle zbyt daleko by znaleźć się w czołówce najlepszych osobników w bieżącej populacji. Tego rodzaju punkty, wygenerowane losowo, stają się przyczynkiem dla eksploracji nowych obszarów funkcji. Z tego powodu zapewnienie im możliwości przetrwania działania operatora selekcji, jest kluczowe dla możliwości eksploracyjnych algorytmów ewolucyjnych.
 }
 
 %%%%% Podstawowy DE
 \subsection{Klasyczny algorytm ewolucji różnicowej}
 \label{DEvol_section}
 \par{
-Szczególnym przypadkiem algorytmu należącego do grupy algorytmów ewolucyjnych są algorytmy ewolucji różnicowej (ang.\emph{ differential evolution}, DE). Algorytmy te, zbudowane są w sposób zakładający ich wykorzystanie do przeszukiwania przestrzeni ciągłej co jest zgodne z przyjętą we wstępie definicją problemu. Ich specyfika zakłada wykorzystanie do operatora mutacji odpowiednio przeskalowanych wektorów przesunięć wygenerowanych z bieżącej populacji punktów (Rysunek \ref{DEvolMutationBasic}) \cite{SpringerIntroToEvol}.
+Szczególnym przypadkiem algorytmu należącego do grupy algorytmów ewolucyjnych są algorytmy ewolucji różnicowej (ang.\emph{ differential evolution}, DE). Algorytmy te, zbudowane są w sposób zakładający ich wykorzystanie do przeszukiwania przestrzeni ciągłej, co jest zgodne z przyjętą we wstępie definicją problemu. Ich specyfika zakłada wykorzystanie do operatora mutacji odpowiednio przeskalowanych wektorów różnic położeń losowanych z bieżącej populacji punktów (Rysunek \ref{DEvolMutationBasic}) \cite{SpringerIntroToEvol}.
 }
 
 %%%%% Rysunek: Mutacja w DE
@@ -348,7 +355,7 @@ Szczególnym przypadkiem algorytmu należącego do grupy algorytmów ewolucyjnyc
 
 
 \par{
-Zgodnie z tą zasadą schemat ewolucyjny w populacji o indeksie ${t}$ -- $\mathbf{X^t}$, składa się z następujących kroków:
+Zgodnie z tą zasadą schemat ewolucyjny w populacji o indeksie ${t}$ -- $\mathbf{X^t}$ składa się z następujących kroków:
 }
 
 %%%%% BAZOWY SCHEMAT DE
@@ -358,7 +365,7 @@ Zgodnie z tą zasadą schemat ewolucyjny w populacji o indeksie ${t}$ -- $\mathb
 	
   		\item[Generowanie mutantów]:\\
   Ten krok polega na wygenerowaniu z wektora osobników mutantów $\mathbf{V^{t}}$ o długości równej wielkości populacji - tak by każdemu osobnikowi $\mathbf{x_i^{t}}$ odpowiadał osobnik mutant $\mathbf{v_i^{t}}$.
-  Do tego celu wykorzystywane są wybrane z populacji punkty - punkt mutowany oraz punkty wymagane do wygenerowania wektorów różnicowych. W najbardziej klasycznym wariancie algorytmu wszystkie te punkty są dla każdego $i$ generowane losowo \cite{SpringerIntroToEvol} (oznaczamy $r_1, r_2, r_3$).
+  Do tego celu wykorzystywane są wybrane z populacji punkty - punkt mutowany oraz punkty wymagane do wygenerowania wektorów różnicowych. W~najbardziej klasycznym wariancie algorytmu wszystkie te punkty są dla każdego $i$ wybierane losowo z rozkładem jednostajnym \cite{SpringerIntroToEvol} (oznaczamy $r_1, r_2, r_3$).
   W opisanym wariancie $\mathbf{v_i^{t}}$ wyznaczane jest jako:
 
 %%%%%% Podstawowe równanie mutacji różnicowej
@@ -366,11 +373,11 @@ Zgodnie z tą zasadą schemat ewolucyjny w populacji o indeksie ${t}$ -- $\mathb
  \mathbf{v_i^{t}} = \mathbf{r_1} + F \cdot (\mathbf{r_2} - \mathbf{r_3})
 \end{equation}
 
-Gdzie $F$ to rzeczywistoliczbowy współczynnik skalujący najczęściej należący do przedziału $[0, 1]$. Literatura \cite{SpringerIntroToEvol} podaje również że w podstawowym wariancie ewolucji różnicowej zachodzi:
+gdzie $F$ to rzeczywistoliczbowy współczynnik skalujący najczęściej należący do przedziału $[0, 1]$. Literatura \cite{SpringerIntroToEvol} podaje również że w podstawowym wariancie ewolucji różnicowej zachodzi:
 \begin{equation}
 \mathbf{x_1^{t}} \neq \mathbf{r_1} \neq \mathbf{r_3} \neq \mathbf{r_3}
 \end{equation}
-nie jest to jednak warunek wymagany dla każdego algorytmu tej klasy.
+nie jest to jednak warunek wymagany dla każdego algorytmu tej klasy. Na rysunku~\ref{DEvolMutationBasic} zaprezentowano działanie podstawowego schematu mutacji w algorytmach ewolucji różnicowej.
 
 
 	  \item[Krzyżowanie]:\\
@@ -387,16 +394,16 @@ x_{i,j}^{t} & \textrm{w przeciwnym wypadku}\\
 Gdzie:
 \begin{itemize}
 \item $r$ -- zmienna losowa o rozkładzie jednostajnym na przedziale [0, 1]
-\item $Cr$ -- współczynnik krzyżowania, parametr algorytmu z dziedziny [0, 1]
+\item $Cr$ -- współczynnik krzyżowania, parametr algorytmu z zakresu [0, 1]
 \end{itemize}
-Wartym odnotowania jest konieczność zapewnienia by do każdego osobnika dziecka $\mathbf{z_i^{t}}$ trafiła co najmniej jedna wartość z osobnika mutanta, a więc by zachodziło $\mathbf{z_i^{t}}~\neq~\mathbf{x_i^{t}}$ \cite{SpringerIntroToEvol}. Ze względu na prostotę zapisu element ten zaniedbano jednak w powyższej definicji.
+Wartą odnotowania jest konieczność zapewnienia by do każdego osobnika dziecka $\mathbf{z_i^{t}}$ trafiła co najmniej jedna wartość z osobnika mutanta, a więc by zachodziło $\mathbf{z_i^{t}}~\neq~\mathbf{x_i^{t}}$ \cite{SpringerIntroToEvol}. Wygenerowanie bowiem $\mathbf{z_i^{t}} = \mathbf{x_i^{t}}$  nie ma bowiem żadnej wartości dodanej (ten punkt był już wcześniej zbadany). Ze względu na prostotę zapisu element ten zaniedbano jednak w powyższej definicji.
 
 
 		\item[Selekcja]:\\
-Ostatnim elementem podstawowej strategii ewolucyjnej dla algorytmów ewolucji różnicowej jest wybór osobników spośród par $(\mathbf{x_i^{t}}, \mathbf{z_i^{t}})$. Wybór ten w typowym przypadku dokonywany jest wg. następującej formuły:
+Ostatnim elementem podstawowej strategii ewolucyjnej dla algorytmów ewolucji różnicowej jest wybór osobników spośród par $(\mathbf{x_i^{t}}, \mathbf{z_i^{t}})$. Wybór ten w typowym przypadku dokonywany jest wg następującej formuły:
 \begin{equation}
 \mathbf{x_{i}^{t+1}} = \left\{ \begin{array}{ll}
-\mathbf{v_{i}^{t}} & \textrm{gdy $f(v_i^t) \le f(x_i^t)$}\\
+\mathbf{z_{i}^{t}} & \textrm{gdy $f(v_i^t) \le f(x_i^t)$}\\
 \mathbf{x_{i}^{t}} & \textrm{w przeciwnym wypadku}\\
 \end{array} \right.
 \end{equation}
@@ -405,16 +412,16 @@ Tego rodzaju podejście stanowi o elitarności wyboru osobników do kolejnych po
 }
 
 \par{
-Działanie algorytmu ewolucji różnicowej zdeterminowane jest przez zestaw operatorów (opisane niżej) jak również podstawowe parametry:
+Działanie algorytmu ewolucji różnicowej zdeterminowane jest przez dobranie konkretnego działania poszczególnych operatorów, jak również podstawowe parametry:
 \begin{itemize}
 \item $\mu$ - liczebność populacji - określa ile osobników zostanie stworzonych we wstępnej fazie algorytmu i ile z nich przetrwa na końcu każdego pokolenia.
-\item $Cr$ - współczynnik krzyżowania określający (w przypadku wariantu \emph{bin}) prawdopodobieństwo wybrania każdego z elementów osobnika mutanta do osobnika dziecka, jak w równaniu \ref{eq:BasicCrossover}.
-\item $F$ - współczynnik skalujący wektor przesunięcia punktu w populacji.
+\item $Cr$ - współczynnik krzyżowania określający (w przypadku wariantu \emph{bin}) prawdopodobieństwo wybrania każdego z elementów osobnika mutanta do osobnika dziecka, jak w równaniu (\ref{eq:BasicCrossover}).
+\item $F$ - współczynnik skalujący (patrz wzór (\ref{eq:DiffMutation}))
 \end{itemize}
 }
 
 \par{
-Podsumowując działanie klasycznego algorytmu ewolucji różnicowej można można posłużyć się poniższym pseudokodem, operującym na wprowadzonych w rozdziałach \ref{Model} i \ref{DEvol_section} symbolach:
+Działanie klasycznego algorytmu ewolucji różnicowej jest opisane poniższym pseudokodem, operującym na symbolach wprowadzonych w rozdziałach \ref{Model} i \ref{DEvol_section}, dodatkowo jako $D$ oznaczono wymiarowość przeszukiwanej przestrzeni:
 \begin{algorithm}[H]
 \caption{Klasyczny algorytm ewolucji różnicowej -- \emph{DE}/\emph{rand}/\emph{1}/\emph{bin}}
 \label{algorithm:de}
@@ -465,34 +472,34 @@ Podsumowując działanie klasycznego algorytmu ewolucji różnicowej można moż
 Dla uproszczenia zapisu jako $U_\mu$ oznaczono liczbę losową wygenerowaną z przestrzeni $U$, z równym prawdopodobieństwem ze zbioru $[1, \mu] \cap \mathbb{N}$. Symbolem $U_u$ oznaczono natomiast liczbę losową wygenerowaną z przestrzeni $U$ z rozkładem $U(0,1)$.
 }
 
-\subsection{DE a klasyczne strategie ewolucyjne}
+\subsection{Ewolucja różnicowa, a klasyczne algorytmy ewolucyjne}
 \par{
-Podstawową różnicą w stosunku do klasycznych strategii ewolucyjnych jest nietypowy schemat mutacji i ścisły dobór par poddawanych krzyżowaniu tak, by zawsze stanowiły one kombinację mutanta i osobnika z populacji  podstawowej.
+Podstawową różnicą ewolucji różnicowej w stosunku do klasycznych algorytmów ewolucyjnych jest nietypowy schemat mutacji i ścisły dobór par poddawanych krzyżowaniu tak, by zawsze stanowiły one kombinację mutanta i osobnika z populacji  podstawowej.
 }
 \par{
-Ponadto, ważnym elementem tego algorytmu jest także fakt, że wykorzystuje on zawartą w populacji informację o uzyskanych dotąd przesłankach na temat kształtu badanej funkcji. W klasycznych algorytmach ewolucyjnych, sposób rozłożenia populacji w przestrzeni determinuje typowo jedynie punkty bazowe dla nowej populacji. W przypadku ewolucji różnicowej, nowe punkty generowane z populacji podlegają wyciągnięciu w kierunkach, w których przeszukiwanie przyniosło lepsze rezultaty. Pozwala to na szybsze poruszanie się populacji w adaptującym się do bieżącego krajobrazu kierunku i prędkości.
+Ponadto, ważnym elementem tego algorytmu jest także fakt, że wykorzystuje on zawartą w populacji informację o uzyskanych dotąd przesłankach na temat kształtu badanej funkcji. W klasycznych algorytmach ewolucyjnych, sposób rozłożenia populacji w przestrzeni determinuje typowo jedynie punkty bazowe dla nowej populacji. W przypadku ewolucji różnicowej, nowe punkty generowane z populacji układają się w chmurę podlegającą wyciągnięciu w kierunkach, w których przeszukiwanie przyniosło lepsze rezultaty. Pozwala to na szybsze poruszanie się populacji w adaptującym się do bieżącego krajobrazu kierunku.
 }
 \par{
-Warto także zwrócić uwagę, że algorytmy ewolucji różnicowej mają zwykle bardziej elitarny charakter selekcji niż klasyczne algorytmy ewolucyjne, powoduje to częstszą zbieżność populacji do pojedynczych punktów w przestrzeni a także przyspiesza przejście algorytmu w fazę ekspoatacji. Fakt ten dodatkowo potęguje typowy wybór wartości $F \in [0, 1]$, który powoduje geometryczne zmniejszanie się średniej długości wektora różnicowego wraz z upływem pokoleń, w przypadku przejścia algorytmu w fazę eksploatacji pojedynczego punktu.
+Warto także zwrócić uwagę, że algorytmy ewolucji różnicowej mają zwykle bardziej elitarny charakter selekcji niż klasyczne algorytmy ewolucyjne, powoduje to częstszą zbieżność populacji do pojedynczych punktów w przestrzeni, a także przyspiesza przejście algorytmu w fazę eksploatacji. Fakt ten dodatkowo potęguje typowy wybór wartości $F \in [0, 1]$, który powoduje geometryczne zmniejszanie się średniej długości wektora różnicowego wraz z upływem pokoleń, w przypadku przejścia algorytmu w fazę eksploatacji pojedynczego minimum lokalnego.
 }
 \par{
-Co do zasady algorytmy ewolucji różnicowej stanowią cenny punkt wyjścia dla dalszych rozważań, ponieważ już przy bardzo prostych operatorach pozwalają na uzyskiwanie bardzo dobrych właściwości eksporacyjnych i eksploatacyjnych.
+Co do zasady algorytmy ewolucji różnicowej stanowią cenny punkt wyjścia dla dalszych rozważań, ponieważ już przy bardzo prostych operatorach pozwalają na uzyskiwanie bardzo dobrych właściwości eksploracyjnych i eksploatacyjnych.
 }
 
 \subsection{Podstawowe warianty ewolucji różnicowej}
-\subsubsection{Ilość par różnicowanych}
+\subsubsection{Liczba par różnicowanych}
 \par{
-Opisany wyżej standardowy schemat ewolucji różnicowej, jest wersją podstawową, której zachowanie można na wiele sposobów zmodyfikować, pozostając nadal w tej klasie algorytmów. Podstawowa różnica jaką mogą charakteryzować się poszczególne instancje DE, to ilość par wykorzystywanych do mutacji różnicowej. W ewolucji różnicowej uogólnionej ze względu na ilość różnicowanych par, krok mutacji różnicowej (\ref{eq:DiffMutation}) zostaje zamieniony na \cite{PracticalInsights}:
+Opisany wyżej standardowy schemat ewolucji różnicowej, jest wersją podstawową, której zachowanie można na wiele sposobów zmodyfikować, pozostając nadal w tej klasie algorytmów. Podstawowa różnica jaką mogą charakteryzować się poszczególne instancje DE, to ilość par wykorzystywanych do mutacji różnicowej. W ewolucji różnicowej uogólnionej ze względu na liczbę różnicowanych par, krok mutacji różnicowej (\ref{eq:DiffMutation}) zostaje zamieniony na \cite{PracticalInsights}:
 \begin{equation}
-\mathbf{v_i^{t}} = \mathbf{r_1} + \sum_{d = 1}^D F_d \cdot (\mathbf{r_{j,1}} - \mathbf{r_{j,2}})
+\mathbf{v_i^{t}} = \mathbf{r_1} + \sum_{l = 1}^L F_l \cdot (\mathbf{r_{j,1}} - \mathbf{r_{j,2}})
 \end{equation}
-gdzie jako $D$ oznaczono ilość elementów poddawanych mutacji różnicowej.
+gdzie jako $L$ oznaczono liczbę elementów poddawanych mutacji różnicowej.
 }
 \par{
-W praktyce, najczęściej stosuje się $D = 1$ lub $D = 2$ i $F_1 = F_2$, ponieważ nie znaleziono przesłanek by dalsze zwiększenie wartości $D$ powodowało poprawę jakości otrzymywanych przy użyciu algorytmu wyników \cite{PracticalInsights}.
+W praktyce najczęściej stosuje się $L = 1$ lub $L = 2$ i $F_1 = F_2$, ponieważ nie znaleziono przesłanek by dalsze zwiększenie wartości $L$ powodowało poprawę jakości otrzymywanych przy użyciu algorytmu wyników \cite{PracticalInsights}.
 \subsubsection{Schemat mutacji}
 \par{
-Najistotniejszą z punktu widzenia charakterystyki DE możliwością zmodyfikowania zachowania algorytmu jest możliwość, zamiany schematu mutacji. Podstawowy schemat mutacji (\emph{rand}) zakłada losowanie osobników $\mathbf{r_1}, \mathbf{r_2}, \mathbf{r_3}$ i postępowanie wg schematu \ref{eq:DiffMutation}. W ramach licznych badań powstała jednak znaczna ilość wariantów bardziej wysublimowanych. Najpopularniejsze w literaturze i najistotniejsze ze względu na zawartość pracy schematy mutacji to:
+Najistotniejszą z punktu widzenia charakterystyki DE możliwością zmodyfikowania zachowania algorytmu jest możliwość zamiany schematu mutacji. Podstawowy schemat mutacji (\emph{rand}) zakłada losowanie osobników $\mathbf{r_1}, \mathbf{r_2}, \mathbf{r_3}$ z rozkładem jednostajnym i postępowanie wg schematu \ref{eq:DiffMutation}. W ramach licznych badań powstała jednak znaczna liczba wariantów bardziej wysublimowanych. Najpopularniejsze w literaturze i najistotniejsze ze względu na zawartość pracy schematy mutacji to:
 \begin{description}
 
 \item[rand] \cite{RainerStorn,SpringerIntroToEvol} -- wariant podstawowy
@@ -500,22 +507,24 @@ Najistotniejszą z punktu widzenia charakterystyki DE możliwością zmodyfikowa
 \begin{equation}
 \mathbf{v_i^{t}} = \mathbf{x_{best}^t} + F \cdot (\mathbf{r_{1}} - \mathbf{r_{2}})
 \end{equation}
-gdzie $\mathbf{x_{best}^t}$ to osobnik z populacji $t$, który uzyskał najlepszy wynik oceny funkcją $f$. Schemat ten, promuje poszukiwanie rozwiązania wokół najlepszego dotychczas znalezionego osobnika, wedle rozrzutu bieżącej populacji. Pozwala to na adaptacyjne skupienie się populacji wokół lokalnego optimum i eksploatowanie jego możliwości, kosztem możliwości eksploracyjnych algorytmu.
+gdzie $\mathbf{x_{best}^t}$ to osobnik z populacji $t$, który uzyskał najlepszy wynik oceny funkcją $f$. Schemat ten promuje poszukiwanie rozwiązania wokół najlepszego dotychczas znalezionego osobnika, wedle rozrzutu bieżącej populacji. Pozwala to na adaptacyjne skupienie się populacji wokół lokalnego optimum i eksploatowanie jego możliwości, kosztem możliwości eksploracyjnych algorytmu.
+
+
 \item[mid] \cite{DEmid} -- ten schemat zakłada zmianę schematu \ref{eq:DiffMutation} na:
 \begin{equation}
 \mathbf{v_i^{t}} = \mathbf{x_{mid}^t} + F \cdot (\mathbf{r_{1}} - \mathbf{r_{2}})
 \end{equation}
 gdzie $\mathbf{x_{mid}^t}$ to punkt środkowy populacji $t$ zdefiniowany jako:
 \begin{equation}
-x_{mid,j}^t = \frac{1}{n}\sum_{i=1}^n{x_{i,j}}
+x_{mid,j}^t = \frac{1}{\mu}\sum_{i=1}^\mu{x_{i,j}}
 \end{equation}
-gdzie $n$ to wielkość populacji. Schemat ten został opracowany niedawno i czerpie on swoją inspirację z podejrzenia o informacji niesionej przez środek populacji. Koncepcja ta zostanie rozwinięta w rozdziale \ref{MidPoint}.
+gdzie $\mu$ to wielkość populacji. Schemat ten został opracowany niedawno i czerpie on swoją inspirację z podejrzenia, iż punkt środkowy populacji, może stanowić cenną przesłankę na temat krajobrazu obszaru przeszukiwań. Koncepcja ta zostanie rozwinięta w rozdziale \ref{MidPoint}.
 
 \item[current-to-rand] \cite{PracticalInsights} -- ten schemat zakłada zmianę schematu \ref{eq:DiffMutation} na:
 \begin{equation}
  \mathbf{v_i^{t}} = K \cdot \mathbf{x_i^t} + (1 - K) \cdot \mathbf{r_{1}} + F \cdot (\mathbf{r_{2}} - \mathbf{r_{3}})
 \end{equation}
-W tym schemacie do standardowego schematu \emph{rand} dołącza się element wiążący mutanta ze sparowanym z nim osobnikiem z populacji podstawowej $\mathbf{X}$. Wykorzystuje się w tym celu zmienną $K \in [0, 1]$, która stanowi wagę dla osobnika z populacji podstawowej $\mathbf{x_i^t}$. W praktyce oznacza to, że mutant $\mathbf{v_i^t}$ powstaje przez przesunięcie punktu leżącego między $\mathbf{x_i^t}$ a losowo wybranym punktem z populacji $\mathbf{r_1}$ o przeskalowany współczynnikiem $F$ wektor między dwoma losowymi osobnikami z populacji (Rysunek \ref{current-to-rand-img}).
+W tym schemacie do standardowego schematu \emph{rand} dołącza się element wiążący mutanta ze sparowanym z nim osobnikiem z populacji podstawowej $\mathbf{X}$. Wykorzystuje się w tym celu parametr $K \in [0, 1]$, która stanowi wagę dla osobnika z populacji podstawowej $\mathbf{x_i^t}$. W praktyce oznacza to, że mutant $\mathbf{v_i^t}$ powstaje przez przesunięcie punktu leżącego między $\mathbf{x_i^t}$ a losowo wybranym punktem z populacji $\mathbf{r_1}$ o przeskalowany współczynnikiem $F$ wektor między dwoma losowymi osobnikami z populacji (Rysunek \ref{current-to-rand-img}).
 
 %%%%% Rysunek: current-to-rand
 \begin{figure}[h]
@@ -543,7 +552,7 @@ Schemat ten, podobnie jak dwa poprzednie, opiera się o przypuszczenie, że istn
 \begin{equation}
 \mathbf{v_i^{t}} = \mathbf{x_i^t} + F \cdot (\mathbf{x_{r_{pbest}}^t} - \mathbf{x_i^t}) + F \cdot (\mathbf{r_1} - \mathbf{r_{2}})
 \end{equation}
-gdzie $\mathbf{x_{r_{pbest}}^t}$ to osobnik wybrany losowo spośród $p \cdot n$ osobników o najniższej wartości funkcji optymalizowanej, $p \in (0,1]$. W niektórych pracach \cite{SHADE} proponowane jest dolne ograniczenie wartości $p$ jako $p_{min} = \frac{2}{\mu}$, co oznacza, że osobnik $\mathbf{x_{r_{pbest}}^t}$ jest zawsze losowany spośród co najmniej dwóch najlepszych osobników.
+gdzie $\mathbf{x_{r_{pbest}}^t}$ to osobnik wybrany losowo spośród $p \cdot \mu$ osobników o najniższej wartości funkcji optymalizowanej, $p \in (0,1]$. W niektórych pracach \cite{SHADE} proponowane jest dolne ograniczenie wartości $p$ jako $p_{min} = \frac{2}{\mu}$, co oznacza, że osobnik $\mathbf{x_{r_{pbest}}^t}$ jest zawsze losowany spośród co najmniej dwóch najlepszych osobników.
 
 Rozwiązanie to ma za zadanie dołączyć do zalet schematu \emph{current-to-best} dodatkowe rozrzucenie osobników w przeszukiwanej przestrzeni i osłabienie siły przyciągania jednego najmocniejszego osobnika, a więc zmniejszenie elitaryzmu całego algorytmu.
 
@@ -569,14 +578,14 @@ Działanie poszczególnych operatorów mutacji zaprezentowano na rysunkach \ref{
 }
 \subsubsection{Schemat krzyżowania}
 \par{
-Krzyżowanie w klasycznym algorytmie ewolucji różnicowej, pełni kluczową rolę -- zapewnia powiązanie osobników mutantów z populacji $\mathbf{V}$ w pary z osobnikami z populacji bazowej $\mathbf{X}$. W ten sposób tworzy przyczynek do wykorzystywania par osobników do selekcji przez ich bezpośrednie porównanie. W bardziej wysublimowanych schematach mutacji opisanych w poprzednim podrozdziale, osobnik z bieżącej populacji bywa wykorzystywany już na etapie mutacji. Nie jest to regułą ani założeniem niezbędnym dla skonstruowania poprawnych operatorów dla ewolucji różnicowej, stąd też nawet w odbiegających od podstawowego wariantu wersjach algorytmów ewolucji różnicowej, krzyżowanie jest niezbędne dla poprawnego zachowania algorytmu.
+Krzyżowanie w klasycznym algorytmie ewolucji różnicowej pełni kluczową rolę -- zapewnia powiązanie osobników mutantów z populacji $\mathbf{V}$ w pary z osobnikami z populacji bazowej $\mathbf{X}$. W bardziej wysublimowanych schematach mutacji opisanych w poprzednim podrozdziale, osobnik z bieżącej populacji bywa wykorzystywany już na etapie mutacji. Nie jest to regułą ani założeniem niezbędnym dla skonstruowania poprawnych operatorów dla ewolucji różnicowej, stąd też nawet w odbiegających od podstawowego wariantu wersjach algorytmów ewolucji różnicowej, krzyżowanie nie jest niezbędne dla poprawnego zachowania algorytmu.
 }
 
 \par{
 Typowo w literaturze spotyka się następujące schematy krzyżowania:
 \begin{description}
-\item[bin] -- podstawowy schemat krzyżowania zgodny z równością \ref{eq:BasicCrossover}.
-\item[exp] -- schemat krzyżowania zamieniający równość \ref{eq:BasicCrossover}, na procedurę:
+\item[bin] -- podstawowy schemat krzyżowania zgodny ze wzorem (\ref{eq:BasicCrossover}).
+\item[exp] -- schemat krzyżowania zamieniający wzór (\ref{eq:BasicCrossover}), na procedurę:
 \begin{algorithm}[H]
 \caption{Schemat krzyżowania \textbf{exp}}
 \label{algorithm:ea}
@@ -592,12 +601,12 @@ Typowo w literaturze spotyka się następujące schematy krzyżowania:
 \end{algorithmic}
 \end{algorithm}
 
-Tego rodzaju krzyżowanie powoduje dążący (gdy $D \rightarrow \infty$) do wykładniczego rozkład położenia pierwszego elementu wektora pochodzącego z osobnika $\mathbf{x_i^t}$. Rozkład ten nie traktuje wszystkich pozycji w wektorze osobników identycznie, ponieważ dalsze pozycje w wektorze będą rzadziej zastępowane przez wartości z osobników mutantów. W związku z tym stosuje się także wariant, który wybiera ilość elementów ($n_x$) pochodzących z osobnika rodzica zgodnie z opisanym rozkładem a następnie wybiera z równym prawdopodobieństwem $n_x$ elementów wektora, które będą pochodziły z osobnika $\mathbf{x_i^t}$.
+Tego rodzaju krzyżowanie powoduje dążący (gdy $D \rightarrow \infty$) do wykładniczego rozkład położenia pierwszego elementu wektora pochodzącego z osobnika $\mathbf{x_i^t}$. Rozkład ten nie traktuje wszystkich pozycji w wektorze osobników identycznie, ponieważ dalsze pozycje w wektorze będą rzadziej zastępowane przez wartości z osobników mutantów. W związku z tym stosuje się także wariant, który wybiera liczbę elementów ($n_x$) pochodzących z osobnika rodzica zgodnie z opisanym rozkładem a następnie wybiera z równym prawdopodobieństwem $n_x$ elementów wektora, które będą pochodziły z osobnika $\mathbf{x_i^t}$.
 \end{description}
 }
 \subsubsection{Notacja}
 \par{
-Mając na względzie, że typowo algorytmy ewolucji różnicowej rozróżniane są między sobą na podstawie trzech wyżej wymienionych zmiennych - a więc: ilości par różnicowanych, schematu mutacji różnicowej i schematu krzyżowania, wprowadzono notację pozwalającą w sposób zwięzły opisać konkretną instancję algorytmu z grupy algorytmów ewolucji różnicowej \cite{PracticalInsights}:
+Mając na względzie, że typowo algorytmy ewolucji różnicowej rozróżniane są między sobą na podstawie trzech wyżej wymienionych elementów - a więc: liczby par różnicowanych, schematu mutacji różnicowej i schematu krzyżowania, wprowadzono notację, pozwalającą w sposób zwięzły opisać konkretną instancję algorytmu z grupy algorytmów ewolucji różnicowej \cite{PracticalInsights}:
 %%%%%% Zapis 
 \begin{center}
 \textbf{DE/M/D/C}
@@ -605,7 +614,7 @@ Mając na względzie, że typowo algorytmy ewolucji różnicowej rozróżniane s
 gdzie:
 \begin{itemize}
 \item \textbf{M} - schemat mutacji (np. \emph{rand}, \emph{current-to-pbest}).
-\item \textbf{D} - ilość par różnicowanych (zwykle \emph{1} lub \emph{2}).
+\item \textbf{D} - liczba par różnicowanych (zwykle \emph{1} lub \emph{2}).
 \item \textbf{C} - schemat krzyżowania (np. \emph{bin}, \emph{exp}).
 \end{itemize}
 I tak na przykład klasyczny algorytm ewolucji różnicowej (\ref{DEvol_section}) wg tej notacji byłby opisany jako: DE/\emph{rand}/\emph{1}/\emph{bin}. Notacja ta będzie wykorzystywana w dalszej części pracy.
@@ -615,37 +624,37 @@ I tak na przykład klasyczny algorytm ewolucji różnicowej (\ref{DEvol_section}
 \subsection{Strategie adaptacji}
 \label{Adaptation}
 \par{
-Dla każdego z opisanych schematów istnieją prace opisujące proces adaptacji parametrów na podstawie dotychczas uzyskiwanych rezultatów \cite{zhang2009adaptive,JADE,SHADE}. Nierzadko proces adaptacji wykorzystanie informacje historii $H$ o szerokości przekraczającej wielkość pojedynczego pokolenia stąd metody adaptacji mogą być traktowane jako jedna z prób poprawy działania algorytmów ewolucji różnicowej przez poszerzenie okna archiwum.
+Dla każdego z opisanych schematów istnieją prace opisujące proces adaptacji parametrów na podstawie dotychczas uzyskiwanych rezultatów \cite{zhang2009adaptive,JADE,SHADE}. Nierzadko proces adaptacji wykorzystuje informacje historii $H$ o szerokości przekraczającej wielkość pojedynczego pokolenia. Z tego powodu, metody adaptacji mogą być traktowane jako jedna z prób poprawy działania algorytmów ewolucji różnicowej przez poszerzenie okna archiwum.
 }
 \par{
-Opublikowane prace jednoznacznie wskazują, że proces adaptacji znacząco poprawia uzyskiwane w ramach ewolucji różnicowej wyniki. Stanowi to kolejną przesłankę pozwalającą oczekiwać poprawy rezultatów przez wykorzystanie szerszego okna historii.
+Prace \cite{zhang2009adaptive,JADE,SHADE} jednoznacznie wskazują, że proces adaptacji znacząco poprawia uzyskiwane w ramach ewolucji różnicowej wyniki. Stanowi to kolejną przesłankę pozwalającą oczekiwać poprawy rezultatów przez wykorzystanie szerszego okna historii.
 }
 \par{
-Dodatkowo należy odnotować, że adaptacyjne algorytmy ewolucyjne otrzymują najlepsze rezultaty w testach typu \emph{black-box} (spośród algorytmów klasy DE) \cite{CEC2013Comp}. Fakt ten staje się przyczynkiem do tego by sprawdzić, czy proponowany algorytm \emph{NADE} będzie utrzymywał swoją charakterystykę jakości także względem tych modyfikacji.
+Dodatkowo należy odnotować, że adaptacyjne algorytmy ewolucji różnicowej otrzymują najlepsze rezultaty w testach typu \emph{black-box} (spośród algorytmów klasy DE) \cite{CEC2013Comp}. Algorytmy te, są również w ścisłej czołówce wszystkich algorytmów ewolucyjnych, będąc wyprzedzanymi jedynie przez niektóre warianty algorytmu \emph{CMAES}. Fakt ten staje się przyczynkiem do tego by sprawdzić, czy proponowane w pracy schematy wykorzystania archiwum będą utrzymywały swoją charakterystykę jakości także względem tych modyfikacji.
 }
 
 \subsection{Punkt środkowy populacji}
 \label{MidPoint}
 \par{
-Niedawno w badaniach nad algorytmami ewolucji różnicowej \cite{DEmid} pojawiła się koncepcja wykorzystania inforamcji niesionej przez punkt środkowy populacji do poprawy sposobu działania algorytmu. W pracy \cite{DEmid} podjęto próbę zbudowania nowego schematu mutacji, w którym punktem bazowym jest punkt środkowy populacji (DE/\emph{mid}/\emph{k}). Wnioskiem z tej pracy było stwierdzenie, iż dla większości funkcji zwłaszcza w wielowymiarowych przestrzeniach, wybór strategii \emph{mid} poprawia w sposób statystycznie istotny działanie algorytmu ewolucji różnicowej. W pracy zwrócono także uwagę, że punkt środkowy nie przynosi znaczącej poprawy lub wręcz jest mylący dla zadania, w przypadku pewnych funkcji. Jako przykład takiej funkcji wymieniono funkcję Weierstrassa wchodzącą w skład zestawu testowego CEC2013 (\ref{CEC2013chapter}).
+Niedawno w badaniach nad algorytmami ewolucji różnicowej pojawiła się koncepcja wykorzystania informacji niesionej przez punkt środkowy populacji do poprawy sposobu działania algorytmu. W pracy \cite{DEmid} podjęto próbę zbudowania nowego schematu mutacji, w którym punktem bazowym jest punkt środkowy populacji (DE/\emph{mid}/\emph{k}). Wnioskiem z tej pracy było stwierdzenie, iż dla większości funkcji zwłaszcza w wielowymiarowych przestrzeniach, wybór strategii \emph{mid} poprawia w sposób statystycznie istotny działanie algorytmu ewolucji różnicowej. W pracy zwrócono także uwagę, że punkt środkowy nie przynosi znaczącej poprawy lub wręcz jest mylący dla zadania, w przypadku pewnych funkcji. Jako przykład takiej funkcji wymieniono funkcję Weierstrassa wchodzącą w skład zestawu testowego CEC2013 (\ref{CEC2013chapter}).
 }
 \par{
-Praca ta jednoznacznie wskazała, że informacja zawarta w punkcie środkowym dla wielu problemów może być użyteczna. Intuicja podpowiada, że w szczególności w fazie eksploatacji okolic lokalnego optimum punkt środkowy może być o wartości wyższej niż najlepsza. Taka własność punktu środkowego stanowiła by wytłumaczenie przewagi algorytmu DE/\emph{mid}/\emph{1} nad DE/\emph{best}/\emph{1}. Choć początkowo zamierzano włączyć w skład pracy badanie dotyczące tej tezy, to ze względu na dużą ilość innych tez wymagających sprawdzenia w ostatecznej wersji rezygnowano z badania tej tezy.
+Praca ta jednoznacznie wskazała, że informacja zawarta w punkcie środkowym dla wielu problemów może być użyteczna. Intuicja podpowiada, że w fazie eksploatacji okolic lokalnego optimum punkt środkowy może mieć niższą wartość funkcji celu niż najlepszy punkt z populacji. Taka własność punktu środkowego stanowiłaby wytłumaczenie przewagi algorytmu DE/\emph{mid}/\emph{1} nad DE/\emph{best}/\emph{1}.
 }
 \subsection{Metoda uwzględniania ograniczeń}
 \par{
-Praca \cite{Boundary}, pokazała że metoda uwzględniania ograniczeń przeszukiwanej przestrzeni ma istotny wpływ na jakość rezultatów uzyskiwanych przez algorytm ewolucji różnicowej. Praca wyszczególnia wiele typów dopasowywania punktów mutantów do zakresu:
+Praca \cite{Boundary} pokazała, że metoda uwzględniania ograniczeń przeszukiwanej przestrzeni ma istotny wpływ na jakość rezultatów uzyskiwanych przez algorytm ewolucji różnicowej. Praca wyszczególnia wiele typów dopasowywania punktów mutantów do zakresu:
 \begin{description}
-\item[Reinicjalizacja] (ang. \emph{Reinitialization} -- Powszechnie używana w algorytmach ewolucji różnicowej strategia \cite{Boundary}, która polega na zamianie punktu, który znalazł się poza ograniczeniami, na losowo wybrany (z rozkładem jednostajnym) punkt mieszczący się w ograniczeniach.
-\item[Ponowne próbkowanie] (ang. \emph{Resampling}) -- Metoda, która okazała się bardzo skuteczna, w szczególności w przypadku dużej ilości punktów nie mieszczących się w ograniczeniach. Polega ona na powtarzaniu procedury tworzenia mutanta na podstawie losowych wektorów różnicowych, do czasu osiągnięcia osobnika, który mieści się w ograniczeniach.
+\item[Reinicjalizacja] (ang. \emph{Reinitialization}) -- Powszechnie używana w algorytmach ewolucji różnicowej strategia, polegająca na zamianie punktu, który znalazł się poza ograniczeniami, na losowo wybrany (z rozkładem jednostajnym) punkt mieszczący się w ograniczeniach.
+\item[Ponowne próbkowanie] (ang. \emph{Resampling}) -- Metoda, która okazała się bardzo skuteczna, w szczególności w przypadku dużej liczby punktów nie mieszczących się w~ograniczeniach. Polega ona na powtarzaniu procedury tworzenia mutanta na podstawie losowych wektorów różnicowych, do czasu osiągnięcia osobnika, który mieści się w ograniczeniach.
 \item[Odbijanie] (ang. \emph{Reflection}) -- Metoda polegająca na odbijaniu punktu względem wszystkich przekroczonych linii ograniczeń aż do czasu, gdy punkt znajdzie się wewnątrz przeszukiwanego obszaru przestrzeni.
 \item[Rzutowanie] (ang. \emph{Projection}) -- Metoda ta polega na rzutowaniu prostopadłym punktu na wszystkie przekroczone ograniczenia.
-\item[Zawijanie] (ang. \emph{Wrapping}) -- w tej metodzie, zakłada się, że obszar przeszukiwań jest skończonym wycinkiem hiperpłaszczyzny. Mając to na względzie, nakłada się tą skończoną podprzestrzeń na hipertorusa w ten sposób zyskując przestrzeń posiadającą wyłącznie punkty dopuszczalne a opisującą cały zbiór $\mathbb{R}^D$. Wadą tego rozwiązania jest fakt, że jeśli funkcja $f$ jest ciągła, to jej w nowej przestrzeni jej ciągłość może zostać zerwana.
-\item[Zachowywanie] (ang. \emph{Conservatism}) -- metoda ta polega na odrzuceniu dziecka $z_i$ jeśli znajdzie się ono poza obszarem przeszukiwania i w czasie selekcji wybranie osobnika $x_i$. Podejście to jest równoważne nadaniu funkcji kary za przejście poza granicę obszaru przeszukiwania, równej $\infty$ w każdym punkcie poza ograniczeniami.
+\item[Zawijanie] (ang. \emph{Wrapping}) -- w tej metodzie, zakłada się, że obszar przeszukiwań jest skończonym wycinkiem hiperpłaszczyzny. Mając to na względzie, nakłada się tą skończoną podprzestrzeń na hipertorusa w ten sposób zyskując przestrzeń posiadającą wyłącznie punkty dopuszczalne a opisującą cały zbiór $\mathbb{R}^D$. Wadą tego rozwiązania jest fakt, że jeśli funkcja $f$ jest ciągła, to w nowej przestrzeni jej ciągłość może zostać zerwana.
+\item[Zachowywanie] (ang. \emph{Conservatism}) -- metoda ta polega na odrzuceniu dziecka $\mathbf{z_i}$ jeśli znajdzie się ono poza obszarem przeszukiwania i w czasie selekcji wybranie osobnika $\mathbf{x_i}$. Podejście to jest równoważne nadaniu funkcji kary za przejście poza granicę obszaru przeszukiwania, równej $\infty$ w każdym punkcie poza ograniczeniami.
 \end{description}
 }
 \par{
-Wyniki otrzymane w ramach \cite{Boundary} sugerują, że najlepiej sprawdzają się metodą uwzględniania ograniczeń jest \emph{resampling}. Poważnymi wadami tego rozwiązania jest znaczne skomplikowanie struktury algorytmu, ze względu na konieczne nawroty, a także koszta wynikające z dodatkowych obliczeń (zwłaszcza w przypadku dużego odsetka odrzucanych punktów). Z tych powodów zdecydowano, by odrzucić tę metodę i na czas pracy skorzystać z jednej z dwóch znacznie prostszych a dających podobne, obiecujące rezultaty -- \emph{odbijania} i \emph{rzutowania}. Spośród tych dwóch wariantów arbitralnie wybrano \emph{odbijanie} i ten sposób uwzględniania ograniczeń będzie wykorzystywany przy wszystkich testach w ramach pracy.
+Wyniki otrzymane w ramach \cite{Boundary} sugerują, że najlepiej sprawdzają się metodą uwzględniania ograniczeń jest \emph{resampling}. Poważnymi wadami tego rozwiązania jest znaczne skomplikowanie struktury algorytmu, ze względu na konieczne nawroty, a także koszta wynikające z dodatkowych obliczeń (zwłaszcza w przypadku dużego odsetka odrzucanych punktów). Z tych powodów zdecydowano, by odrzucić tę metodę i na czas pracy skorzystać z jednej z dwóch znacznie prostszych, a dających nadal dobre rezultaty -- \emph{odbijania} i \emph{rzutowania}. Spośród tych dwóch wariantów arbitralnie wybrano \emph{odbijanie} i ten sposób uwzględniania ograniczeń będzie wykorzystywany przy wszystkich testach w ramach pracy.
 }
 
 \subsection{Archiwum}
@@ -657,7 +666,7 @@ W literaturze spotyka się niezliczone próby jawnego lub niejawnego wykorzystan
 \par{
 W pracy \cite{ArchivedDE} opracowano algorytm \emph{ADE} (ang. \emph{Archived Differential Evolution}) wykorzystujący archiwum mające przechowywać informacje o najlepszych osobnikach we wszystkich następujących po sobie pokoleniach. Archiwum tego rodzaju pełniło w algorytmie trzy funkcje:
 \begin{description}
-\item[Wskaźnika wysycenia konkretnej populacji] -- przyjęto tu założenie, że jeśli najlepszy punkt w populacji nie zmienił się od pewnej definiowalnej ilości pokoleń, należy przyjąć, że obecna populacja nie ma perspektyw na odnalezienie znacząco lepszych punktów. W algorytmie \emph{ADE} był to jeden z warunków wyzwalających adaptację populacji.
+\item[Wskaźnika wysycenia konkretnej populacji] -- przyjęto tu założenie, że jeśli najlepszy punkt w populacji nie zmienił się od pewnej definiowalnej liczby pokoleń, należy przyjąć, że obecna populacja nie ma perspektyw na odnalezienie znacząco lepszych punktów. W algorytmie \emph{ADE} był to jeden z warunków wyzwalających adaptację populacji.
 \item[Wskaźnika zbliżenia się populacji do lokalnego optimum] -- w algorytmie podjęto próbę wykorzystania informacji zawartych w punkcie środkowym populacji. Jednym z warunków wyzwalających adaptację populacji, było bowiem zmniejszenie odległości euklidesowej:
 \begin{equation}
 d = \sqrt{\sum_{i = 1}^{D}(x_{best,i} - x_{mean,i})^2}
@@ -672,7 +681,7 @@ d \le \epsilon
 \end{equation}
 gdzie $\epsilon$ to parametr algorytmu określający graniczną odległość między wspomnianymi punktami.
 Jeśli warunek jest spełniony, następuje adaptacja populacji.
-\item[Punktu odniesienia dla adaptacji populacji] -- w algorytmie w wyniku kilku warunków następowała adaptacja popualacji mająca na celu poprawę właściwości eksporacyjnych algorytmu. Adaptacja odbywała się wg. formuły zmieniającej osobniki w populacji \cite{ArchivedDE}:
+\item[Punktu odniesienia dla adaptacji populacji] -- w algorytmie w wyniku kilku warunków następowała adaptacja popualacji mająca na celu poprawę właściwości eksporacyjnych algorytmu. Adaptacja odbywała się wg formuły zmieniającej osobniki w populacji \cite{ArchivedDE}:
 \begin{equation}
 x_{i,j,G} = \lambda \cdot x_{i,Best,A} + (1 - \lambda) \cdot (x_{i,Best,A} - x_{i,j,G-1})
 \end{equation}
@@ -683,18 +692,18 @@ gdzie $\lambda \sim U[0,1]$ natomiast $x_{i,j,G}$ oznacza wartość $i$ elementu
 Poważną wadą samego algorytmu jest wykorzystywanie informacji wykraczających poza te pozyskiwalne z definicji (rozdział \ref{ProblemDefinition}). W szczególności algorytm wykorzystuje trudności opisane w rozdziale \ref{WadyBB} wykorzystując parametr $\epsilon$ a nawet sugerując jego uniwersalną arbitralną wartość $10^{-3}$. Tego rodzaju podejście przeczy założeniom opisywanego problemu.
 }
 \par{
-Algorytm \emph{ADE} został przez autorów oceniony pozytywnie w kontekście badanych problemów. Wykorzystuje on jednak archiwum w niewielkim stopniu a ponadto nie bada tego zastosowania w odcięciu od pozostałych technik poprawy jakości działania algorytmu. Sama metoda reinicjalizacji oparta o brak poprawy w kolejnych pokoleniach stanowi przykład przeniesienia znanych z innych algorytmów technik na grunt ewolucji różnicowej.
+Algorytm \emph{ADE} został przez autorów oceniony pozytywnie w kontekście badanych problemów. Wykorzystuje on jednak archiwum w niewielkim stopniu, a ponadto nie bada tego zastosowania w odcięciu od pozostałych technik poprawy jakości działania algorytmu. Sama metoda reinicjalizacji oparta o brak poprawy w kolejnych pokoleniach stanowi przykład przeniesienia znanych z innych algorytmów technik na grunt ewolucji różnicowej.
 }
 
 \subsubsection{Archiwum w CDDE{\_}Ar \cite{ClusterArchiveDE}}
 \par{
-Algorytm \emph{CDDE{\_}Ar} operaty jest o idee podzielenia populacji na mniejsze grupy (klastrowanie) przy użyciu algorytmu \emph{k-średnich} \cite{KMeans}. Tego rodzaju grupy, traktowane są oddzielnie i podlegają złożonym procesom adaptacji, usuwania i kreacji opisanych szczegółowo w \cite{ClusterArchiveDE}.
+Algorytm \emph{CDDE{\_}Ar} oparty jest o idee podzielenia populacji na mniejsze grupy (klastrowanie) przy użyciu algorytmu \emph{k-średnich} \cite{KMeans}. Tego rodzaju grupy traktowane są oddzielnie i podlegają złożonym procesom adaptacji, usuwania i kreacji opisanych szczegółowo w \cite{ClusterArchiveDE}.
 }
 \par{
-Choć modyfikacja ta znacząco odbiega od podstawowego wariantu ewolucji różnicowej \emph{DE}/\emph{rand}/\emph{1}/\emph{bin}, to jednak istotnym z punktu jej widzenie jest wykorzystanie archiwum, w celu selektywnego przechowywania informacji o dobrych jakościowo punktach odnalezionych przez nieistniejące już klastry. W tym podejściu wykorzystuje się znane i dobre jakościowo punkty do wzbogacania nowo tworzonych lub adaptowanych klastrów.
+Choć modyfikacja ta znacząco odbiega od podstawowego wariantu ewolucji różnicowej \emph{DE}/\emph{rand}/\emph{1}/\emph{bin}, to jednak istotnym z punktu jej widzenia jest wykorzystanie archiwum, w celu selektywnego przechowywania informacji o dobrych jakościowo punktach odnalezionych przez nieistniejące już klastry. W tym podejściu wykorzystuje się znane i dobre jakościowo punkty do wzbogacania nowo tworzonych lub adaptowanych klastrów.
 }
 \par{
-Algorytm \emph{CDDE{\_}Ar}, nie stanowi podstawy dla tej pracy, jednak pokazuje potencjał, drzemiący w historycznych osobnikach, który w podstawowym wariancie ewolucji różnicowej jest zaniedbywany.
+Algorytm \emph{CDDE{\_}Ar} nie stanowi podstawy dla tej pracy, jednak pokazuje potencjał drzemiący w historycznych osobnikach, który w podstawowym wariancie ewolucji różnicowej jest zaniedbywany.
 }
 
 \subsubsection{Archiwum w innych algorytmach}
@@ -702,7 +711,7 @@ Wiele innych algorytmów ewolucji różnicowej wdraża lub jest modyfikowana o e
 
 \subsubsection{Wnioski z dotychczasowych prac}
 \par{
-Liczność algorytmów ewolucji różnicowej wykorzystujących koncepcję archiwum do różnych celów (w szczególności do generowania wektorów różnicowych), sugeruje, że wykorzystanie archiwum pozytywnie wpływa na działanie algorytmów. Można także zauważyć, że archiwum w algorytmie ewolucji różnicowej, jest cennym źródłem dodatkowych informacji, wspierających adaptację i inne zaawansowane procesy w ich obrębie. Warto zwrócić uwagę, że wspomniane prace traktują archiwum łącznie z innymi koncepcjami poprawy działania algorytmów ewolucji różnicowej. Nie można w związku z tym wysnuwać wniosków na temat niezależności wpływu wykorzystania archiwum od innych technik usprawniania algorytmów. Tego rodzaju badania są jednym z przedmiotów tej pracy.
+Liczność algorytmów ewolucji różnicowej wykorzystujących koncepcję archiwum do różnych celów (w szczególności do generowania wektorów różnicowych), sugeruje, że wykorzystanie archiwum pozytywnie wpływa na działanie algorytmów. Można także zauważyć, że archiwum w algorytmie ewolucji różnicowej jest cennym źródłem dodatkowych informacji, wspierających adaptację i inne zaawansowane procesy w ich obrębie. Warto zwrócić uwagę, że wspomniane prace traktują archiwum łącznie z innymi koncepcjami poprawy działania algorytmów ewolucji różnicowej. Nie można w związku z tym wysnuwać wniosków na temat niezależności wpływu wykorzystania archiwum od innych technik usprawniania algorytmów. Tego rodzaju badania są jednym z przedmiotów tej pracy.
 }
 
 \subsection{Zaawansowne modyfikacje}
@@ -711,10 +720,10 @@ Liczność algorytmów ewolucji różnicowej wykorzystujących koncepcję archiw
 Do celów pracy wybrano dwie modyfikacje stosujące adaptację parametrów (rozdział \ref{Adaptation}), jak również powiększone okno historii (rozdział \ref{ArchiveLiterature}). Algorytm \emph{SHADE} \cite{SHADE} został wybrany, jako najlepiej sprawdzająca się modyfikacja ewolucji różnicowej \cite{CEC2013Comp}. Algorytm \emph{JADE} \cite{JADE} został wybrany jako pierwowzór \emph{SHADE}, który opiera się o prostsze acz ideologicznie podobne koncepcje. Specyfikę obu algorytmów opisano poniżej:
 }
 \begin{description}
-\item[JADE] \cite{JADE} -- algorytm \emph{JADE} jest algorytmem ewolucji różnicowej, wykorzystującym schemat mutacji \emph{current-to-pbest} (zalecane $p \in [0.05, 0.2]$). Algorytm cechuje także indywidualna wartość współczynnika $F$ oraz $Cr$ dla każdego mutowanego i krzyżowanego osobnika w każdej kolejnej iteracji (oznaczenie $F_i^t$, $Cr_i^t$ lub po prostu $F_i$, $Cr_i$). Taka mnogość prób wykorzystywana jest, do adaptacji tych współczynników. Wartości współczynników zmieniane są na podstawie sukcesów bądź porażek przy stosowaniu ich konkretnych wartości. Ponadto, algorytm ten wykorzystuje archiwum punktów do generowania wektorów różnicowych. Stanowi więc on dalekie rozszerzenie podstawowej idei ewolucji różnicowej. Poniżej opisano kluczowe modyfikacje względem \emph{DE/rand/1/bin} występujące w algorytmie.
+\item[JADE] \cite{JADE} -- algorytm \emph{JADE} jest algorytmem ewolucji różnicowej, wykorzystującym schemat mutacji \emph{current-to-pbest} (zalecane $p \in [0.05, 0.2]$). Algorytm cechuje także indywidualna wartość współczynnika $F$ oraz $Cr$ dla każdego mutowanego i krzyżowanego osobnika w każdej kolejnej iteracji (oznaczenie $F_i^t$, $Cr_i^t$ lub po prostu $F_i$, $Cr_i$). W ten sposób wygenerowana liczna próba różnych wartości współczynników wykorzystywana jest do adaptacji tychże. Wartości współczynników zmieniane są na podstawie sukcesów bądź porażek przy stosowaniu ich konkretnych wartości. Ponadto, algorytm ten wykorzystuje archiwum punktów do generowania wektorów różnicowych. Stanowi więc on dalekie rozszerzenie podstawowej idei ewolucji różnicowej. Poniżej opisano kluczowe modyfikacje względem \emph{DE/rand/1/bin} występujące w algorytmie.
 \subsubsection{Archiwum}
 \par{
-W algorytmie \emph{JADE} zastosowano archiwum o wielkości dwóch populacji -- w postaci populacji bieżącej $\mathbf{X}$ i archiwum $\mathbf{A}$. Do archiwum trafiają punkty z populacji $\mathbf{X}$ zastąpione przez osobniki dzieci z populacji $\mathbf{Z}$. Ograniczenie wielkości archiwum $|A| \le \mu$ jest wymuszane na końcu każdej iteracji algorytmu, przez losowe usuwanie osobników z archiwum -- aż do uzyskania jego porządanej wielkości. Archiwum wykorzystywane jest w połączeniu z bieżącą populacją $\mathbf{X}$ wyłącznie do generowania wektorów różnicowych.
+W algorytmie \emph{JADE} zastosowano archiwum o wielkości jednej populacji -- oznaczone jako $\mathbf{A}$. Do archiwum trafiają punkty z populacji $\mathbf{X}$ zastąpione przez osobniki dzieci z populacji $\mathbf{Z}$. Ograniczenie wielkości archiwum $|A| \le \mu$ jest wymuszane na końcu każdej iteracji algorytmu, przez losowe usuwanie osobników z archiwum -- aż do uzyskania jego porządanej wielkości. Archiwum wykorzystywane jest w połączeniu z bieżącą populacją $\mathbf{X}$ wyłącznie do generowania wektorów różnicowych. Charakterystycznym jest to, iż tylko jeden z punktów z pary generującej wektor różnicowy, może pochodzić z archiwum $A$. Dla tego algorytmu, gdy wektor różnicowy zdefiniujemy jako $F \cdot (r_1 - r_2)$, zachodzi więc $r_1 \in X$ oraz $r_2 \in X \cup A$.
 }
 \subsubsection{Adaptacja $F_i$}
 \par{
@@ -747,9 +756,9 @@ Autorzy \cite{JADE} sugerują wykorzystanie wartości $c \in [0.05, 0.2]$.
 
 \subsubsection{Adaptacja $Cr_i$}
 \par{
-Mechanizm adaptacji współczynników $Cr_i$ w algorytmie \emph{JADE} zbudowany jest na podobnej zasadzie jak mechanizm adaptacji współczynników $F_i$. Podobnie jak w przypadku $F_{mid}$, $Cr_{mid}$ jest generowany na podstawie średniej z wartości $Cr_i$ dla sukcesów. Tym razem jednak wykorzystana jest średnia arytmetyczna zamiast średniej Lehmera. Ponadto do generowania wartości $Cr_i$ dla poszczególnych wartości $i$ wykorzystywany jest rozkład normalny zamiast rozkładu cauchiego -- \\ $Cr_i~\sim~N(Cr_{mid}, 0.1)$. Do adaptacji wartości $Cr_{mid}$ wykorzystywana jest ta sama stała $c$ co w przypadku adaptacji $F_{mid}$.
+Mechanizm adaptacji współczynników $Cr_i$ w algorytmie \emph{JADE} zbudowany jest na~podobnej zasadzie jak mechanizm adaptacji współczynników $F_i$. Podobnie jak w przypadku $F_{mid}$, $Cr_{mid}$ jest generowany na podstawie średniej z wartości $Cr_i$ dla sukcesów. Tym razem jednak wykorzystana jest średnia arytmetyczna zamiast średniej Lehmera. Ponadto do generowania wartości $Cr_i$ dla poszczególnych wartości $i$ wykorzystywany jest rozkład normalny zamiast rozkładu cauchiego -- \\ $Cr_i~\sim~N(Cr_{mid}, 0.1)$. Do adaptacji wartości $Cr_{mid}$ wykorzystywana jest ta sama stała $c$ co w przypadku adaptacji $F_{mid}$.
 }
-\item[SHADE]\cite{SHADE} -- algorytm \emph{JADE} doczekał się wielu modyfikacji i rozwinięć \cite{SHADE, JADEexMultiStart, zhang2009adaptive, JADEexOverviewNumerical, JADEexLargeScale, JADEDiscrette, JADE2}. Spośród nich, wyjątkowo obiecujące rezultaty w ramach testu sprawności \emph{CEC 2013 benchmark} (rozdział \ref{CEC2013chapter}) uzyskał algorytm \emph{SHADE}. Autorzy tego algorytmu zauważyli, że ze względu na niedeterministyczny charakter badanych algorytmów pewne wartości adaptowanych parametrów mimo, iż lokalnie przyniosły korzyść, w perspektywie globalnego krajobrazu badanej funkcji nie przynoszą oczekiwanej poprawy. Autorzy wysuwają tezę, iż w związku z tym algorytm jest podatny na tego typu lokalne zaburzenia wartości adaptowanych i nie posiada skutecznego mechanizmu ochrony przed tym zjawiskiem.
+\item[SHADE]\cite{SHADE} -- algorytm \emph{JADE} doczekał się wielu modyfikacji i rozwinięć \cite{SHADE, JADEexMultiStart, zhang2009adaptive, JADEexOverviewNumerical, JADEexLargeScale, JADEDiscrette, JADE2}. Spośród nich wyjątkowo obiecujące rezultaty w ramach testu sprawności \emph{CEC 2013 benchmark} (rozdział \ref{CEC2013chapter}) uzyskał algorytm \emph{SHADE}. Autorzy tego algorytmu zauważyli, że ze względu na niedeterministyczny charakter badanych algorytmów pewne wartości adaptowanych parametrów mimo, iż lokalnie przyniosły korzyść, w perspektywie globalnego krajobrazu badanej funkcji nie przynoszą oczekiwanej poprawy. Autorzy wysuwają tezę, iż w związku z tym algorytm jest podatny na tego typu lokalne zaburzenia wartości adaptowanych i nie posiada skutecznego mechanizmu ochrony przed tym zjawiskiem.
 
 \subsubsection{Modyfikacja adaptacji względem JADE}
 \par{
@@ -781,10 +790,10 @@ Dodatkową modyfikacją wprowadzoną w ramach algorytmu \emph{SHADE} jest uzmien
 }
 \end{description}
 
-\chapter{Metodyka badań}
+\chapter{Metodyka testowania efektywności algorytmów ewolucyjnych}
 \section{Modelowanie statystyczne}
 \par{
-Modelowanie statystyczne to dziedzina zajmująca się tworzeniem modeli charakterystyki zmiennych losowych w oparciu o statystyki z próby losowej. W przypadku niedeterministycznych algorytmów optymalizujących, wynik algorytmu jest zmienną losową. Z tego powodu, porównanie pojedynczych wyników różnych algorytmów, nawet w kontekście tego samego problemu niesie bardzo niewielką informację.
+Modelowanie statystyczne to dziedzina zajmująca się tworzeniem modeli charakterystyki zmiennych losowych w oparciu o statystyki z próby losowej. W przypadku niedeterministycznych algorytmów optymalizujących, wynik algorytmu jest zmienną losową. Z~tego powodu, porównanie pojedynczych wyników różnych algorytmów, nawet w kontekście tego samego problemu niesie bardzo niewielką informację.
 }
 \par{
 Narzędzia modelowania statystycznego pozwalają przy użyciu skończonej liczby próbek zbudować przybliżoną charakterystykę otrzymywanych w kolejnych próbach wyników. Porównanie tego rodzaju charakterystyk niesie już znacznie większą informację, choć zawsze wyznaczaną z pewnym tylko prawdopodobieństwem. W tym rozdziale zostaną opisane metody modelowania statystycznego wykorzystane przy badaniu i porównywaniu algorytmów w ramach pracy.
@@ -792,32 +801,32 @@ Narzędzia modelowania statystycznego pozwalają przy użyciu skończonej liczby
 \subsection{Testy statystyczne}
 \label{TestingStats}
 \par{
-Testy statystyczne służą do estymacji prawdopodobieństwa prawdziwości pewnej hipotezy dotyczącej losowego modelu na podstawie próby losowej. Innymi słowy testy te, pozwalają stwierdzić z pewnym prawdopodobieństwem, że pewna własność zmiennych losowych zachodzi lub nie zachodzi.
+Testy statystyczne służą do estymacji prawdopodobieństwa prawdziwości pewnej hipotezy dotyczącej losowego modelu na podstawie próby losowej. Innymi słowy testy te pozwalają stwierdzić z pewnym prawdopodobieństwem, że zachodzi pewna własność zmiennych losowych.
 }
 \par{
-W przypadku testów statystycznych, testowana hipoteza nosi nazwę hipotezy zerowej, a hipoteza uznawana za prawdziwą w przypadku odrzucenia hipotezy zerowej nazywana jest hipotezą alternatywną.
+W przypadku testów statystycznych testowana hipoteza nosi nazwę hipotezy zerowej, a hipoteza przyjmowana w przypadku odrzucenia hipotezy zerowej nazywana jest hipotezą alternatywną.
 }
 \par{
-Omawiane testy statystyczne, opierają się o wyznaczenie pewnej statystyki testowej (będącej zmienną losową). Następnie, przy użyciu narzędzi modelowania statystycznego, jest wyznaczane prawdopodobieństwo, że przy prawdziwości hipotezy zerowej, uzyskana wartość statystyki będzie taka sama lub bardziej odległa od oczekiwanej -- w ten sposób definiowana jest $p-wartosc$ (poziom istotności). Samo określenie, która wartość jest bardziej odległa od hipotezy zerowej zależy od konstrukcji konkretnych testów.
+Omawiane testy statystyczne opierają się o wyznaczenie pewnej statystyki testowej (będącej zmienną losową). Następnie, przy użyciu narzędzi modelowania statystycznego, jest wyznaczane prawdopodobieństwo, że przy prawdziwości hipotezy zerowej, uzyskana wartość statystyki będzie taka sama lub bardziej odległa od oczekiwanej -- w ten sposób definiowana jest $p-wartosc$ (poziom istotności). Samo określenie, która wartość jest bardziej odległa od hipotezy zerowej, zależy od konstrukcji konkretnych testów.
 }
 \par{
-W przypadku, gdy na podstawie testu chcemy wysnuć (choćby z pewnym prawdopodobieństwem) twierdzenie na temat modelu losowego, często przyjmuje się próg istotności (graniczny poziom istotności), dla którego odrzuca się hipotezę zerową. Najczęściej pojawiającym się w literaturze granicznym istotności jest 0.05 \cite{lowry}, taka wartość będzie przyjęta również w tej pracy. Tego rodzaju wartość oznacza, że średnio co dwudziesta próba udowodnienia hipotezy zerowej zostanie niepoprawnie odrzucona mimo jej poprawności. Tego rodzaju zaburzenia nie powinny jednak wpływać na ogólne wnioski.
+W przypadku, gdy na podstawie testu chcemy wysnuć (choćby z pewnym prawdopodobieństwem) twierdzenie na temat modelu losowego, często przyjmuje się próg istotności (graniczny poziom istotności), dla którego odrzuca się hipotezę zerową. Najczęściej pojawiającym się w literaturze granicznym progiem istotności jest 0.05 \cite{lowry}, taka wartość będzie przyjęta również w tej pracy. Tego rodzaju wartość oznacza, że średnio co dwudziesta próba udowodnienia hipotezy zerowej zostanie niepoprawnie odrzucona mimo jej poprawności. Tego rodzaju zaburzenia nie powinny jednak wpływać na ogólne wnioski.
 }
 \subsubsection{Testy statystyczne w kontekście algorytmów optymalizacyjnych}
 \par{
-W przypadku niedeterministycznych algorytmów optymalizacyjnych, zmienną losową, która może zostać poddana testowaniu statystycznemu i nieść informację na temat jakości algorytmu jest minimalna wartość funkcji optymalizowanej uzyskiwana w kolejnych powtórzeniach algorytmu. Dla celów przykładów w dalszych częściach rozdziału zmienną tę oznaczono $R_{algorytm}$.
+W przypadku niedeterministycznych algorytmów optymalizacyjnych, zmienną losową, która może zostać poddana testowaniu statystycznemu i nieść informację na temat jakości algorytmu, jest minimalna wartość funkcji optymalizowanej uzyskiwana w kolejnych powtórzeniach algorytmu. Dla celów przykładów w dalszych częściach rozdziału zmienną tę oznaczono $R_{algorytm}$.
 }
 \par{
 Próbki z tej zmiennej zebrane dla różnych algorytmów i tego samego problemu pozwalają na modelowanie i porównywanie między sobie algorytmów w kontekście uzyskiwanych przez nie wyników. To z kolei pozwala na wysnuwanie statystycznych wniosków na temat przewagi algorytmu w kontekście pojedynczego zadania. W rozdziale \ref{benchmarkChapter} wskazano jak poszerzyć zastosowanie testów statystycznych przy użyciu dodatkowych narzędzi, w celu umożliwienia badania jakości uzyskiwanych przez algorytm wyników w oderwaniu od konkretnych problemów.
 \subsection{Testy parametryczne}
 \par{
-Statystyczne testy parametryczne służą do weryfikacji pewnych hipotez w oparciu o próbę oraz znaną postać ogólną dystrybuanty statystyki testowej.
+Statystyczne testy parametryczne służą do weryfikacji pewnych hipotez w oparciu o~próbę oraz znaną postać ogólną dystrybuanty statystyki testowej.
 \par{
-Często przyjmowanym w statystyce rozkładem zmiennej losowej o której nie ma żadnych dodatkowych informacji, jest rozkład normalny. Ze względu na prawo wielkich liczb oraz centralne twierdzenie graniczne \cite{centrallimit}, rozkład ten występuje bowiem w realnych problemach nadzwyczaj często. Rozkład ten jest więc często dobrym punktem wyjścia dla pierwszych badań nad modelem losowym.
+Często przyjmowanym w statystyce rozkładem zmiennej losowej, o której nie ma żadnych dodatkowych informacji, jest rozkład normalny. Ze względu na prawo wielkich liczb oraz centralne twierdzenie graniczne \cite{centrallimit}, rozkład ten występuje bowiem w realnych problemach nadzwyczaj często. Rozkład ten jest więc często dobrym punktem wyjścia dla~pierwszych badań nad modelem losowym.
 }
 \subsubsection{Test T-Studenta dla prób niezależnych}
 \par{
-Jednym z testów zakładających normalny rozkład badanych zmiennych losowych, jest test T-Studenta dla prób niezależnych. Test ten, weryfikuje hipotezę zerową o równości średnich rozkładów dwóch zmiennych losowych na podstawie prób z nich pochodzących przy założeniu rozkładu normalnego tychże rozkładów.
+Jednym z testów zakładających normalny rozkład badanych zmiennych losowych, jest test T-Studenta dla prób niezależnych. Test ten weryfikuje hipotezę zerową o równości średnich rozkładów dwóch zmiennych losowych na podstawie prób z nich pochodzących przy założeniu rozkładu normalnego tychże rozkładów.
 }
 \par{
 Średnia wartość zmiennej $R_{algorytm}$ jest uniwersalnym (choć nie jedynym możliwym) sposobem oceny algorytmu w kontekście problemu. W związku z tym, sprawdzenie hipotezy o nierówności średnich, z dwóch prób pochodzących z różnych algorytmów, pozwala wysnuć poprawny statystycznie wniosek na temat przewagi uzyskiwanych przez algorytm wyników. Wniosek ten, obarczony będzie błędem na poziomie granicznego poziomu istotności.
@@ -825,7 +834,7 @@ Jednym z testów zakładających normalny rozkład badanych zmiennych losowych, 
 \par{
 Z tym testem wiążą się jednak dwa podstawowe problemy:
 \begin{description}
-\item[Założenie o normalności rozkładu] -- w przypadku generowanych przez różne algorytmy optymalizacyjne wyników prób na zmiennej losowej $R_{algorytm}$, rozkład tej zmiennej zależy zarówno od algorytmu jak i od rozwiązywanego problemu. Założenie o dążeniu rozkładu rzeczywistego $R_{algorytm}$ do rozkładu normalnego jest w niektórych wypadkach poprawne, jednak istnieją funkcje i algorytmy tego założenia niespełniające. W związku z tym test ten  w zaproponowanym zastosowaniu, zdaje się być obarczony nieznanym błędem metodycznym, co wyklucza jego zastosowanie w tych badaniach.
+\item[Założenie o normalności rozkładu] -- w przypadku generowanych przez różne algorytmy optymalizacyjne wyników prób na zmiennej losowej $R_{algorytm}$, rozkład tej zmiennej zależy zarówno od algorytmu, jak i od rozwiązywanego problemu. Założenie o dążeniu rozkładu rzeczywistego $R_{algorytm}$ do rozkładu normalnego jest w niektórych wypadkach poprawne, jednak istnieją funkcje i algorytmy tego założenia niespełniające. W związku z tym test ten  w zaproponowanym zastosowaniu, zdaje się być obarczony nieznanym błędem metodycznym, co wyklucza jego zastosowanie w tych badaniach.
 \item[Niestabilność średniej] -- średnia arytmetyczna jako statystyka próby podlega znacznemu wpływowi wartości odstających. Odpowiedź na pytanie, czy jest to cecha pożądana, zależy ściśle od tego, co jest rzeczywiście obiektem naszych badań. W tym konkretnym wypadku, przy użyciu wybieranej statystyki staramy się dowiedzieć, jak algorytm wypada w typowym przypadku. Wydaje się, że mediana jest statystyką znacznie lepiej pasującą do tego ogólnego opisu. Warto zauważyć, że choć na potrzeby zawartych w pracy badań wybrano medianę, to nie jest to jedyny właściwy wybór i jest on podyktowany wyłącznie intuicją badacza (i dostępnością narzędzi do testowania hipotez).
 \end{description}
 }
@@ -844,7 +853,7 @@ Test Wilcoxona \cite{mann1947} to nieparametryczny test statystyczny, badający 
 \end{itemize}
 }
 \par{
-Wszystkie powyższe założenia są spełnione dla badanego przypadku. W związku z tym, można przy użyciu tego testu wysnuwać statystycznie poprawne wnioski dotyczące przewagi konkretnych algorytmów (mediany wyników) w konkretnych problemach, bez obarczania wyników błędem metodycznym. To rozwiązanie wydaje się odpowiadać w pełni wymaganiom poniższych badań, w związku z tym test Wilcoxona dla prób niezależnych został w nich wykorzystany.
+Wszystkie powyższe założenia są spełnione dla badanego przypadku. W związku z~tym, można przy użyciu tego testu wysnuwać statystycznie poprawne wnioski dotyczące przewagi konkretnych algorytmów (mediany wyników) w konkretnych problemach, bez obarczania wyników błędem metodycznym. To rozwiązanie wydaje się odpowiadać w pełni wymaganiom poniższych badań, w związku z tym test Wilcoxona dla prób niezależnych został w nich wykorzystany.
 }
 \subsection{Dystrybuanta empiryczna}
 \par{
@@ -859,31 +868,28 @@ Funkcja ta dokładnie opisuje rozkład zmiennej pozwalając wyznaczyć prawdopod
 \par{
 Dystrybuantą empiryczną zmiennej losowej $L$ nazywamy funkcję stanowiącą aproksymację funkcji $D_L$ na podstawie uzyskanych wartości $x$. Uzyskana w ten sposób krzywa, ma zawsze charakter schodkowy (ze względu na skończoną liczbę prób), jednak wraz ze wzrostem wielkości próby, średni błąd dystrybuanty empirycznej względem dystrybuanty rzeczywistej, dąży do zera. Z tego powodu, dystrybuanta empiryczna, przy licznych próbach, pełni nadal funkcję wizualizacyjną.
 }
-\par{
-Na rysunku \ref{EmpiricDist} zaprezentowano wykres rzeczywistej dystrybuanty rozkładu normalnego i nałożony na niego wykres dystrybuanty empirycznej wygenerowanej ze stu elementowej próby.
-}
 
 \section{Testy sprawności typu \emph{black-box}}
 \label{benchmarkChapter}
 \subsection{Testy sprawności (ang. \emph{benchmark})}
 \par{
-W rozdziale \ref{TestingStats} wskazano metodę sprawdzenia jakości heurystycznego algorytmu rozwiązującego problem optymalizacji w kontekście konkretnego problemu. Ze względu na charakter optymizowanej funkcji $f$ i kształty przeszukiwanej podprzestrzeni wyznaczanej przez funkcje $g_1,g_2, \ldots g_n$ różne algorytmy zachowują się różnie dla różnych instancji problemu optymalizacyjnego. Z tego powodu ocena algorytmu w kontekście konkretnego problemu nie może być traktowana jako rzetelna algorytmu.
+W rozdziale \ref{TestingStats} wskazano metodę sprawdzenia jakości heurystycznego algorytmu rozwiązującego problem optymalizacji w kontekście konkretnego problemu. Ze względu na charakter optymalizowanej funkcji $f$ i kształty przeszukiwanej podprzestrzeni wyznaczanej przez funkcje $g_1,g_2, \ldots g_n$, różne algorytmy zachowują się różnie dla różnych instancji problemu optymalizacyjnego. Z tego powodu ocena algorytmu w kontekście konkretnego problemu nie może być traktowana jako rzetelna algorytmu.
 }
 \par{
-Naturalną konsekwencją powyższego twierdzenia, jest próba skonstruowania mechanizmu umożliwiającego ocenę algorytmów niezależnie od konkretnego algorytmu. Testy sprawności (\emph{benchmark}) stanowią pod wieloma względami odpowiedź na to zapotrzebowanie. Ich podstawowym założeniem, jest teza, że właściwą oceną dla algorytmu średnia jakość jego działania dla wszystkich możliwych problemów danej klasy.
+Naturalną konsekwencją powyższego twierdzenia jest próba skonstruowania mechanizmu umożliwiającego ocenę algorytmów niezależnie od konkretnego algorytmu. Testy sprawności (\emph{benchmark}) stanowią pod wieloma względami odpowiedź na to zapotrzebowanie. Ich podstawowym założeniem jest teza, że właściwą oceną dla algorytmu jest przeciętna jakość jego działania dla wszystkich możliwych problemów danej klasy.
 }
 \par{
-Przyjmując to założenie, autorzy testów tego typu starają się dostarczyć reprezentatywnej próbki problemów. Dzięki temu, oceniając średnią jakość algorytmu w kontekście tych problemów, oczekujemy podobnej średniej jakości co w przypadku wszystkich dopuszczalnych problemów. Oznacza to, że średnia jakość algorytmu w kontekście algorytmów z testu, jest estymatorem średniej jakości algorytmu we wszystkich rozważanych problemach. Zgodnie z pierwotnym założeniem, można więc stwierdzić, że jakość algorytmu w kontekście problemów testów sprawnościowych, stanowi estymator jakości algorytmu.
+Przyjmując to założenie, autorzy testów tego typu starają się dostarczyć reprezentatywnej próbki problemów. Dzięki temu, oceniając przeciętną jakość algorytmu w kontekście tych problemów, oczekujemy podobnej przeciętnej jakości co w przypadku wszystkich dopuszczalnych problemów. Oznacza to, że przeciętna jakość algorytmu w kontekście algorytmów z testu, jest estymatorem przeciętnej jakości algorytmu we wszystkich rozważanych problemach. Zgodnie z pierwotnym założeniem, można więc stwierdzić, że jakość algorytmu w kontekście problemów testów sprawnościowych, stanowi estymator jakości algorytmu.
 }
 \par{
-Dodatkowo, należy zauważyć, że ze względu na reprezentatywny charakter problemów zebranych w ramach testów tego typu, można traktować poszczególne funkcje za reprezentantów pewnych klas problemów. Pozwala to wysnuwać wnioski dotyczące zachowania się algorytmów optymalizacyjnych w kontekście problemów posiadających określoną charakterystykę. Taka możliwość bywa bardzo cenna w procesie modyfikacji i strojenia algorytmów.
+Dodatkowo należy zauważyć, że ze względu na reprezentatywny charakter problemów zebranych w ramach testów tego typu, można traktować poszczególne funkcje za reprezentantów pewnych klas problemów. Pozwala to wysnuwać wnioski dotyczące zachowania się algorytmów optymalizacyjnych w kontekście problemów posiadających określoną charakterystykę. Taka możliwość bywa bardzo cenna w procesie modyfikacji i strojenia algorytmów.
 }
 \subsection{Testy typu \emph{black-box}}
 \par{
-Określenie \emph{black-box} odnosi się do charakteru realizacji problemów i dostępu do nich. Założeniem, towarzyszącym testom określanym jako \emph{black-box} jest zgodność problemu z punktu widzenia użytkownika z definicją z rozdziału \ref{ProblemDefinition}. Oznacza to, że użytkownik testów nie możliwości skorzystania przy implementowania algorytmów z innych informacji dt. problemu niż:
+Określenie \emph{black-box} odnosi się do charakteru realizacji problemów i dostępnych sposobów ich obserwowania. Założeniem, towarzyszącym testom określanym jako \emph{black-box} jest zgodność problemu z punktu widzenia użytkownika z definicją z rozdziału \ref{ProblemDefinition}. Oznacza to, że użytkownik testów nie ma możliwości skorzystania przy implementowania algorytmów z innych informacji dotyczących problemu niż:
 \begin{description}
-\item[definicji funkcji ograniczeń $g_1, g_2, \ldots g_m$]
-\item[wartości funkcji $f$ w zadanym przez użytkownika zbiorze $X_B$] -- gdzie $X_B$ stanowi skończony zbiór zadanych przez algorytm punktów w przestrzeni $X_D$.
+\item[definicja funkcji ograniczeń $g_1, g_2, \ldots g_m$]
+\item[wartość funkcji $f$ w zadanym przez użytkownika zbiorze $X_B$] -- gdzie $X_B$ stanowi skończony zbiór zadanych przez algorytm punktów w przestrzeni $X_D$ (patrz rozdział \ref{ProblemDefinition}).
 \end{description}
 Tego rodzaju konstrukcja testu pozwala na zakwalifikowanie rozwiązanego przez użytkownika problemu do zdefiniowanego w sekcji \ref{ProblemDefinition} problemu.
 }
@@ -896,30 +902,30 @@ Klasycznym przykładem tego rodzaju dodatkowej informacji jest podanie przez tw�
 \subsection{Warunki dodatkowe testów}
 \par
 {
-Wiele testów sprawności oprócz podstawowych elementów dostarcza pewnych wskazówek sugerujących sposób testowania algorytmów przy ich użyciu. Wskazówki te nie mają wiążącego charakteru i zwykle nie zastosowanie się do nich nie powoduje spadku jakości badań, jednak ich stosowanie niesie ze sobą następujące korzyści:
+Wiele testów sprawności, oprócz podstawowych elementów, dostarcza pewnych wskazówek sugerujących sposób testowania algorytmów przy ich użyciu. Wskazówki te nie mają wiążącego charakteru i zwykle nie zastosowanie się do nich nie powoduje spadku jakości badań, jednak ich stosowanie niesie ze sobą następujące korzyści:
 \begin{itemize}
-\item Użytkownik zestawu testów zwolniony jest z obowiązku dostrajania, definiowania warunków i analizowania ich wpływu na otrzymywane wyniki.
+\item Użytkownik zestawu testów zwolniony jest z obowiązku definiowania warunków testów i analizowania ich wpływu na otrzymywane wyniki.
 \item Użytkownik zestawu testów ma możliwość skonfrontowania swoich wyników z wynikami innych badań wykorzystujących dany zestaw testów -- można oczekiwać, że większość opublikowanych wyników eksperymentów prowadzonych przy użyciu danego testu sprawności będzie przeprowadzona z zastosowaniem warunków dodatkowych.
 \item Użytkownik zwolniony jest z konieczności obsługi części sytuacji trudnych lub atypowych.
 \end{itemize}
 }
 \par{
-Popularnymi warunkami dodaktowymi są \textbf{budżet} i \textbf{ilość wykonań}.
+Popularnymi warunkami dodaktowymi są \textbf{budżet} i \textbf{liczba wykonań}.
 \begin{description}
 \item[budżet] -- definiuje $X_{B}^{max}$ jako liczbę naturalną taką, że $|X_B| \le X_{B}^{max}$. Wyznaczenie przez zestaw testowy budżetu zwalnia użytkownika z konieczności definiowania deterministycznego warunku stopu algorytmu -- stanowi w tym kontekście warunek awaryjny.
 
 Ponadto zastosowanie budżetu pozwala na nakierowanie badań przy użyciu danego zestawu testów na odwzorowanie realiów konkretnych problemów. Przykładem mogą być testy przy bardzo ograniczonym budżecie, które testują jakość algorytmów przy założeniu braku możliwości dokładnego zbadania przeszukiwanej przestrzeni.
-\item[ilość wykonań] -- dotyczy algorytmów niedeterministycznych i określa jaka ilość prób jaką należy wykonać na danym problemie by statystyki wyznaczane na otrzymanych wynikach były reprezentatywne.
+\item[liczba wykonań] -- określa jaką liczbę prób jaką należy wykonać na danym problemie by~statystyki wyznaczane na otrzymanych wynikach były reprezentatywne. Dotyczy to badania algorytmów niedeterministycznych, gdzie każde uruchomienie algorytmu na~problemie może zakończyć się innym rezultatem.
 \end{description}
 }
 
-\subsection{Wady}
+\subsection{Wady testów sprawności typu \emph{black-box}}          
 \label{WadyBB}
 \par{
-Podstawowym problemem związanym z testami sprawności typu \emph{black-box} jest niska weryfikowalność wyników otrzymywanych w ramach poszczególnych badań. W szczególności możliwe są następujące uchybienia przy prowadzeniu badań przy użyciu większości testów tego rodzaju:
+Podstawowym problemem, związanym z testami sprawności typu \emph{black-box}, jest niska weryfikowalność wyników otrzymywanych w ramach poszczególnych badań. W szczególności możliwe są następujące uchybienia przy prowadzeniu badań przy użyciu większości testów tego rodzaju:
 \begin{itemize}
-\item Wielokrotne powtarzanie eksperymentów przy użyciu niedeterministycznych algorytmów w celu uzyskania możliwie najlepszego wyniku dla poszczególnych zdań.
-\item Wykorzystanie dodatkowych informacji udostępnionych przez twórców zestawu w konstrukcji algorytmu.
+\item Wielokrotne powtarzanie eksperymentów przy użyciu niedeterministycznych algorytmów w celu uzyskania możliwie najlepszego wyniku dla poszczególnych zadań.
+\item Wykorzystanie dodatkowych informacji udostępnionych przez twórców zestawu w~konstrukcji algorytmu.
 \item Przekraczanie budżetu.
 \end{itemize}
 Cześć z tych problemów zostało rozwiązanych np. w testach \emph{BBComp} \cite{BBComp}. W ramach konkursu przed konferencją \emph{CEC 2015}, mającego stanowić bazę dla oceny poszczególnych rozwiązań, użytkownicy mają dostęp jedynie do interfejsów umożliwiających wykonywanie operacji zgodnych z założeniami testu \emph{black-box}. Dopuszczalne jest więc tylko zapytanie o wartość funkcji w punkcie. Ponadto do skorzystania z interfejsu wymagane jest indywidualne konto, do którego przypisany jest budżet. Przekroczenie budżetu nie powinno być więc możliwe.
@@ -931,9 +937,9 @@ Po drugie, nadal udostępniana jest informacja pomocnicza w postaci wartości op
 \par{
 Poza problemami związanymi z weryfikowalnością, występują jeszcze inne problemy charakterystyczne dla testów sprawności typu \emph{black-box}:
 \begin{description}
-\item[precyzja cyfrowa] -- problem wynikający z binarnego charakteru reprezentacji i skończoności pamięci maszyn cyfrowych obsługujących testy. Zbiór liczb rzeczywistych w reprezentacji cyfrowej jest skończony a zgodnie z modelem matematycznym powinien mieć liczność $\mathfrak{c}$. Konsekwencją tego faktu jak również typowo stosowanego standardu reprezentacji liczb zmiennoprzecinkowych IEEE-754 \cite{IEEE754}, jest pewien spodziewany przedział wartości $\epsilon$ na przeszukiwanej przestrzeni $X_D$, dla którego zmienność badanej funkcji jest pomijalna. Tego rodzaju wnioskowanie nie jest możliwe w oparciu o matematyczny model \ref{Model} a zarazem jest powszechnie wykorzystywane np. w algorytmie \emph{ADE} opisanym w rozdziale \ref{ArchiveLiterature}.
-\item[znany charakter problemów] -- problemy tworzone w ramach testów sprawności, są często sztucznymi funkcjami skonstruowanymi wg. najprostszych dla danych właściwości matematycznych formuł. Pewne elementarne własności charakterystyczne dla tych problemów (dla których nie ma naturalnego wytłumaczenia w modelu matematycznym) mogą być wykorzystane przez algorytmy w celu poprawy jakości ich działania. Walka z tym zjawiskiem powinna być możliwa, ale znacząco utrudnia konstruowanie testów. Pewne próby w tym kierunku poczyniono w ramach testów \emph{CEC 2013 benchmark} opisanych w rozdziale \ref{CEC2013chapter}. Jak pokazują wyniki tych testów, zjawisko to ma wpływ na jakość wyników -- problem ten jest więc rzeczywiście obecny w badaniach.
-\item[przeuczenie] -- Proces tworzenia i modyfikowania algorytmów oparty jest o badanie jak zmiany w algorytmie wpływają na wyniki testów sprawności uzyskiwane przez algorytm. W związku z tym, przy próbie oceny jakości algorytmu przy użyciu tego samego lub podobnego zestawu testów, może występować znany z uczenia maszynowego problem przeuczenia. Choć podejście twórców algorytmów, oparte jest o założenie o reprezentatywności zestawu testów w kontekście wszystkich problemów, to praktyczna nieprawdziwość tego założenia odbija się w błędzie wyników testów sprawności, rozumianych jako estymator jakości algorytmu. Ponieważ w czasie tworzenia algorytmu staramy się maksymalizować jakość algorytmu oceniając ją przez pryzmat obarczonego błędem estymatora, po pierwsze pomijamy błąd estymatora w badaniach, ale co gorsza generujemy algorytm, który najprawdopodobniej będzie w praktyce jakościowo słabszy.
+\item[precyzja cyfrowa] -- problem wynikający z binarnego charakteru reprezentacji i skończoności pamięci maszyn cyfrowych obsługujących testy. Zbiór liczb rzeczywistych w reprezentacji cyfrowej jest skończony a zgodnie z modelem matematycznym powinien być nie tylko nieskończony, ale i nieprzeliczalny. Konsekwencją tego faktu, jak również typowo stosowanego standardu reprezentacji liczb zmiennoprzecinkowych IEEE-754 \cite{IEEE754}, jest pewien spodziewany przedział wartości $\epsilon$ na przeszukiwanej przestrzeni $X_D$, dla którego zmienność badanej funkcji jest pomijalna. Tego rodzaju wnioskowanie nie jest możliwe w oparciu o matematyczny model \ref{Model} a zarazem jest powszechnie wykorzystywane np. w algorytmie \emph{ADE} opisanym w rozdziale \ref{ArchiveLiterature}.
+\item[znany charakter problemów] -- problemy, tworzone w ramach testów sprawności, są często sztucznymi funkcjami skonstruowanymi wg najprostszych dla danych właściwości matematycznych formuł. Pewne elementarne własności charakterystyczne dla tych problemów (dla których nie ma naturalnego wytłumaczenia w modelu matematycznym) mogą być wykorzystane przez algorytmy w celu poprawy jakości ich działania. Walka z tym zjawiskiem powinna być możliwa, ale znacząco utrudnia konstruowanie testów. Pewne próby w tym kierunku poczyniono w ramach testów \emph{CEC 2013 benchmark} opisanych w rozdziale \ref{CEC2013chapter}. Jak pokazują wyniki tych testów, zjawisko to ma wpływ na jakość wyników -- problem ten jest więc rzeczywiście obecny w badaniach. Dalsze próby poprawy tego problemu zostały podjęte w ramach zestawu testów \emph{CEC 2015 benchmark}, gdzie transformacje funkcji nie są podane do wiadomości użytkowników.
+\item[przeuczenie] -- Proces tworzenia i modyfikowania algorytmów oparty jest o badanie jak zmiany w algorytmie wpływają na wyniki testów sprawności uzyskiwane przez algorytm. W związku z tym, przy próbie oceny jakości algorytmu przy użyciu tego samego lub podobnego zestawu testów, może występować znany z uczenia maszynowego problem przeuczenia. Choć podejście twórców algorytmów oparte jest o założenie o reprezentatywności zestawu testów w kontekście wszystkich problemów, to praktyczna nieprawdziwość tego założenia odbija się w błędzie wyników testów sprawności, rozumianych jako estymator jakości algorytmu. Ponieważ w czasie tworzenia algorytmu staramy się maksymalizować jakość algorytmu, oceniając ją przez pryzmat obarczonego błędem estymatora, po pierwsze pomijamy błąd estymatora w badaniach, ale co gorsza generujemy algorytm, który najprawdopodobniej będzie w praktyce jakościowo słabszy.
 
 \par{
 Niestety uniknięcie tego problemu jest problematyczne, głównie ze względu na fakt, że większość testów sprawności zbudowana jest w oparciu o podobne funkcje, a zatem wykorzystanie innego zestawu testów do tworzenia i badania algorytmu, prawdopodobnie tylko w niewielkim stopniu zredukuje zaistniały problem. Tezę tę należało by jednak poddać weryfikacji w toku dalszych badań.
@@ -962,14 +968,14 @@ Wszystkie funkcje dostarczone w ramach testu są dostępne dla wymiarowości prz
 Dla wszystkich funkcji zdefiniowano wartość minimum globalnego. Ponadto zdefiniowano, że wartości błędu poniżej $10^{-8}$ nie powinny być rozróżniane i powinny być traktowane jako optimum globalne $\mathbf{x_{best}}$ takie, że $e(\mathbf{x_{best}}) = 0$.
 }
 \par{
-Cechą charakterystyczną tego zestawu testów jest zastosowanie pewnych funkcji w wariantach standardowych jak i obróconych. Pozwala to na wykrycie na etapie testów preferencji algorytmu dla funkcji, które mają wyróżnioną charakterystykę wzdłuż osi. Wyniki eksperymentów wielu algorytmów sugerują znaczący wpływ takiej preferencji \cite{JADE,SHADE}, która zdaje się nie mieć silnego poparcia w realnych problemach.
+Cechą charakterystyczną tego zestawu testów jest zastosowanie pewnych funkcji w wariantach standardowych jak i poddanych obrotowi i translacji. Pozwala to na wykrycie na etapie testów preferencji algorytmu dla funkcji, które mają wyróżnioną charakterystykę wzdłuż osi. Wyniki eksperymentów wielu algorytmów sugerują znaczący wpływ takiej preferencji \cite{JADE,SHADE}.
 }
 \par{
 W ramach opisu testu \emph{CEC 2013 benchmark} dostarczono szeregu wskazań opisujących sposób zebrania danych. Wyszczególniono:
 \begin{itemize}
-\item budżet -- $X_B^{max} = D \cdot 10'000$
-\item ilość wykonań -- $R = 51$
-\item Punkty charakterystyczne na przestrzeni budżetu dla których należy zbierać informacje o najlepszym dotąd odnalezionym punkcie. Pozwala to na sprawdzenie jak zachowuje się dany algorytm dla zadanego budżetu, ale także dla zdefiniowanych mniejszych budżetów -- dla wszystkich badań podążających za wytycznymi.
+\item budżet -- $X_B^{max} = D \cdot 10 000$
+\item liczba wykonań -- $R = 51$
+\item Punkty charakterystyczne na przestrzeni liczby dotąd wyznaczonych wartości funkcji celu dla których należy zbierać informacje o najlepszym dotąd odnalezionym punkcie. Pozwala to na sprawdzenie jak zachowuje się dany algorytm dla zadanego budżetu, ale także dla zdefiniowanych mniejszych budżetów -- dla wszystkich badań podążających za wytycznymi.
 \end {itemize}
 }
 
@@ -984,21 +990,16 @@ Wartym odnotowania jest fakt, że w ramach badań w oparciu o testy \emph{CEC 20
 \end{itemize}
 }
 \par{
-Ponieważ algorytm \emph{SHADE} uzyskał najlepszy wynik pośród algorytmów ewolucji różnicowej, został on wybrany jako baza do zaawansowanego algorytmu \emph{ANADE}.
-}
-
-\subsubsection{Motywacja wyboru zestawu testów}
-\par{
-Zróżnicowane funkcje testowe, precyzyjne wytyczne co do zbierania danych, liczne badania algorytmów ewolucji różnicowej oraz dostępność implementacji w języku wykorzystanym do implementacji sprawiły, że właśnie test \emph{CEC 2013 benchmark} został wybrany jako właściwy do pokazania właściwości badanych w ramach pracy algorytmów.
+Ponieważ algorytm \emph{SHADE} uzyskał najlepszy wynik pośród algorytmów ewolucji różnicowej, został on wybrany jako baza dla zaawansowanych algorytmów proponowanych w ramach pracy.
 }
 
 \chapter{Implementacja archiwum w DE}
 \section{Cele i założenia}
 \par{
-Główną ideą stojącą za projektowaniem algorytmu \emph{NADE} (ang. \emph{Normalized Archive Differential Evolution}), było skonstruowanie algorytmu wykorzystującego archiwum punktów odbiegającego w możliwie niewielkim stopniu od typowych wariantów ewolucji różnicowej. Skupiono się tu przede wszystkim na próbie dołączenia archiwum do klasycznego algorytmu \emph{DE}/\emph{rand}/\emph{1}/\emph{bin}.
+Główną ideą stojącą za projektowaniem wszystkich opisanych w rozdziale algorytmów, było skonstruowanie ich w taki sposób, by wykorzystywały one archiwum punktów a zarazem odbiegały w możliwie niewielkim stopniu od typowych wariantów ewolucji różnicowej. Skupiono się tu przede wszystkim na próbie dołączenia archiwum do klasycznego algorytmu \emph{DE}/\emph{rand}/\emph{1}/\emph{bin}.
 }
 \par{
-Tego rodzaju podejście pozwala zbadać użyteczność archiwum w oderwaniu od innych metod poprawy jakości działania algorytmu. Istnieje możliwość, że uzyskane rezultaty będą przynosiły korzyści zanikające w przypadku bardziej wysublimowanych wariantów algorytmu. W związku z tym, w rozdziale \ref{ANADE} zaproponowano algorytm \emph{ANADE} (ang. \emph{Adaptive Normalized Archive Differential Evolution}), bazujący na algorytmie \emph{SHADE}. W rozdziale \ref{badania}, każdy z zaprojektowanych algorytmów zostanie porównany ze swoim niewykorzystującym archiwum odpowiednikiem.
+Tego rodzaju podejście pozwala zbadać użyteczność archiwum w oderwaniu od innych metod poprawy jakości działania algorytmu. Istnieje możliwość, że uzyskane rezultaty będą przynosiły korzyści zanikające w przypadku bardziej wysublimowanych wariantów algorytmu. W związku z tym, zaproponowano także odpowiedniki algorytmów stosujące badane schematy wykorzystania archiwum, bazujące na algorytmie \emph{SHADE}. W rozdziale~\ref{badania}, każdy z zaprojektowanych algorytmów zostanie porównany ze swoim niewykorzystującym archiwum odpowiednikiem.
 }
 \par{
 W rozdziale tym, w przypadku odwołań do wcześniej istniejących wariantów ewolucji różnicowej, stosowane będą oznaczenia z rozdziału \ref{DEvolChapter}.
@@ -1033,24 +1034,24 @@ Istnieje ryzyko przeuczenia algorytmów wynikające z projektowania algorytmu w 
 Podstawowym celem wykorzystania archiwum w procesie ewolucji różnicowej, było zwielokrotnienie liczby możliwych do wygenerowania wektorów różnicowych bez konieczności powiększania populacji. Intuicyjnym sposobem na zbudowanie tego rodzaju algorytmu jest włączenie w skład populacji poddawanej mutacji różnicowej osobników pochodzących z poprzednich iteracji, które zostały już wyeliminowane z bieżącego pokolenia. W ten sposób uzyskiwana jest możliwość sterowania wielkością takiego archiwum za pomocą nowego parametru $H$ oznaczającego wielkość populacji (archiwum) używanego do generowania wektorów różnicowych w mutacji różnicowej.
 }
 \par{
-Tego rodzaju podejście stanowiło punkt wyjścia dla algorytmu \emph{NADE}. Dla poszczególnych badanych wariantów zastosowano $H \in \{ 1.5 \cdot \mu, 2 \cdot \mu, 4 \cdot \mu \}$.  Takie wartości pozwalają na badanie algorytmu w porównaniu do klasycznego algorytmu ewolucji różnicowej przy standardowych nastawach podanych w rozdziale \ref{StandardParamsSimple}, jednocześnie są to wartości bliskie stosowanym do tej pory w innych algorytmach ewolucji różnicowej wykorzystujących archiwum (rozdział \ref{ArchiveLiterature}).
+Tego rodzaju podejście stanowiło punkt wyjścia dla algorytmu \emph{NADE}. Dla poszczególnych badanych wariantów zastosowano $H \in \{ 1.5 \cdot \mu, 2 \cdot \mu, 4 \cdot \mu \}$.  Takie wartości pozwalają na badanie algorytmu w porównaniu do klasycznego algorytmu ewolucji różnicowej przy standardowych nastawach podanych w rozdziale \ref{StandardParamsSimple}. Jednocześnie są to wartości bliskie stosowanym do tej pory w innych algorytmach ewolucji różnicowej wykorzystujących archiwum (rozdział \ref{ArchiveLiterature}).
 }
 \subsection{Wybór punktów do archiwum}
 \par{
 Kluczowym przy projektowaniu mechanizmu archiwum jest wybranie mechanizmu doboru elementów wchodzących w jego skład.
 W przypadku algorytmu \emph{NADE} zastosowano jako punkt wyjścia najprostszy (opisany w rozdziale \ref{ArchiveTheoryBase}) mechanizm przesuwnego okna archiwum. W przypadku tego algorytmu, do archiwum $\mathbf{A}$ dodawane są punkty, które w czasie selekcji zostały dodane do populacji $\mathbf{X
-}$. Archiwum inicjalizowane jest pierwszym pokoleniem $X$. W przypadku przepełnienia archiwum ($|\mathbf{A}| + \mu > H$) usuwane są z niego osobniki dodane w najwcześniejszym pokoleniu. W przypadku wielu osobników w archiwum pochodzących z tego samego pokolenia, kolejność usuwania elementów jest losowa.
+}$. Archiwum inicjalizowane jest pierwszym pokoleniem $X$. W przypadku przepełnienia archiwum ($|\mathbf{A}| > H$) usuwane są z niego osobniki dodane w najwcześniejszym pokoleniu. W przypadku wielu osobników w archiwum pochodzących z tego samego pokolenia, kolejność usuwania elementów jest losowa. Ta nietypowa konstrukcja włączająca punkty z bieżącego pokolenia w skład archiwum, uzasadniona jest czystością zapisu i prostotą implementacji.
 }
 \par
 Tak zdefiniowany mechanizm doboru elementów do archiwum został dobrany do algorytmu \emph{NADE} jako podstawowy punkt wyjścia. Jednocześnie w toku dalszych prac nie zostały dostrzeżone przesłanki wskazujące, że zmiana tego mechanizmu na inny cechujący się podobnym stopniem złożoności mogła by przyczynić się do statystycznie istotnej poprawy uzyskiwanych przez algorytm rezultatów.
 }
 \subsection{Normalizacja archiwum}
 \par{
-Pierwsze próba porównania algorytmu \emph{NADE} z \emph{DE/rand/1/bin} przy użyciu uproszczonego schematu badań pozwoliła uzyskać wyniki zaprezentowane w tabeli \ref{Eksp1} w rozdziale \ref{ResultsAttachments} (podsumowanie w tabeli \ref{Eksp1short} poniżej). Wyniki te sugerują, iż przyjęta metoda może mieć potencjał dla wielu funkcji, ale zarazem, że uzyskiwana korzyść zanika w miarę jak rośnie wartość $H$.
+Pierwsza próba porównania algorytmu \emph{NADE} z \emph{DE/rand/1/bin} przy użyciu uproszczonego schematu badań pozwoliła uzyskać wyniki zaprezentowane w tabeli \ref{Eksp1} w rozdziale \ref{ResultsAttachments} (podsumowanie w tabeli \ref{Eksp1short} poniżej). Wyniki te sugerują, iż przyjęta metoda może mieć potencjał dla wielu funkcji, ale zarazem, że uzyskiwana korzyść zanika w miarę jak rośnie wartość $H$.
 }
 \begin{table}[h]
 \centering
-\caption{Podsumowanie wyników uproszczonego porównania algorytmu \emph{NADE} bez normalizacji z \emph{DE/rand/1/bin} dla różnych wartości $H$ przy użyciu testu Wilcoxona. W tablicy ilość funkcji, dla których wyniki uległy statystycznej istotnej poprawie (+), pogorszeniu (-) i nie uległy statystycznej zmianie (=)}
+\caption{Podsumowanie wyników uproszczonego porównania algorytmu \emph{NADE} bez normalizacji z \emph{DE/rand/1/bin} dla różnych wartości $H$ przy użyciu testu Wilcoxona. W tablicy liczba funkcji, dla których wyniki uległy statystycznej istotnej poprawie (+), pogorszeniu (-) i nie uległy statystycznej zmianie (=)}
 \label{Eksp1short}
 \begin{tabular}{|l|l|l|l|}
 \hline
@@ -1061,7 +1062,7 @@ Pierwsze próba porównania algorytmu \emph{NADE} z \emph{DE/rand/1/bin} przy u�
 \end{tabular}
 \end{table}
 \par{
-Warto odnotować, że w przypadku ewolucji różnicowej, oczekiwana jest coraz mniejsza wariancja osobników w kolejnych pokoleniach. Przetestowana wersja algorytmu mogła przyczynić się do zaburzenia tej cechy, ponieważ wariancja osobników w każdym pokoleniu zależy od wielu poprzednich -- innymi słowy -- wraz ze wzrostem wartości $H$ rośnie wariancja bieżącej populacji.
+Warto odnotować, że w przypadku ewolucji różnicowej, można się spodziewać coraz mniejszego rozproszenia osobników w kolejnych pokoleniach. Przetestowana wersja algorytmu mogła przyczynić się do zaburzenia tej cechy, ponieważ rozproszenie osobników w każdym pokoleniu zależy od wielu poprzednich -- innymi słowy -- wraz ze wzrostem wartości $H$ rośnie wariancja bieżącej populacji.
 }
 \par{
 W związku z tym, podjęto próbę modyfikacji algorytmu w celu wyeliminowania tej jego właściwości. W ten sposób powstał mechanizm adaptujący archiwum do bieżącego pokolenia. Mechanizm ten składa się z dwóch elementów:
@@ -1163,8 +1164,50 @@ Wyniki wskazują, że dla małych populacji dodanie znormalizowanego archiwum po
 }
 \subsection{Wstępna hipoteza}
 \par{
-Zebrane wyniki sugerują, iż istnienie archiwum zarówno w znormalizowanej jak i zdenormalizowanej nie wpływają korzystnie w statystycznie istotny sposób na wyniki uzyskiwane w większości funkcji z \emph{CEC2013 benchmark}. Istnieje także podejrzenie, że w rzeczywistości istnienie archiwum w takiej formie może powodować pogorszenie uzyskiwanych wyników. Ponieważ jednak wyniki, zwłaszcza w przypadku pomniejszonej populacji są niejednoznaczne, algorytm NADE będzie poddany kompletnym badaniom zgodnym z wytycznymi z \cite{Li13benchmarkfunctions} w rozdziale \ref{badania}.
+Zebrane wyniki sugerują, iż istnienie archiwum zarówno w znormalizowanej jak i zdenormalizowanej nie wpływaja korzystnie w statystycznie istotny sposób na wyniki uzyskiwane w większości funkcji z \emph{CEC2013 benchmark}. Istnieje także podejrzenie, że w rzeczywistości istnienie archiwum w takiej formie może powodować pogorszenie uzyskiwanych wyników. Ponieważ jednak wyniki, zwłaszcza w przypadku pomniejszonej populacji są niejednoznaczne, algorytm NADE będzie poddany kompletnym badaniom zgodnym z wytycznymi z \cite{Li13benchmarkfunctions} w rozdziale \ref{badania}.
 }
+
+\subsection{Kompletna definicja algorytmu \emph{NADE}}
+\begin{algorithm}[H]
+\caption{Algorytm NADE, kompletna definicja (zaczerpnięto funkcje z algorytmu \ref{algorithm:de})}
+\label{algorithm:nade}
+\begin{algorithmic}[1]
+\Function{NADE}{$S$, $U$, $f$, $\mu$, $Cr$, $F$, $\mu$, $H$}
+    \State X $\gets$ \Call{I}{$S$, $U$}
+    \State $A_{normalized}$ $\gets$ \Call{Normalize}{X}
+    \While{!stop}
+        \State $A$ $\gets$ \Call{Denormalize}{$A_{normalized}$, X}
+	    \State V $\gets$ \Call{MutacjaNADE}{X, A, $\mu$, $U$, $F$}
+        \State Z $\gets$ \Call{Krzyzowanie}{X, V, $\mu$, $U$, $Cr$}
+        \State $A$ $\gets$ $A$ $\cup$ \Call{SelekcjaArchiwum}{Z, X, $\mu$, $f$}
+        \If{$|A| > H$}
+	        \State $A$ $\gets$ $A[|A|-H:|A|]$
+        \EndIf
+        \State X $\gets$ \Call{Selekcja}{Z, X, $\mu$, $f$}
+        \State $A_{normalized}$ $\gets$ \Call{Normalize}{A}
+    \EndWhile
+    \State \Return $argmin_{x \in X} f(x)$
+\EndFunction
+\State
+\Function{MutacjaNADE}{X, A, $\mu$, $U$, $F$}
+    \ForAll{i $\in$ 1:$\mu$}
+    	\State V[i] $\gets$ X[$U_\mu$] + $F \cdot $(A[$U_\mu$] - A[$U_\mu$])
+    \EndFor
+    \State \Return V
+\EndFunction
+\State
+\Function{SelekcjaArchiwum}{Z, X, $\mu$, $f$}
+	\State $A_{new} \gets \emptyset$
+    \ForAll{i $\in$ 1:$\mu$}
+        \If{$f($Z$) \le f($X$)$}
+            \State $A_{new}$ $\gets$ $A_{new}$ $\cup$ X[i]
+        \EndIf
+    \EndFor
+    \State \Return $X_{new}$
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
 
 \section{Algorytm \emph{ANADE}}
 \label{ANADE}
@@ -1175,7 +1218,7 @@ Podstawowy wariant algorytmów ewolucji różnicowej, \emph{DE/rand/1/bin} zosta
 Argumentacja ta, doprowadziła do próby skonstruowania algorytmu \emph{ANADE} opartego ściśle o algorytm \emph{SHADE}. Algorytm SHADE został wybrany jako reprezentant zaawansowanych algorytmów ewolucji różnicowej, ze względu na najlepsze w grupie algorytmów ewolucji różnicowej wyniki, jakie uzyskał w teście \emph{CEC2013 benchmark} \cite{CEC2013Comp}.
 }
 \par{
-Algorytm \emph{ANADE} należy więc rozumieć jako taką modyfikację algorytmu \emph{SHADE}, która normalizuje i denormalizuje archiwum (istniejące już w SHADE) wg. schematów znanych z \emph{NADE}. Tę modyfikację poddano weryfikacji przez zestawienie uzyskiwanych przez nią wyników z wynikami uzyskiwanymi przez SHADE. Dla obu algorytmów zastosowano nastawy zgodne z \cite{SHADE}. Jako bazę implementacji wykorzystano kod źródłowy udostępniony przez autorów \emph{SHADE} w ramach konferencji \emph{CEC2013}. W takim zestawieniu uzyskano wyniki jak w tablicy \ref{Eksp3short} poniżej (pełne wyniki w załączniku, tablica \ref{Eksp3}).
+Algorytm \emph{ANADE} należy więc rozumieć jako taką modyfikację algorytmu \emph{SHADE}, która normalizuje i denormalizuje archiwum (istniejące już w SHADE) wg schematów znanych z \emph{NADE}. Tę modyfikację poddano weryfikacji przez zestawienie uzyskiwanych przez nią wyników z wynikami uzyskiwanymi przez SHADE. Dla obu algorytmów zastosowano nastawy zgodne z \cite{SHADE}. Jako bazę implementacji wykorzystano kod źródłowy udostępniony przez autorów \emph{SHADE} w ramach konferencji \emph{CEC2013}. W takim zestawieniu uzyskano wyniki jak w tablicy \ref{Eksp3short} poniżej (pełne wyniki w załączniku, tablica \ref{Eksp3}).
 }
 
 \begin{table}[h]
@@ -1198,16 +1241,49 @@ Uzyskane wyniki wskazują na trzy hipotezy do przetestowania w pełnym schemacie
 \end{itemize}
 }
 
+%\subsection{Kompletna definicja algorytmu \emph{ANADE}}
+%\begin{algorithm}[H]
+%\caption{Algorytm ANADE według zapisu z \cite{SHADE}}
+%\label{algorithm:nade}
+%\begin{algorithmic}[1]
+%\Function{ANADE}{$S$, $U$, $f$, $\mu$, $Cr$, $F$, $\mu$}
+%    \State G $\gets$ 0
+%    \State Losowa inicjalizacja populacji $P_0 = (x_{1,0}, \cdots, x_{N,0})$
+%    \State Ustawienie wszystkich wartości $M_{CR}$, $M_F$ na 0.5
+%    \State Archiwum $\mathbf{A}$ $\gets$ $\emptyset$
+%    \While{!stop}
+%    	\State $S_{CR}$ $\gets$ $\emptyset$, $S_{F}$ $\gets$ $\emptyset$
+%    	\For{$i$ $\gets$ $1$ to $N$}
+%    		\State $r_i$ $\gets$ Wybierz losowo ze zbioru [1,H]
+%    		\State $CR_{i,G}$ $\gets$ \Call{$randn_i$}{$M_{CR,r_i}$, $0.1$}
+%	   		\State $F_{i,G}$ $\gets$ \Call{$randc_i$}{$M_{F,r_i}$, $0.1$}
+%	  		\State $p_{i,G}$ $\gets$ $rand[p_{min}, 0.2]$
+%	  		\State Wygeneruj punkt $u_{i,G}$ (schemat current-to-\emph{p}best/1/bin)
+%    	\EndFor
+%		\For{$i$ $\gets$ $1$ to $N$}
+%			\
+%    		\State $r_i$ $\gets$ Wybierz losowo ze zbioru [1,H]
+%    		\State $CR_{i,G}$ $\gets$ \Call{$randn_i$}{$M_{CR,r_i}$, $0.1$}
+%	   		\State $F_{i,G}$ $\gets$ \Call{$randc_i$}{$M_{F,r_i}$, $0.1$}
+%	  		\State $p_{i,G}$ $\gets$ $rand[p_{min}, 0.2]$
+%	  		\State Wygeneruj wektor różnicowy $u_{i,G}$ (schemat current-to-\emph{p}best/1/bin)
+%    	\EndFor
+%    \EndWhile
+%\EndFunction
+%\end{algorithmic}
+%\end{algorithm}
+
+
 \section{Algorytm \emph{grADE}}
 \subsection{Podejście do wykorzystania archiwum}
 \par{
 Ponieważ początkowy pomysł wykorzystania archiwum w procesie mutacji różnicowej przyniósł we wstępnych badaniach wyniki nie wskazujące na jego pozytywny wpływ na jakość uzyskiwanych wyników, zdecydowano się na przetestowanie innego modelu archiwum. Wychodząc, z założenia, że osobniki pochodzące z kolejnych populacji mogą (mimo normalizacji) generować zbyt długie lub zbyt rozrzucone wektory różnicowe, postanowiono zbudować archiwum, które będzie pozwalało na budowanie wektorów różnicowych w oparciu o dwa punkty pochodzące z tej samej populacji.
 }
 \par{
-Zadanie to postanowiono rozwiązać organizując archiwum w zbiór, zbiorów punktów z przestrzeni przeszukiwanej. Każdy zbiór punktów w archiwum, odpowiada jednej z historycznych populacji. W ten sposób uzyskano możliwość sterowania wielkością archiwum jako ilością historycznych pokoleń w nim zawartych. Dla zachowania oznaczeń, na potrzeby tej pracy przyjęto parametr $H$ oznaczający ilość osobników w archiwum. Dla tego algorytmu $H = n \cdot \mu$ gdzie, $n \in \mathbb{N}$. Podobnie jak w przypadku algorytmu \emph{NADE} archiwum zorganizowane zostało w kolejkę -- w przypadku gdy archiwum przekracza zadany parametrem rozmiar, usuwane jest z niego najstarsze pokolenie.
+Zadanie to postanowiono rozwiązać organizując archiwum w zbiór zbiorów punktów z przestrzeni przeszukiwanej. Każdy zbiór punktów w archiwum, odpowiada jednej z historycznych populacji. W ten sposób uzyskano możliwość sterowania wielkością archiwum jako ilością historycznych pokoleń w nim zawartych. Dla zachowania oznaczeń, na potrzeby tej pracy przyjęto parametr $H$ oznaczający ilość osobników w archiwum. Dla tego algorytmu $H = n \cdot \mu$ gdzie, $n \in \mathbb{N}$. Podobnie jak w przypadku algorytmu \emph{NADE} archiwum zorganizowane zostało w kolejkę -- w przypadku gdy archiwum przekracza zadany parametrem rozmiar, usuwane jest z niego najstarsze pokolenie.
 }
 \par{
-Tego rodzaju archiwum jest wykorzystywane w procesie generowania wektorów różnicowych przez wybranie z równym prawdopodobieństwem populacji archiwum a następnie wybranie z niego dwóch różnych punktów tworzących wektor różnicowy (również z równym prawdopodobieństwem).
+Tego rodzaju archiwum jest wykorzystywane w procesie generowania wektorów różnicowych przez wybranie z równym prawdopodobieństwem populacji z~archiwum a następnie wybranie z niego dwóch różnych punktów tworzących wektor różnicowy (również z równym prawdopodobieństwem).
 }
 \par{
 Tak zdefiniowany algorytm został nazwany \emph{grADE} (ang. \emph{generation robust archived differential evolution}).
@@ -1255,13 +1331,44 @@ Dodatkowo, by stwierdzić zasadność procedury normalizacji w algorytmie \emph{
 \par{
 Przedstawione wyniki sugerują dwa wnioski:
 \begin{itemize}
-\item Archiwum zorganizowane wg. zaproponowanego schematu, wpływa w sposób statystycznie istotny i pozytywny na jakość uzyskiwanych przez klasyczny algorytm ewolucji różnicowej wyników.
-\item Normalizacja punktów w przypadku tego wariantu archiwum wg. procedury z \emph{NADE} nie wpływa znacząco na uzyskiwane w algorytmie \emph{grADE} wyniki.
+\item Archiwum zorganizowane wg zaproponowanego schematu, wpływa w sposób statystycznie istotny i pozytywny na jakość uzyskiwanych przez klasyczny algorytm ewolucji różnicowej wyników.
+\item Normalizacja punktów w przypadku tego wariantu archiwum wg procedury z \emph{NADE} nie wpływa znacząco na uzyskiwane w algorytmie \emph{grADE} wyniki.
 \end{itemize}
 }
 \par{
 Pierwsza z tez, zostanie sprawdzona w pełnych badaniach w rozdziale \ref{badania}. Druga natomiast zostanie przyjęta jako metoda ograniczenia ilości testowanych scenariuszy i związku z tym, w dalszej części pracy będzie wykorzystywana tylko wersja algorytmu bez normalizacji punktów. Tak sformułowany algorytm będzie nazywany \emph{grADE}.
 }
+
+\subsection{Kompletna definicja algorytmu \emph{grADE}}
+\begin{algorithm}[H]
+\caption{Algorytm grADE, kompletna definicja}
+\label{algorithm:grade}
+\begin{algorithmic}[1]
+\Function{grADE}{$S$, $U$, $f$, $\mu$, $Cr$, $F$, $\mu$, $H$}
+    \State X $\gets$ \Call{I}{$S$, $U$}
+    \State A $\gets$ $\emptyset$
+    \While{!stop}
+	    \State V $\gets$ \Call{MutacjaGrADE}{X, A, $\mu$, $U$, $F$}
+        \State Z $\gets$ \Call{Krzyzowanie}{X, V, $\mu$, $U$, $Cr$}
+        \State A $\gets$ A $\cup$ \{X\}
+		\If{$|A| \cdot \mu > H$}
+	        \State A $\gets$ A[2:$|$A$|$]
+        \EndIf
+        \State X $\gets$ \Call{Selekcja}{Z, X, $\mu$, $f$}
+    \EndWhile
+    \State \Return $argmin_{x \in X} f(x)$
+\EndFunction
+\State
+\Function{MutacjaGrADE}{X, A, $\mu$, $U$, $F$}
+    \ForAll{i $\in$ 1:$\mu$}
+    	\State $X_i$ $\gets$ (A $\cup$ \{X\})[$U_{|A \cup \{X\}|}$]
+	   	\State V[i] $\gets$ X[$U_\mu$] + $F \cdot $($X_i$[$U_\mu$] - $X_i$[$U_\mu$])
+    \EndFor
+    \State \Return V
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
 
 \section{Algorytm \emph{grAADE}}
 \label{grAADE}
@@ -1269,10 +1376,10 @@ Pierwsza z tez, zostanie sprawdzona w pełnych badaniach w rozdziale \ref{badani
 Ponieważ zaproponowane w algorytmie \emph{grADE} podejście do archiwum przyniosło we wstępnych badaniach poprawę jakości uzyskiwanych wyników względem \emph{DE/rand/1/bin}, należało skupić się (z powodów opisanych w rozdziale \ref{ANADE}) na możliwości zastosowania tego schematu archiwum w bardziej złożonych wariantach ewolucji różnicowej.
 }
 \par{
-Podobnie jak w przypadku algorytmu \emph{ANADE}, na bazę zaawansowanego algorytmu opartego o zaproponowany schemat mutacji w oparciu o archiwum wybrano algorytm \emph{SHADE}. W konsekwencji, zastąpiono wykorzystywane w mutacji archiwum i wektor różnicowy z losowych punktów populacji, dobierany był z archiwum zgodnym ze schematem \emph{grADE}. W ten sposób powstał algorytm \emph{grAADE}.
+Podobnie jak w przypadku algorytmu \emph{ANADE}, na bazę zaawansowanego algorytmu opartego o zaproponowany schemat mutacji w oparciu o archiwum wybrano algorytm \emph{SHADE}. W konsekwencji, zastąpiono wykorzystywane w bazowym algorytmie archiwum schematem zaczerpniętym z algorytmu \emph{grADE}. W ten sposób powstał algorytm \emph{grAADE}.
 }
 \par{
-Na tak przygotowanym algorytmie przeprowadzono badania wg. uproszczonego schematu uzyskując wyniki jak w tablicy \ref{Anal12} zaprezentowanej w załączniku \ref{ResultsAttachments} (skrót w tablicy \ref{Anal12sum} poniżej).
+Na tak przygotowanym algorytmie przeprowadzono badania wg uproszczonego schematu uzyskując wyniki jak w tablicy \ref{Anal12} zaprezentowanej w załączniku \ref{ResultsAttachments} (skrót w tablicy \ref{Anal12sum} poniżej).
 }
 \begin{table}[h]
 \centering
@@ -1333,21 +1440,52 @@ Zaprezentowane wyniki sugerują następujące tezy, które zostaną poddane wery
 \end{itemize}
 }
 
-\chapter{Badania}
+
+\subsection{Kompletna definicja algorytmu \emph{shAde}}
+\begin{algorithm}[H]
+\caption{Algorytm shAde, kompletna definicja}
+\label{algorithm:shAde}
+\begin{algorithmic}[1]
+\Function{shAde}{$S$, $U$, $f$, $\mu$, $Cr$, $F$, $\mu$, $H$}
+    \State X $\gets$ \Call{I}{$S$, $U$}
+    \State A $\gets$ $\emptyset$
+    \While{!stop}
+	    \State V $\gets$ \Call{MutacjaShAde}{X, A, $\mu$, $U$, $F$}
+        \State Z $\gets$ \Call{Krzyzowanie}{X, V, $\mu$, $U$, $Cr$}
+        \State A $\gets$ A $\cup$ \Call{SelekcjaArchiwum}{Z, X, $\mu$, $f$}
+		\If{$|A| > H$}
+	        \State A $\gets$ \Call{LosoweElementyBezPowtorzen}{A, H}
+        \EndIf
+        \State X $\gets$ \Call{Selekcja}{Z, X, $\mu$, $f$}
+    \EndWhile
+    \State \Return $argmin_{x \in X} f(x)$
+\EndFunction
+\State
+\Function{MutacjaShAde}{X, A, $\mu$, $U$, $F$}
+    \ForAll{i $\in$ 1:$\mu$}
+	   	\State V[i] $\gets$ X[$U_\mu$] + $F \cdot $($X$[$U_\mu$] - $A$[$U_{|A|}$])
+    \EndFor
+    \State \Return V
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+gdzie funkcja $LosoweElementyBezPowtorzen(A, H)$ tworzy losowo z równym prawdopodobieństwem $H$-elementowy podzbiór zbioru $A$.
+
+\chapter{Badania różnych schematów wykorzystania archiwum}
 \label{badania}
-\section{Cel}
+\section{Cel badań}
 \label{CelHipotezy}
 \par{
-W poprzednim rozdziale przy użyciu uproszczonego schematu badań wysunięto hipotezy dotyczące wpływu zorganizowanego wg. wskazanych procedur archiwum na wyniki uzyskiwane w różnych wariantach ewolucji różnicowej. W celu zweryfikowania tych tez, przeprowadzono badania w oparciu o schemat zgodny z zalecaniami twórców \emph{CEC2013 benchmark}.
+W poprzednim rozdziale przy użyciu uproszczonego schematu badań wysunięto hipotezy dotyczące wpływu zorganizowanego wg wskazanych procedur archiwum na wyniki uzyskiwane w różnych wariantach ewolucji różnicowej. W celu zweryfikowania tych tez, przeprowadzono badania w oparciu o schemat zgodny z zalecaniami twórców \emph{CEC2013 benchmark}.
 }
 \par{
 Weryfikacji poddane zostaną następujące tezy:
 \begin{enumerate}
-\item Archiwum znormalizowane wg. procedury algorytmu \emph{NADE} powoduje poprawę jakości uzyskiwanych przez ewolucję różnicową dla niektórych typów funkcji.
+\item Archiwum znormalizowane wg procedury algorytmu \emph{NADE} powoduje poprawę jakości uzyskiwanych przez ewolucję różnicową dla niektórych typów funkcji.
 \item Tego rodzaju archiwum nie jest perspektywiczne jeśli chodzi o jakość algorytmu dla nieznanego charakteru problemu.
 \item Wpływ takiej modyfikacji na jakość wyników zanika w przypadku zastosowania go w zaawansowanym algorytmie ewolucji różnicowej (\emph{SHADE}).
-\item W przypadku archiwum zorganizowanego wg. \emph{NADE}, niewielkie wartości H (ok. $1.5 \cdot \mu$) dają największe korzyści przy jednoczesnym zminimalizowaniu liczby problemów, dla których przynosi ono skutek negatywny.
-\item Wykorzystanie archiwum wg. procedury zaproponowanej w algorytmie \emph{grADE} przynosi statystycznie istotną poprawę w przypadku większości badanych problemów.
+\item W przypadku archiwum zorganizowanego wg \emph{NADE}, niewielkie wartości H (ok. $1.5 \cdot \mu$) dają największe korzyści przy jednoczesnym zminimalizowaniu liczby problemów, dla których przynosi ono skutek negatywny.
+\item Wykorzystanie archiwum wg procedury zaproponowanej w algorytmie \emph{grADE} przynosi statystycznie istotną poprawę w przypadku większości badanych problemów.
 \item Mechanizm archiwum pochodzący z algorytmu \emph{SHADE}, a wykorzystywany w \emph{shAde} przynosi statystycznie istotną poprawę w przypadku większości badanych problemów.
 \item Mechanizm archiwum zaczerpnięty \emph{shAde} działa w przeważającej ilości problemów skuteczniej niż archiwum zgodne z \emph{grADE}.
 \end{enumerate}
@@ -1383,7 +1521,7 @@ Szczególnie istotne jest sprawdzenie postawionych tez w kontekście innych niż
 \end{itemize}
 }
 \par{
-W celu weryfikacji tez, wg. powyższego scenariusza zostaną wykonane następujące porównania:
+W celu weryfikacji tez, wg powyższego scenariusza zostaną wykonane następujące porównania:
 \begin{itemize}
 \item Porównanie algorytmu \emph{DE/rand/1/bin} i \emph{NADE} dla $H \in \{1.5 \cdot \mu, 2 \cdot \mu, 4 \cdot \mu \}$
 \item Porównanie algorytmu \emph{SHADE} i \emph{ANADE} dla standardowych parametrów \emph{SHADE}.
@@ -1463,7 +1601,7 @@ Przeprowadzone eksperymenty pozwoliły na uzyskanie wyników przedstawionych w t
 \section{Wnioski}
 \subsection{Algorytmy \emph{NADE} i \emph{ANADE}}
 \par{
-Analizując wyniki eksperymentów, należy zwrócić uwagę, na fakt, że w uzyskanych wynikach wyraźnie widać, że dla pewnych funkcji dodanie archiwum (szczególnie w przypadku algorytmu NADE) niezależnie od przyjętych parametrów przynosi korzyść. Wstępne badania sugerowały, że może mieć to związek z charakterem funkcji i dotyczyć w szczególności wielu funkcji jedno modalnych ($f_1$ do $f_5$) oraz złożonych ($f_{21}$ do $f_{28}$). W tych grupach podsumowanie testu Wilcoxona prezentowało się jak w tablicy \ref{FULLSUMMARYUNIandCOMPLEX} poniżej. Sugeruje to, że algorytm poszerzony o niewielkie archiwum w najlepszym razie nie traci na możliwościach przeszukiwania w przypadku funkcji tego rodzaju (i to tylko dla $H = 1.5 \cdot \mu$. Obala to hipotezę pierwszą, szczególnie dla większych wymiarowości problemów. Istnieją funkcje, dla których znormalizowane archiwum przynosi poprawę jednak jest to nieliczna i nieregularna podgrupa wszystkich analizowanych problemów.
+Analizując wyniki eksperymentów, należy zwrócić uwagę, na fakt, że w uzyskanych wynikach wyraźnie widać, że dla pewnych funkcji dodanie archiwum (szczególnie w przypadku algorytmu NADE) niezależnie od przyjętych parametrów przynosi korzyść. Wstępne badania sugerowały, że może mieć to związek z charakterem funkcji i dotyczyć w szczególności wielu funkcji jedno modalnych ($f_1$ do $f_5$) oraz złożonych ($f_{21}$ do $f_{28}$). W tych grupach podsumowanie testu Wilcoxona prezentowało się jak w tablicy \ref{FULLSUMMARYUNIandCOMPLEX} poniżej. Sugeruje to, że algorytm poszerzony o niewielkie archiwum w najlepszym razie nie traci na możliwościach przeszukiwania w przypadku funkcji tego rodzaju (i to tylko dla $H = 1.5 \cdot \mu$). Obala to hipotezę pierwszą, szczególnie dla większych wymiarowości problemów. Istnieją funkcje, dla których znormalizowane archiwum przynosi poprawę jednak jest to nieliczna i nieregularna podgrupa wszystkich analizowanych problemów.
 }
 \begin{table}[h]
 \centering
@@ -1504,16 +1642,16 @@ Czwartą hipotezę najłatwiej potwierdzić sumując wartości z kolumny $+$ i $
 \end{table}
 \subsection{Algorytmy \emph{grADE} i \emph{shAde}}
 \par{
-Na podstawie zebranych rezultatów można wysnuć wnioski dotyczące postawionych w rozdziale \ref{CelHipotezy}. Na podstawie tablicy \ref{shAde_and_grADE} można potwierdzić hipotezy piątą oraz szóstą. Bilans jakości dla wszystkich badanych wymiarowości problemu i wartości parametrów nowych algorytmów jest bowiem dodatni (tablica \ref{Bilans_shAde_grAde}).
+Na podstawie zebranych rezultatów można wysnuć wnioski dotyczące postawionych w rozdziale \ref{CelHipotezy}. Na podstawie tablicy \ref{shAde_and_grADE} można potwierdzić hipotezy piątą oraz szóstą. Bilans jakości dla wszystkich badanych wymiarowości problemu i wartości parametrów nowych algorytmów jest bowiem dodatni (tablica \ref{shAde_and_grADE}).
 }
 \par{
-Ostatnia z postawionych hipotez pozostaje sprawą otwartą. Dla wymiarowości $D \in {30, 50}$ algorytm \emph{shAde} rozwiązał statystycznie istotnie lepiej od \emph{grADE} znacznie więcej problemów niż gorzej. Warto jednak zwrócić uwagę, na niejednoznaczną sytuację w przypadku wymiarowości $D = 10$, gdzie algorytm \emph{grADE} wysuwa się na niewielkie prowadzenie.
+Ostatnia z postawionych hipotez pozostaje sprawą otwartą. Dla wymiarowości $D \in $\{$30, 50$\} algorytm \emph{shAde} rozwiązał statystycznie istotnie lepiej od \emph{grADE} znacznie więcej problemów niż gorzej. Warto jednak zwrócić uwagę, na niejednoznaczną sytuację w przypadku wymiarowości $D = 10$, gdzie algorytm \emph{grADE} wysuwa się na niewielkie prowadzenie.
 }
 \par{
 Dodatkowo, należy zwrócić uwagę, że z wyjątkiem wymiarowości $D = 30$, \emph{grADE} rozwiązał statystycznie istotnie lepiej niż \emph{shAde} znaczną liczbę problemów (ponad 20\%). Należy w związku z tym wnosić, że zarówno wymiarowość problemu, jak i jego charakter może wpływać na skuteczność obu metod i sprawiać, że jedna zyskuje przewagę nad drugą.
 }
 \par{
-Archiwum zaczerpnięte z \emph{shAde} nadal jawi się jako najlepszy i najbezpieczniejszy spośród przebadanych punkt wyjścia dla nieznanego problemu. Zebrane dane nie pozwalają jednak na bezkrytyczne przyjęcie tej metody i w wskazanie jej jednoznacznej przewagi. Istnieją ku temu trzy powody:
+Archiwum zaczerpnięte z \emph{shAde} nadal jawi się jako najlepszy i najbezpieczniejszy spośród przebadanych punkt wyjścia dla nieznanego problemu. Zebrane dane nie pozwalają jednak na bezkrytyczne przyjęcie tej metody i w wskazanie na jej jednoznaczną przewagę. Istnieją ku temu trzy powody:
 \begin{itemize}
 \item Nie przeanalizowano zachowania badanych metod w kontekście innych niż \emph{SHADE} zaawansowanych algorytmów ewolucji różnicowej.
 \item Nie została dostatecznie zbadana przestrzeń parametrów tych algorytmów w kontekście jakości uzyskiwanych przez nie wyników.
@@ -1538,8 +1676,8 @@ Podstawowym elementem, który należy rozważyć przy omawianiu metodyki pracy n
 \par{
 Tak niski poziom stabilności badanych algorytmów powoduje dwie ważne konsekwencje:
 \begin{description}
-\item[podatność na błędy] -- popełnienie drobnego błędu w implementacji założonej koncepcji może znacząco wpłynąć na końcowe wyniki. W praktyce gdy błąd doprowadzi do pogorszenia wyników, może to spowodować przedwczesne zakończenie badań nad konkretną koncepcją. Gdy z kolei błąd doprowadzi do poprawy wyników, wysunięte wnioski a przede wszystkim uargumentowanie co spowodowało poprawę rezultatów będą błędne. Zwłaszcza ta druga sytuacja jest niebezpieczna, gdyż autorzy kolejnych prac w oparciu o wcześniejsze badania mogą brnąć w gałąź nauki opartą na błędnych przesłankach.
-\item[dużą ilość stopni swobody] -- ze względu na ogromny wpływ każdego elementu na ogólny wynik działania algorytmu, a także na zachodzące między elementami zależności, ilość wariantów algorytmów które należy poddać badaniu by potwierdzić pewne teorie nie pozostawiając pola na wątpliwości jest niezliczona. Z tego powodu, częstą praktyką jest przyjmowanie pewnych wartości parametrów czy koncepcji ze wcześniejszych prac i domniemanie, że w połączeniu z proponowanymi modyfikacjami będą one stanowiły reprezentatywną próbę. Analogicznie postąpiono w tej pracy. Ponieważ badanie wszelkich kontr teorii dotyczących zmian w wynikach uzyskiwanych przez algorytm jest przy dzisiejszym stanie wiedzy niemożliwe. Próba wyeliminowania tego problemu zdaje się być bardzo ciekawym, choć niewątpliwie dalece złożonym problemem, godnym dalszych badań.
+\item[podatność na błędy] -- popełnienie drobnego błędu w implementacji założonej koncepcji może znacząco wpłynąć na końcowe wyniki. W praktyce gdy błąd doprowadzi do pogorszenia wyników, może to spowodować przedwczesne zakończenie badań nad konkretną koncepcją. Gdy z kolei błąd doprowadzi do poprawy wyników, wysunięte wnioski, a przede wszystkim uargumentowanie, co spowodowało poprawę rezultatów będą błędne. Zwłaszcza druga z tych sytuacji jest niebezpieczna, gdyż autorzy kolejnych prac w oparciu o wcześniejsze badania mogą brnąć w koncepcje oparte na błędnych przesłankach.
+\item[dużą liczba stopni swobody] -- ze względu na ogromny wpływ każdego elementu na ogólny wynik działania algorytmu, a także na zachodzące między elementami zależności, ilość wariantów algorytmów które należy poddać badaniu by potwierdzić pewne teorie nie pozostawiając pola na wątpliwości jest niezliczona. Z tego powodu, częstą praktyką jest przyjmowanie pewnych wartości parametrów czy koncepcji ze wcześniejszych prac i domniemanie, że w połączeniu z proponowanymi modyfikacjami będą one stanowiły reprezentatywną próbę. Analogicznie postąpiono w tej pracy. Ponieważ badanie wszelkich kontr teorii dotyczących zmian w wynikach uzyskiwanych przez algorytm jest przy dzisiejszym stanie wiedzy niemożliwe. Próba wyeliminowania tego problemu zdaje się być bardzo ciekawym, choć niewątpliwie dalece złożonym problemem, godnym dalszych badań.
 \end{description}
 }
 \subsection{Czas obliczeń}
@@ -1577,10 +1715,10 @@ Ponadto, przy wstępnych badaniach, wykorzystanie tego języka może sugerować 
 Z drugiej strony, język R wydaje się nadal znakomitym narzędziem analizy danych, pozwalającym przy wykorzystaniu wbudowanych funkcjonalności wykonywać złożone operacje statystyczne na danych, bez konieczności wnikania użytkownika w ich implementację. Dodatkowo język R udostępnia szereg mechanizmów wizualizacji, które dodatkowo zwiększają jego atrakcyjność na etapie analizy danych. Stosowność jego zastosowania, jest więc tu podważana tylko w kontekście obliczeń symulacyjnych -- takich jak testy algorytmów optymalizacyjnych.
 }
 \par{
-Tego rodzaju rozumowanie prowadzi do poszukiwania odpowiedzi na pytanie -- jaki język implementacji byłby najbardziej właściwy. W późniejszej części badań w ramach pracy wykorzystano do implementacji silnie typowany język obiektowy -- \emph{C++}. Spowodowało to znaczne zwiększenie tempa prac, mimo spowolnienia tempa implementacji. Mniejsza ilość błędów i większy wachlarz możliwości jeśli chodzi o ich odnajdywanie, spowodowały, że ilość kosztownych uruchomień symulacji znacząco zmalała przy jednoczesnym niewątpliwym wzroście wiarygodności badań. Dodatkową korzyścią płynącą z wykorzystania tego języka był wzrost wydajności obliczeń, a więc skrócenie czasu oczkowania na wyniki. Czas ten nie był dokładnie zmierzony ponieważ nie był on przedmiotem badań, jednak przyspieszenie obliczeń można szacować na 2--3 krotne.
+Tego rodzaju rozumowanie prowadzi do poszukiwania odpowiedzi na pytanie -- jaki język implementacji byłby najbardziej właściwy. W późniejszej części badań w ramach pracy wykorzystano do implementacji silnie typowany język obiektowy -- \emph{C++}. Spowodowało to znaczne zwiększenie tempa prac, mimo spowolnienia tempa implementacji. Mniejsza ilość błędów i większy wachlarz możliwości jeśli chodzi o ich odnajdywanie, spowodowały, że ilość kosztownych uruchomień symulacji znacząco zmalała przy jednoczesnym niewątpliwym wzroście wiarygodności badań. Dodatkową korzyścią płynącą z wykorzystania tego języka był wzrost wydajności obliczeń, a więc skrócenie czasu oczkiwania na wyniki. Czas ten nie był dokładnie zmierzony ponieważ nie był on przedmiotem badań, jednak przyspieszenie obliczeń można szacować na 2--3 krotne.
 }
 \par{
-Fakt, że język \emph{C++} sprawdził się w tym zastosowaniu dobrze, nie przesądza o tym, czy jest to najlepsze z możliwych rozwiązań. Należy również wziąć pod uwagę, że zaobserwowany spadek liczby błędów w kodzie może być także spowodowany dużym doświadczeniem autora pracy w tej właśnie technologi.
+Fakt, że język \emph{C++} sprawdził się w tym zastosowaniu dobrze, nie przesądza o tym, czy jest to najlepsze z możliwych rozwiązań. Należy również wziąć pod uwagę, że zaobserwowany spadek liczby błędów w kodzie może być także spowodowany większym doświadczeniem autora pracy w tej właśnie technologii.
 }
 \par{
 Sprawą otwartą i wymagającą dalszych badań (a także w dużej mierze zależną od autora konkretnych badań) jest dobranie języka implementacji odpowiedniego do opisywanych badań. Język taki niewątpliwie powinien posiadać mechanizmy kontrolujące logiczną zwartość przetwarzanych informacji i operacji, a także pozwalać na modularyzację algorytmów. Wydaje się więc, że najlepszymi kandydatami będą silnie typowane języki obiektowe oraz silnie typowane języki funkcyjne (np. \emph{Haskell)}.
@@ -1617,7 +1755,7 @@ Odnotować należy również możliwość prowadzenia badań nad algorytmami z w
 \end{description}
 }
 
-\section{Narzędzia wsparcia}
+\section{Narzędzia wsparcia badań}
 \par{
 Ostatnią wartą odnotowania obserwacją dotyczącą stosowanej metodyki pracy, jest niska dostępność narzędzi wsparcia. Oznacza to, że mimo sporej społeczności badaczy, zajmujących się tematyką, a także dużej powtarzalności narzędzi wykorzystywanych w badaniach, nie został skonstruowany wspólny ogólnodostępny ich zestaw. W praktyce powoduje to, że każdy z badaczy, poświęca własny czas badań, na przygotowanie pobocznych narzędzi nie będących ich przedmiotem. Jednocześnie należy zwrócić uwagę na fakt, że zwiększa to także ryzyko błędu w implementacji.
 }
@@ -1625,12 +1763,12 @@ Ostatnią wartą odnotowania obserwacją dotyczącą stosowanej metodyki pracy, 
 Choć współczesne pakiety umożliwiające analizę danych jak \emph{R}, dostarczają łatwo dostępnych wysokopoziomowych funkcji analizy danych, to nie jest to jedyna wspólna część narzędzi dla różnych badaczy. Spośród najistotniejszych braków w bazie narzędziowej należało by bowiem wymienić:
 \begin{description}
 \item[Narzędzie planowania eksperymentów] -- elementem niezmiennym dla wszystkich omawianym badań jest planowanie eksperymentów w oparciu o dostarczony algorytm. Niezależnie od parametrów i typu algorytmu, wiele części planowania wygląda podobnie. Dobierane są konkretne zestawy parametrów i zbierane podobne dane. Wydaje się więc możliwym, stworzenie systemu korzystającego ze wspólnych cech badanych algorytmów, i dostarczającego podstawowych operacji takich jak tworzenie zestawu testów i przeglądanie ich wyników.
-\item[Narzędzie zbieranie danych] -- oprócz planowania eksperymentów istotny jest także sposób składowania danych, który co do zasady powinien być podobny dla większości algorytmów. Dostarczając rozbudowaną implementację zbierania danych i łącząc ją z narzędziem do planowania eksperymentów, można się spodziewać, że cały proces badawczy przetwarzający algorytm na gotowe analizy danych wymagające wyłącznie ręcznego opisania i wstawienia do treści artykułu, mógłby zostać zautomatyzowany.
-\item[Narzędzie budowy algorytmów] -- ostatnim elementem, który mógłby powstać w oparciu o ideę modularnych algorytmów, jest narzędzie pozwalające tworzyć algorytmy w bardziej przejrzystej formie wykorzystując gotowe bloki i dopisując własne. Narzędzie takie by było bardziej użyteczne, niż przejrzyste API posiadające podobne właściwości musiało by być rozbudowane pod kątem interfejsu użytkownika. Stworzenie takiego narzędzia nie wydaje się więc być sprawą priorytetową, jednak na pewno jest to warta odnotowania droga rozwoju dla społeczności badaczy.
+\item[Narzędzie zbierania danych] -- oprócz planowania eksperymentów istotny jest także sposób składowania danych, który co do zasady powinien być podobny dla większości algorytmów. Dostarczając rozbudowaną implementację zbierania danych i łącząc ją z narzędziem do planowania eksperymentów, można się spodziewać, że cały proces badawczy przetwarzający algorytm na gotowe analizy danych wymagające wyłącznie ręcznego opisania i wstawienia do treści artykułu, mógłby zostać zautomatyzowany.
+\item[Narzędzie budowy algorytmów] -- ostatnim elementem, który mógłby powstać w oparciu o ideę modularnych algorytmów, jest narzędzie pozwalające tworzyć algorytmy w bardziej przejrzystej formie wykorzystując gotowe bloki i dopisując własne. Narzędzie takie, by było bardziej użyteczne, niż prosta biblioteka dostarczająca podobne możliwości, musiało by jednak być rozbudowane pod kątem interfejsu użytkownika. Stworzenie takiego narzędzia nie wydaje się więc być sprawą priorytetową, jednak na pewno jest to warta odnotowania droga rozwoju dla społeczności badaczy.
 \end{description}
 }
 \par{
-Odnosząc się raz jeszcze do tematu narzędzi wsparcia, można domniemywać, że tego rodzaju zestaw narzędzi stanowił by istotne wsparcie dla badaczy, a zarazem poprawił by jakość i spójność badań. Ponadto można podejrzewać, że uogólnienie niektórych problemów do postaci wystarczającej dla większości badaczy, jest dużym wyzwaniem teoretycznym, mogącym się przyczynić do rozwoju teorii i praktyki różnych dziedzin informatyki.
+Odnosząc się raz jeszcze do tematu narzędzi wsparcia, można domniemywać, że tego rodzaju zestaw narzędzi stanowiłby istotne wsparcie dla badaczy, a zarazem poprawił by jakość i spójność badań. Ponadto można podejrzewać, że uogólnienie niektórych problemów do postaci wystarczającej dla większości badaczy, jest dużym wyzwaniem teoretycznym, mogącym się przyczynić do rozwoju teorii i praktyki różnych dziedzin informatyki.
 }
 
 
